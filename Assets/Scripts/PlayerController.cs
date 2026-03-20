@@ -7,25 +7,38 @@ public class PlayerController : MonoBehaviour
     // Player WASD movement and jump settings
     [Header("Movement")]
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private float jumpForce = 10f; // Jump force for normal jumps
     [SerializeField] private float gravity = -18f;
     [SerializeField] private float groundCheckDistance = 1.1f; // Allowable distance from ground to player
     [SerializeField] private LayerMask groundLayer = -1;
 
-    //Player camera control with mouse
+    // Player camera control with mouse
     [Header("Camera")]
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private float lookSensitivity = 0.2f;
     [SerializeField] private float minPitch = -80f;
     [SerializeField] private float maxPitch = 80f;
 
+    // Player pump-action jump settings
+    [Header("Charge Jump")]
+    [SerializeField] private float chargePerPress = 5f;   // How much charge each space bar press adds
+    [SerializeField] private float maxCharge = 25f;       
+    [SerializeField] private float chargeMultiplier = 1.2f; // Converts charge into jump force
+
+    [SerializeField] private float airControl = 0f; // Control how much the player can move in the air - 0 = no control / 1 = full control
+
+    private bool _ctrlHeld;   
+    private float _charge;    
+    private Vector3 _horizontalVelocity; // units per second
+
     // Input values to record from the new input system
     private Vector2 _moveInput;
     private Vector2 _lookInput;
-    private float _verticalVelocity;
+    private float _verticalVelocity; // value to control vertical movement 
     private float _pitch;
 
     #region Record Inputs
+
     public void OnMove(InputValue value)
     {
         _moveInput = value.Get<Vector2>();
@@ -36,13 +49,44 @@ public class PlayerController : MonoBehaviour
         _lookInput = value.Get<Vector2>();
     }
 
+    // Jump input checks for both normal and charged jumps using 
     public void OnJump(InputValue value)
     {
-        if (value.isPressed && IsGrounded())
-            _verticalVelocity = jumpForce;
-    }
-    #endregion
+        if (!value.isPressed) return;
 
+        if (_ctrlHeld && IsGrounded())
+        {
+            _charge += chargePerPress;
+            _charge = Mathf.Clamp(_charge, 0f, maxCharge);
+            Debug.Log($"Charge added: {_charge}");
+        }
+        else if (!_ctrlHeld && IsGrounded())
+        {
+            _verticalVelocity = jumpForce; // Normal jump
+            Debug.Log("Normal jump");
+        }
+    }
+
+    // crouch for pump-action jump using callback context to detect when the key is pressed and released
+    public void OnCrouch(InputValue value)
+    {
+        bool wasHeld = _ctrlHeld;
+        _ctrlHeld = value.isPressed;
+
+        Debug.Log($"Ctrl: {_ctrlHeld}");
+
+        // On release player jumps 
+        if (wasHeld && !_ctrlHeld)
+        {
+            if (_charge > 0f && IsGrounded())
+            {
+                float launchForce = _charge * chargeMultiplier;
+                _verticalVelocity = Mathf.Max(_verticalVelocity, launchForce);
+            }
+        }
+    }
+
+    #endregion
 
     private bool IsGrounded()
     {
@@ -51,17 +95,33 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Movement and gravity remain in Update (unchanged)
-        Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
-        move = move.normalized * (speed * Time.deltaTime);
+        
+        Vector3 desiredDir = transform.forward * _moveInput.y + transform.right * _moveInput.x;
+        if (desiredDir.sqrMagnitude > 1f) desiredDir.Normalize();
 
-        // Gravity and jump control 
+        if (IsGrounded())
+        {
+            _horizontalVelocity = desiredDir * speed;
+        }
+        else
+        {
+            // No control in air when airControl is 0
+            Vector3 desiredVel = desiredDir * speed;
+            _horizontalVelocity = Vector3.Lerp(_horizontalVelocity, desiredVel, airControl * Time.deltaTime);
+        }
+
         _verticalVelocity += gravity * Time.deltaTime;
         if (IsGrounded() && _verticalVelocity < 0f)
-            _verticalVelocity = -0.5f; 
+            _verticalVelocity = -0.5f;
+
+        Vector3 move = _horizontalVelocity * Time.deltaTime;
         move.y = _verticalVelocity * Time.deltaTime;
 
         transform.Translate(move, Space.World);
+
+        // Charge cannot be built up mid air
+        if (!IsGrounded())
+            _charge = 0f;
     }
 
     private void LateUpdate()

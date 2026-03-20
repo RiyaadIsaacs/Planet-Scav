@@ -1865,6 +1865,10 @@ MonoBehaviour:
   lookSensitivity: 0.2
   minPitch: -80
   maxPitch: 80
+  chargePerPress: 5
+  maxCharge: 30
+  chargeMultiplier: 1.2
+  airControl: 0
 --- !u!114 &1361433797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2010,7 +2014,7 @@ Transform:
   m_GameObject: {fileID: 1361433795}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.6, y: 57.97, z: 210}
+  m_LocalPosition: {x: -2.59, y: 73.4, z: 47.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
