@@ -31,6 +31,10 @@ public class PlayerController : MonoBehaviour
     private float _charge;    
     private Vector3 _horizontalVelocity; // units per second
 
+    // pickup-applied temporary multiplier (consumed per charged jump)
+    private float pickupChargeMultiplier = 0f;
+    private int pickupMultiplierUses = 0;
+
     // Input values to record from the new input system
     private Vector2 _moveInput;
     private Vector2 _lookInput;
@@ -80,13 +84,38 @@ public class PlayerController : MonoBehaviour
         {
             if (_charge > 0f && IsGrounded())
             {
-                float launchForce = _charge * chargeMultiplier;
+                // Use pickup multiplier or otherwise use base chargeMultiplier
+                float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
+                float launchForce = _charge * activeMultiplier;
                 _verticalVelocity = Mathf.Max(_verticalVelocity, launchForce);
+
+                // consume one pickup use if active
+                if (pickupMultiplierUses > 0)
+                {
+                    pickupMultiplierUses--;
+                    if (pickupMultiplierUses == 0)
+                        pickupChargeMultiplier = 0f;
+                    Debug.Log($"Pickup multiplier uses left: {pickupMultiplierUses}");
+                }
+
+                _charge = 0f;
+                Debug.Log($"Charged launch: {launchForce}");
             }
         }
     }
 
     #endregion
+
+    // Public API for pickups to apply a temporary charge multiplier for N charged launches
+    public void ApplyChargeMultiplier(float multiplier, int uses)
+    {
+        if (uses >= 0)
+        {
+            pickupChargeMultiplier = multiplier;
+            pickupMultiplierUses = uses;
+            Debug.Log($"Applied pickup multiplier {multiplier} for {uses} uses");
+        }
+    }
 
     private bool IsGrounded()
     {
