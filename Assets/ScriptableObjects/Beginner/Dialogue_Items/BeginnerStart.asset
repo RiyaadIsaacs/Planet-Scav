@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f73a245060d612f449ae436861d8bdd4, type: 3}
-  m_Name: DialogueItem
+  m_Name: BeginnerStart
   m_EditorClassIdentifier: Assembly-CSharp::DialogueItem
-  alertName: 
+  alertName: Landing now
   icon: {fileID: 0}
-  textID: 
+  textID: BEGINNER_INTRO_001
