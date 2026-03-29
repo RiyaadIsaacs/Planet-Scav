@@ -1,0 +1,12 @@
+{
+  "dialogues": [
+    {
+      "key": "BEGINNER_INTRO_001",
+      "value": "Good job getting to the planet safely Investigator. You have entered the suspected zone of the last signs of life. Navigate the area carefully and see what you can find."
+    },
+    {
+      "key": "BEGINNER_INTRO_002",
+      "value": "We are monitoring your progress from up here With some beacons we sent down earlier. You should try to get as many as you cab on your exploration. Space Gov is granting you special pay based on the areas you've explored by collecting them."
+    }
+  ]
+}
