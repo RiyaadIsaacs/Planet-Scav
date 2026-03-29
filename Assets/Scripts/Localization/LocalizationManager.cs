@@ -4,8 +4,22 @@ using System.Collections.Generic;
 
 public class LocalizationManager : MonoBehaviour
 {
+    public static LocalizationManager Instance { get; private set; } 
+
     // Stores all loaded text.
     private static Dictionary<string, string> localizedText = new Dictionary<string, string>();
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);   // Persists across scenes
+    }
 
     // Load a JSON file from Resources/Dialogue/
     public static void LoadLanguage(string fileName)
