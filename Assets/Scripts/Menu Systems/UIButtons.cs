@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class UIButtons : MonoBehaviour
 {
+    public PlayerStats player;
     public DeathHandling deathHandling;
     public Canvas deathCanvas;
     public void QuitApplication()
@@ -11,7 +12,7 @@ public class UIButtons : MonoBehaviour
 
     public void retry()
     {
-        deathHandling.health = 3;
+        player.health = 3;
         deathHandling.HPGainHandler(); // Restore health visuals
         deathCanvas.gameObject.SetActive(false); // Hide the death canvas
         Time.timeScale = 1f; // Resume the game

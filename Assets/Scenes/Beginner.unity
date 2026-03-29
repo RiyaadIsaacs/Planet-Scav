@@ -1147,8 +1147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e4f22f46fa90b4aaba9f2c3cab4be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathHandling
-  health: 3
-  player: {fileID: 1361433802}
+  player: {fileID: 1361433804}
   checkPoints: {fileID: 1361433803}
   deathCanvas: {fileID: 123309067}
   healthThird: {fileID: 406723896}
@@ -1166,6 +1165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b97456cc641e941aeb0e5e1164aacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtons
+  player: {fileID: 1361433804}
   deathHandling: {fileID: 413533353}
   deathCanvas: {fileID: 123309067}
 --- !u!1 &415270585
@@ -3115,6 +3115,7 @@ GameObject:
   - component: {fileID: 1361433797}
   - component: {fileID: 1361433803}
   - component: {fileID: 1361433796}
+  - component: {fileID: 1361433804}
   m_Layer: 0
   m_Name: TempPlayer
   m_TagString: Player
@@ -3314,6 +3315,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCheckpoints
   respawnPoints: {fileID: 1699763524}
+--- !u!114 &1361433804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361433795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e6a413a586f93449be98c215148e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  health: 3
+  playerTrans: {fileID: 1361433802}
 --- !u!1 &1379518724
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class DeathHandling : MonoBehaviour
 {
-    public int health = 3; // Player's health
-    public Transform player; 
+    public PlayerStats player;
+    //public Transform playerTrans; 
     public PlayerCheckpoints checkPoints;
     public Canvas deathCanvas;
 
@@ -19,26 +19,26 @@ public class DeathHandling : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            player.SetPositionAndRotation(checkPoints._initialPosition, checkPoints._initialRotation);
+            player.playerTrans.SetPositionAndRotation(checkPoints._initialPosition, checkPoints._initialRotation);
             HPLossHandler();
         }
     }
 
     public void HPLossHandler()
     {
-        health += -1;
-        Debug.Log(health);
+        player.health += -1;
+        Debug.Log(player.health);
 
-        if (health == 2)
+        if (player.health == 2)
         {
             healthThird.gameObject.SetActive(false);
         }
-        else if (health == 1)
+        else if (player.health == 1)
         {
             healthSecond.gameObject.SetActive(false);
         }
 
-        if (health <= 0)
+        if (player.health <= 0)
         {
             healthFirst.gameObject.SetActive(false);
             Debug.Log("Player has died.");
@@ -49,18 +49,18 @@ public class DeathHandling : MonoBehaviour
 
     public void HPGainHandler()
     {
-        if (health == 3)
+        if (player.health == 3)
         {
             healthThird.gameObject.SetActive(true);
             healthSecond.gameObject.SetActive(true);
             healthFirst.gameObject.SetActive(true);
         }
-        else if (health == 2)
+        else if (player.health == 2)
         {
             healthSecond.gameObject.SetActive(true);
             healthFirst.gameObject.SetActive(true);
         }
-        else if (health == 1)
+        else if (player.health == 1)
         {
             healthFirst.gameObject.SetActive(true);
         }
