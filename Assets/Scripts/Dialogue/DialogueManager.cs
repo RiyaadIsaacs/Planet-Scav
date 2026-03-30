@@ -5,12 +5,12 @@ public class DialogueManager : MonoBehaviour
 {
     [Header("Dialogue Data")]
     public DialogueSequence sequence;
-    public string localizationFile = "Beginner";   // Changes dialog per scene 
+    public string localizationFile = "Beginner";   // Changes dialog per scene. 
 
     [Header("UI Toolkit")]
     [SerializeField] private UIDocument dialogueUIDocument;
 
-    // References to UI elements for displaying 
+    // References to UI elements for displaying. 
     private VisualElement root;
     private Image iconElement;
     private Label alertNameElement;
@@ -59,31 +59,66 @@ public class DialogueManager : MonoBehaviour
 
     public void ShowNextDialogue()
     {
-        // disable Next button here or end the dialogue.
+        // hide the dialogue box cause no more dialogue. 
         if (queue.IsEmpty())
         {
-            if (messageElement != null)
-                messageElement.text = "End of dialogue. Level ready!";
-            if (nextButton != null)
-                nextButton.text = "Close";
+            HideDialogueBox();
             return;
         }
 
+        ShowDialogueBox();
+
         DialogueItem item = queue.Dequeue();
 
-        // Update UI with current dialogue item.
-        if (alertNameElement != null)
-        {
-            alertNameElement.text = item.alertName;
-        }
-        if (messageElement != null)
-        {
-            messageElement.text = LocalizationManager.GetText(item.textID);
-
-        }
+        // Update the dialogue UI.
+        if (alertNameElement != null) alertNameElement.text = item.alertName;
+        if (messageElement != null) messageElement.text = LocalizationManager.GetText(item.textID);
         if (iconElement != null && item.icon != null)
-        {
             iconElement.sprite = item.icon;
+
+        if (nextButton != null)
+            nextButton.text = "Next";
+    }
+
+    // Makes the whole dialogue visible.
+    private void ShowDialogueBox()
+    {
+        if (root != null)
+            root.style.display = DisplayStyle.Flex;     
+    }
+
+    // Makes the whole dialogue invisible.
+    private void HideDialogueBox()
+    {
+        if (root != null)
+            root.style.display = DisplayStyle.None;
+    }
+
+    // Allows starting a new dialogue sequence at runtime.
+    public void StartNewDialogue(DialogueSequence newSequence, string newLocalizationFile)
+    {
+        if (newSequence == null)
+        {
+            Debug.LogError("Cannot start dialogue: Sequence is null");
+            return;
         }
+
+        // Clear the old queue.
+        queue = new DialogueQueue();
+
+        // Load level localization file just in case.
+        if (!string.IsNullOrEmpty(newLocalizationFile))
+        {
+            LocalizationManager.LoadLanguage(newLocalizationFile);
+        }
+
+        // Fill the queue with the new dialogue items.
+        foreach (DialogueItem item in newSequence.dialogues)
+        {
+            queue.Enqueue(item);
+        }
+
+        // Show the dialogue box and display first item.
+        ShowNextDialogue();
     }
 }

@@ -41,6 +41,7 @@
     margin-bottom: 25px;
     white-space: normal;
     flex-wrap: wrap;
+    max-width: 700px;
 }
 
 .next-button {

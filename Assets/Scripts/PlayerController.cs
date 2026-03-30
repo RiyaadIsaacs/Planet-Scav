@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float airControl = 0f; // Control how much the player can move in the air - 0 = no control / 1 = full control
 
     private bool _ctrlHeld;   
-    private float _charge;    
+    private float charge;    
     private Vector3 _horizontalVelocity; // units per second
 
     // pickup-applied temporary multiplier (consumed per charged jump)
@@ -60,9 +60,9 @@ public class PlayerController : MonoBehaviour
 
         if (_ctrlHeld && IsGrounded())
         {
-            _charge += chargePerPress;
-            _charge = Mathf.Clamp(_charge, 0f, maxCharge);
-            Debug.Log($"Charge added: {_charge}");
+            charge += chargePerPress;
+            charge = Mathf.Clamp(charge, 0f, maxCharge);
+            Debug.Log($"Charge added: {charge}");
         }
         else if (!_ctrlHeld && IsGrounded())
         {
@@ -82,11 +82,11 @@ public class PlayerController : MonoBehaviour
         // On release player jumps 
         if (wasHeld && !_ctrlHeld)
         {
-            if (_charge > 0f && IsGrounded())
+            if (charge > 0f && IsGrounded())
             {
                 // Use pickup multiplier or otherwise use base chargeMultiplier
                 float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
-                float launchForce = _charge * activeMultiplier;
+                float launchForce = charge * activeMultiplier;
                 _verticalVelocity = Mathf.Max(_verticalVelocity, launchForce);
 
                 // consume one pickup use if active
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log($"Pickup multiplier uses left: {pickupMultiplierUses}");
                 }
 
-                _charge = 0f;
+                charge = 0f;
                 Debug.Log($"Charged launch: {launchForce}");
             }
         }
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
 
         // Charge cannot be built up mid air
         if (!IsGrounded())
-            _charge = 0f;
+            charge = 0f;
     }
 
     private void LateUpdate()
