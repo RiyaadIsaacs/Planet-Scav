@@ -1,21 +1,28 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class DialogueManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     [Header("Dialogue Data")]
     public DialogueSequence sequence;
     public string localizationFile = "Beginner";   // Changes dialog per scene. 
+
+    [Header("Player Reference")]
+    [SerializeField] private PlayerController playerController;
 
     [Header("UI Toolkit")]
     [SerializeField] private UIDocument dialogueUIDocument;
 
     // References to UI elements for displaying. 
     private VisualElement root;
-    private Image iconElement;
+    private VisualElement iconElement;
     private Label alertNameElement;
     private Label messageElement;
     private Button nextButton;
+
+    // HUD (Charge Bar) elements
+    private VisualElement chargeFill;
+    private Label chargeValueLabel;
 
     private DialogueQueue queue = new DialogueQueue(); // Custom queue to manage dialogue items.
 
@@ -33,15 +40,27 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (playerController == null)
+        {
+            playerController = FindFirstObjectByType<PlayerController>();
+            if (playerController == null)
+                Debug.LogWarning("PlayerController not found in scene. Where did he go?");
+        }
+
         // Setup UI references.
         root = dialogueUIDocument.rootVisualElement;
 
         // find the UI elements by name.
-        iconElement = root.Q<Image>("icon");
+        iconElement = root.Q<VisualElement>("icon");
         alertNameElement = root.Q<Label>("alert-name");
         messageElement = root.Q<Label>("message");
         nextButton = root.Q<Button>("next-button");
 
+        // Charge bar elements by name.
+        chargeFill = root.Q<VisualElement>("charge-fill");
+        chargeValueLabel = root.Q<Label>("charge-value");
+
+        // Subscribing to the next button.
         if (nextButton != null)
             nextButton.clicked += ShowNextDialogue;
 
@@ -55,6 +74,39 @@ public class DialogueManager : MonoBehaviour
         }
 
         ShowNextDialogue();
+    }
+
+    void Update()
+    {
+        // Update charge bar every frame
+        UpdateChargeBar();
+    }
+
+    private void UpdateChargeBar()
+    {
+        // safety check.
+        if (playerController == null || chargeFill == null || chargeValueLabel == null)
+            return;
+
+        // Get current charge and max charge 
+        float currentCharge = playerController.GetCharge();
+        float maxCharge = playerController.GetMaxCharge();
+
+        float percentage = maxCharge > 0 ? (currentCharge / maxCharge) * 100f : 0f; // return percentage if >0, else return 0.
+
+        // fill charge bar vertically based on perventage.
+        chargeFill.style.height = new Length(percentage, LengthUnit.Percent);
+
+        // Update text
+        chargeValueLabel.text = $"{currentCharge:F1} / {maxCharge}";
+
+        // Color changes based on charge.
+        if (percentage > 80f)
+            chargeFill.style.backgroundColor = new Color(1f, 0.3f, 0.3f);     // Red (high)
+        else if (percentage > 50f)
+            chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);   // Yellow
+        else
+            chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);    // Green
     }
 
     public void ShowNextDialogue()
@@ -73,8 +125,11 @@ public class DialogueManager : MonoBehaviour
         // Update the dialogue UI.
         if (alertNameElement != null) alertNameElement.text = item.alertName;
         if (messageElement != null) messageElement.text = LocalizationManager.GetText(item.textID);
+        
         if (iconElement != null && item.icon != null)
-            iconElement.sprite = item.icon;
+        {
+            iconElement.style.backgroundImage = new StyleBackground(item.icon);
+        }
 
         if (nextButton != null)
             nextButton.text = "Next";
@@ -99,7 +154,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (newSequence == null)
         {
-            Debug.LogError("Cannot start dialogue: Sequence is null");
+            Debug.LogError("Cannot start dialogue, you lost the sequence");
             return;
         }
 

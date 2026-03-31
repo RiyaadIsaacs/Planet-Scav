@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f73a245060d612f449ae436861d8bdd4, type: 3}
   m_Name: BeginnerEnd
   m_EditorClassIdentifier: Assembly-CSharp::DialogueItem
-  alertName: Cave Warning
-  icon: {fileID: 0}
+  alertName: Danger Cave Ahead
+  icon: {fileID: 21300000, guid: 49cb86dfa958cfa408c64227ed158c54, type: 3}
   textID: BEGINNER_OUTRO_001

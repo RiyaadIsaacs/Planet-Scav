@@ -1,5 +1,12 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Dialogue/DialogueStyle.uss?fileID=7433441132597879392&amp;guid=45ee96dbe1e23a44a94508064053d01e&amp;type=3#DialogueStyle" />
+    <ui:VisualElement name="charge-container" style="flex-grow: 1; width: 200px; height: 100px; transform-origin: right; translate: 1000px 200px;">
+        <ui:Label text="Pump To Charge" name="charge-label" />
+        <ui:VisualElement name="charge-background" style="flex-grow: 1; width: 75px; height: auto;">
+            <ui:VisualElement name="charge-fill" style="flex-grow: 1; width: 75px; height: auto;" />
+        </ui:VisualElement>
+        <ui:Label text="0/25" name="charge-value" double-click-selects-word="false" />
+    </ui:VisualElement>
     <ui:VisualElement name="dialogue-container" style="flex-grow: 1;">
         <ui:VisualElement name="header" style="flex-grow: 1; align-self: center; justify-content: center; flex-direction: column; align-items: auto;">
             <ui:VisualElement name="Icon" style="flex-grow: 1; background-image: none; width: 48px;" />

@@ -1,6 +1,0 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/Dialogue/DialogueStyle.uss?fileID=7433441132597879392&amp;guid=45ee96dbe1e23a44a94508064053d01e&amp;type=3#DialogueStyle" />
-    <ui:VisualElement name="Container" style="flex-grow: 1;" />
-    <ui:VisualElement name="charge-background" style="flex-grow: 1;" />
-    <ui:VisualElement name="charge-fill" style="flex-grow: 1;" />
-</ui:UXML>

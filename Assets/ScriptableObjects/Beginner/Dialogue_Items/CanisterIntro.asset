@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CanisterIntro
   m_EditorClassIdentifier: Assembly-CSharp::DialogueItem
   alertName: Canister Intro
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4e55da2fed5bffe408a5ab270d1c1ab6, type: 3}
   textID: CANISTER_INTRO_001
