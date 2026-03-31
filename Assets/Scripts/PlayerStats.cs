@@ -11,6 +11,9 @@ public class PlayerStats : MonoBehaviour
     public Transform playerTrans;
     public int coins = 0; // Player's coin count
 
+    [HideInInspector]
+    public bool upgradeCheck = false;
+
     public void CoinGainHandler()
     {
         coins += coinGain;
