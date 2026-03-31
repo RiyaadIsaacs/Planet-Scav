@@ -1147,7 +1147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e4f22f46fa90b4aaba9f2c3cab4be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathHandling
-  health: 3
   player: {fileID: 1361433802}
   checkPoints: {fileID: 1361433803}
   deathCanvas: {fileID: 123309067}
@@ -1166,6 +1165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b97456cc641e941aeb0e5e1164aacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtons
+  player: {fileID: 0}
   deathHandling: {fileID: 413533353}
   deathCanvas: {fileID: 123309067}
 --- !u!1 &415270585
@@ -2153,7 +2153,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -3134,6 +3135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60eefcf3a404ecd4fa3b86c3de33c89d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  playerRef: {fileID: 0}
   speed: 10
   jumpForce: 25
   gravity: -18
