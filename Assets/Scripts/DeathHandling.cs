@@ -19,7 +19,7 @@ public class DeathHandling : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            player.playerTrans.SetPositionAndRotation(checkPoints._initialPosition, checkPoints._initialRotation);
+            player.playerTrans.SetPositionAndRotation(checkPoints.initialPosition, checkPoints.initialRotation);
             HPLossHandler();
         }
     }

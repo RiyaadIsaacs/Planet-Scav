@@ -10,23 +10,32 @@ public class PickUpHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var player = other; //.GetComponent<PlayerController>();
-
-        if (CompareTag("PropaneTank"))
+        if (CompareTag("Player"))
         {
-            if (player != null)
+            var player = other; //.GetComponent<PlayerController>();
+
+            if (CompareTag("PropaneTank"))
             {
-                player.GetComponent<PlayerController>().ApplyChargeMultiplier(pickupMultiplier, uses);
+                if (player != null)
+                {
+                    player.GetComponent<PlayerController>().ApplyChargeMultiplier(pickupMultiplier, uses);
+
+                    Destroy(gameObject);
+                }
+            }
+
+            if (CompareTag("ExplPickUp"))
+            {
+                player.GetComponent<PlayerStats>().CoinGainHandler();
 
                 Destroy(gameObject);
             }
         }
 
-        if (CompareTag("ExplPickUp"))
+        else
         {
-            player.GetComponent<PlayerStats>().CoinGainHandler();
-
-            Destroy(gameObject);
+            return;
         }
+
     }
 }

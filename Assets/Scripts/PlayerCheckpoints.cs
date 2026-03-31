@@ -7,9 +7,9 @@ public class PlayerCheckpoints : MonoBehaviour
     public Transform respawnPoints;
 
     [NonSerialized]
-    public Vector3 _initialPosition;
+    public Vector3 initialPosition;
     [NonSerialized]
-    public Quaternion _initialRotation;
+    public Quaternion initialRotation;
 
     // Internal stack of respawn point transforms
     private Stack<Transform> checkPointStack = new Stack<Transform>();
@@ -18,8 +18,8 @@ public class PlayerCheckpoints : MonoBehaviour
     {
         if (respawnPoints != null)
         {
-            _initialPosition = respawnPoints.position;
-            _initialRotation = respawnPoints.rotation;
+            initialPosition = respawnPoints.position;
+            initialRotation = respawnPoints.rotation;
             checkPointStack.Push(respawnPoints);
         }
     }
@@ -29,32 +29,44 @@ public class PlayerCheckpoints : MonoBehaviour
         if (!other.CompareTag("CheckPoint"))
             return;
 
-        Transform newCheckPoint = other.transform;
-
-        // Keep the public field in sync
-        respawnPoints = newCheckPoint;
-
-        // If stack is empty, add the new respawn point
-        if (checkPointStack.Count == 0)
+        if (CompareTag("Player"))
         {
-            checkPointStack.Push(newCheckPoint);
-            UpdateInitialFromTop();
-            return;
+
+
+            Transform newCheckPoint = other.transform;
+
+            // Keep the public field in sync
+            respawnPoints = newCheckPoint;
+
+            // If stack is empty, add the new respawn point
+            if (checkPointStack.Count == 0)
+            {
+                checkPointStack.Push(newCheckPoint);
+                UpdateInitialFromTop();
+                return;
+            }
+
+            // If stack has exactly one item, do nothing (per your rule)
+            if (checkPointStack.Count == 1)
+            {
+                checkPointStack.Pop();
+                checkPointStack.Push(newCheckPoint);
+                UpdateInitialFromTop();
+            }
+
+            // If stack has more than one item: remove the current top and add the new one
+            //if (checkPointStack.Count > 1)
+            //{
+
+            //}
+
         }
 
-        // If stack has exactly one item, do nothing (per your rule)
-        if (checkPointStack.Count == 1)
+        else
         {
-            checkPointStack.Pop();
-            checkPointStack.Push(newCheckPoint);
-            UpdateInitialFromTop();
+                       return;
         }
 
-        // If stack has more than one item: remove the current top and add the new one
-        //if (checkPointStack.Count > 1)
-        //{
-
-        //}
     }
 
     private void UpdateInitialFromTop()
@@ -66,8 +78,8 @@ public class PlayerCheckpoints : MonoBehaviour
         if (top == null)
             return;
 
-        _initialPosition = top.position;
-        _initialRotation = top.rotation;
+        initialPosition = top.position;
+        initialRotation = top.rotation;
     }
 
     // Optional helpers you can call from other code
