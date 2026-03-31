@@ -54,6 +54,8 @@ public class NPCInteractable : MonoBehaviour
 
         if (playerController.CanSpendMoney(cost))
         {
+            playerController.GetComponent<PlayerStats>().upgradeCheck = true; // Grant the upgrade to the player.
+
             playerController.GetComponent<PlayerStats>().CoinGainHandler(-cost); // Deduct cost from player's credits.
 
             // Hide prompt after successful purchase.

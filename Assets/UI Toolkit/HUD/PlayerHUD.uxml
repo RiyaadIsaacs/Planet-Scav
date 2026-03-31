@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/HUD/HUDStyle.uss?fileID=7433441132597879392&amp;guid=45ee96dbe1e23a44a94508064053d01e&amp;type=3#HUDStyle" />
-    <ui:VisualElement name="charge-container" style="flex-grow: 1; width: 200px; height: 100px; transform-origin: right; translate: 1000px 200px;">
+    <ui:VisualElement name="charge-container" style="flex-grow: 1; width: 200px; height: 100px; transform-origin: right; translate: 1000px 200px; border-bottom-width: 200px;">
         <ui:Label text="Pump To Charge" name="charge-label" />
         <ui:VisualElement name="charge-background" style="flex-grow: 1; width: 75px; height: auto;">
             <ui:VisualElement name="charge-fill" style="flex-grow: 1; width: 75px; height: auto;" />
