@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CheckPoint
   - ExplPickUp
+  - Platform
   layers:
   - Default
   - TransparentFX
