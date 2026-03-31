@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f73a245060d612f449ae436861d8bdd4, type: 3}
-  m_Name: BeaconExplanation
+  m_Name: Vendor_Intro 3
   m_EditorClassIdentifier: Assembly-CSharp::DialogueItem
   alertName: Deckhardt
   icon: {fileID: 21300000, guid: 24e42fd0692bbd445b6a753d9c606939, type: 3}
-  textID: BEACON_EXPLANATION_001
+  textID: VENDOR_INTERACTION_004

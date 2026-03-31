@@ -15,4 +15,5 @@
         <ui:Label text="Label" name="message" style="width: 1064px; white-space: pre; text-overflow: clip; border-top-width: 0; border-bottom-width: 0; border-right-width: 0;" />
         <ui:Button text="Next" name="next-button" style="width: 220px; -unity-text-align: lower-center; white-space: pre; text-overflow: ellipsis; translate: 0 0; transform-origin: bottom;" />
     </ui:VisualElement>
+    <ui:Label text="&apos;E&apos; to Interact" name="interactPrompt" style="translate: 0 -662px; -unity-text-align: upper-center;" />
 </ui:UXML>

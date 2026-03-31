@@ -26,7 +26,35 @@
     },
     {
       "key": "BEACON_EXPLANATION_003",
-      "value": "Oh look at that. My credits got updated in the top right hand corner."
+      "value": "Oh, look at that. My credits are in the top right hand corner. Didn't notice that."
+    },
+    {
+      "key": "PROPANE_EXPLANATION_001",
+      "value": "Our systems show you've made some decent progress. Could you hurry it up a little?"
+    },
+    {
+      "key": "PROPANE_EXPLANATION_002",
+      "value": "Well I'm the one doing all the work here Captain. It'd go faster if you actually did something."
+    },
+    {
+      "key": "PROPANE_EXPLANATION_003",
+      "value": "Well we've sent down some extra gas for you to use along the way. Should give you a nice boost for your pump action pack you've got."
+    },
+    {
+      "key": "VENDOR_INTERACTION_001",
+      "value": "Oh hey, 305! Over here! In the little bin. We sent down a vendor for you to use. Its got everything you need but not on company credit."
+    },
+    {
+      "key": "VENDOR_INTERACTION_002",
+      "value": "You're going to need a bigger jump pack if you want to continue. You can buy one for 500 credits. I hope you've got enough."
+    },
+    {
+      "key": "VENDOR_INTERACTION_003",
+      "value": "You can buy one for 500 credits. I hope you've got enough."
+    },
+    {
+      "key": "VENDOR_INTERACTION_004",
+      "value": "Well there goes all my pay for this job."
     }
   ]
 }

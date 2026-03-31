@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    [SerializeField] public int coinGain = 50;
-
     public TMP_Text coinText; // Reference to the TextMeshPro component for displaying coins
 
     public int health = 3; // Player's health
@@ -14,7 +12,7 @@ public class PlayerStats : MonoBehaviour
     [HideInInspector]
     public bool upgradeCheck = false;
 
-    public void CoinGainHandler()
+    public void CoinGainHandler(int coinGain)
     {
         coins += coinGain;
 

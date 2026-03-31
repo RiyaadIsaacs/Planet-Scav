@@ -8,6 +8,9 @@ public class PickUpHandler : MonoBehaviour
     [Tooltip("How many charged jumps the multiplier should apply to.")]
     [SerializeField] private int uses = 5;
 
+    [Tooltip("Ammount of credits per pickup")]
+    [SerializeField] private int coins = 50;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -26,7 +29,7 @@ public class PickUpHandler : MonoBehaviour
 
             if (CompareTag("ExplPickUp"))
             {
-                player.GetComponent<PlayerStats>().CoinGainHandler();
+                player.GetComponent<PlayerStats>().CoinGainHandler(coins);
 
                 Destroy(gameObject);
             }

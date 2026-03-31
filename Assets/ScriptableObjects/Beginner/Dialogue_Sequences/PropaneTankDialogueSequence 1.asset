@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: PropaneTankDialogueSequence 1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
   dialogues:
-  - {fileID: 11400000, guid: 7ed47c707a12acd449251ed897d9bd7f, type: 2}
-  - {fileID: 11400000, guid: d8e6324fbf6d3214abf182b3d0f7a01c, type: 2}
-  - {fileID: 11400000, guid: a86539d0341cfce40ac2ddcbfad17603, type: 2}
-  - {fileID: 11400000, guid: 39f81f25ae0b6704988daf48eec46df9, type: 2}
+  - {fileID: 11400000, guid: cebaf2aba8976c247b54e91363d6bc69, type: 2}
+  - {fileID: 11400000, guid: 7647dea59c044c2459ce5b78a62835c1, type: 2}
+  - {fileID: 11400000, guid: a9eb824f9f3cb5647aa62cf46d8e24bd, type: 2}

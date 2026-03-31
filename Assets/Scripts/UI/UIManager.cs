@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour
     private VisualElement chargeFill;
     private Label chargeValueLabel;
 
+    private Label interactPrompt; // for interact when close to npc.
+
     private DialogueQueue queue = new DialogueQueue(); // Custom queue to manage dialogue items.
 
     void Start()
@@ -63,6 +65,8 @@ public class UIManager : MonoBehaviour
         chargeContainer = root.Q<VisualElement>("charge-container");
         chargeFill = root.Q<VisualElement>("charge-fill");
         chargeValueLabel = root.Q<Label>("charge-value");
+
+        interactPrompt = root.Q<Label>("interact-prompt");
 
         // Subscribing to the next button.
         if (nextButton != null)
@@ -207,5 +211,15 @@ public class UIManager : MonoBehaviour
 
         // Show the dialogue box and display first item.
         ShowNextDialogue();
+    }
+
+    public void ShowInteractPrompt(bool show)
+    {
+        if (interactPrompt == null) return;
+
+        if (show)
+            interactPrompt.AddToClassList("show");
+        else
+            interactPrompt.RemoveFromClassList("show");
     }
 }

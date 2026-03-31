@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 // Player controller for movement, camera control and other features to be decided later
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject playerRef;
+
     // Player WASD movement and jump settings
     [Header("Movement")]
     [SerializeField] private float speed = 5f;
@@ -22,13 +24,13 @@ public class PlayerController : MonoBehaviour
     // Player pump-action jump settings
     [Header("Charge Jump")]
     [SerializeField] private float chargePerPress = 5f;   // How much charge each space bar press adds
-    [SerializeField] private float maxCharge = 25f;       
+    [SerializeField] private float maxCharge = 25f;
     [SerializeField] private float chargeMultiplier = 1.2f; // Converts charge into jump force
 
     [SerializeField] private float airControl = 0f; // Control how much the player can move in the air - 0 = no control / 1 = full control
 
-    private bool ctrlHeld;   
-    private float charge;    
+    private bool ctrlHeld;
+    private float charge;
     private Vector3 horizontalVelocity; // units per second
 
     // pickup-applied temporary multiplier (consumed per charged jump)
@@ -103,7 +105,7 @@ public class PlayerController : MonoBehaviour
             if (charge > 0f && IsGrounded())
             {
                 // Use pickup multiplier or otherwise use base chargeMultiplier
-                float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier; 
+                float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
                 float launchForce = charge * activeMultiplier;
                 verticalVelocity = Mathf.Max(verticalVelocity, launchForce);
 
@@ -140,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
+
         Vector3 desiredDir = transform.forward * moveInput.y + transform.right * moveInput.x;
         if (desiredDir.sqrMagnitude > 1f) desiredDir.Normalize();
 
@@ -213,4 +215,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    public bool CanSpendMoney(int amount)
+    {
+        if (playerRef.GetComponent<PlayerStats>().coins >= amount)
+        {
+            playerRef.GetComponent<PlayerStats>().coins -= amount;
+            return true;
+        }
+
+        return false;
+    }
 }
