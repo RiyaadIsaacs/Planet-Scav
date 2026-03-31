@@ -3,19 +3,31 @@ using UnityEngine;
 public class ExitChecker : MonoBehaviour
 {
     public Transform gateMove;
+    [SerializeField] private float moveSpeed = 2f;
 
-    public void OnTriggerEnter(Collider other)
+    private bool moving;
+    private Vector3 targetPos;
+
+    private void Update()
     {
-        Debug.Log("someone reached the exit");
-        var player = other; //.GetComponent<PlayerController>();
-        if (player.CompareTag("Player"))
+        if (!moving) return;
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+
+        if (transform.position == targetPos)
+            moving = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player"))
+            return;
+
+        var playerStats = other.GetComponent<PlayerStats>();
+        if (playerStats != null && playerStats.upgradeCheck && gateMove != null)
         {
-            Debug.Log("Player has reached the exit.");
-            if (player.GetComponent<PlayerStats>().upgradeCheck)
-            {
-                Debug.Log("Player has reached the exit and has the upgrade. Moving gate.");
-                gameObject.transform.position = new Vector3(gateMove.position.x, gateMove.position.y, gateMove.position.z);
-            }
+            targetPos = gateMove.position;
+            moving = true;
         }
     }
 }

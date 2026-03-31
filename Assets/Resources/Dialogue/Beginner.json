@@ -46,15 +46,19 @@
     },
     {
       "key": "VENDOR_INTERACTION_002",
-      "value": "You're going to need a bigger jump pack if you want to continue. You can buy one for 500 credits. I hope you've got enough."
+      "value": "You're going to need a bigger jump pack if you want to continue, so you've got to pay the toll fee."
     },
     {
       "key": "VENDOR_INTERACTION_003",
-      "value": "You can buy one for 500 credits. I hope you've got enough."
+      "value": "You can buy one for 200 credits. I hope you've got enough."
     },
     {
       "key": "VENDOR_INTERACTION_004",
       "value": "Well there goes all my pay for this job."
+    },
+    {
+      "key": "EXIT_WIN_001",
+      "value": "Well done! You did it. "
     }
   ]
 }
