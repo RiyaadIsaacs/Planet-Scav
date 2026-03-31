@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     private Button nextButton;
 
     // HUD (Charge Bar) elements
+    private VisualElement chargeContainer;
     private VisualElement chargeFill;
     private Label chargeValueLabel;
 
@@ -57,6 +58,7 @@ public class UIManager : MonoBehaviour
         nextButton = root.Q<Button>("next-button");
 
         // Charge bar elements by name.
+        chargeContainer = root.Q<VisualElement>("charge-container");
         chargeFill = root.Q<VisualElement>("charge-fill");
         chargeValueLabel = root.Q<Label>("charge-value");
 
@@ -88,6 +90,8 @@ public class UIManager : MonoBehaviour
         if (playerController == null || chargeFill == null || chargeValueLabel == null)
             return;
 
+        ChargeBarVisibility();
+
         // Get current charge and max charge 
         float currentCharge = playerController.GetCharge();
         float maxCharge = playerController.GetMaxCharge();
@@ -107,6 +111,21 @@ public class UIManager : MonoBehaviour
             chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);   // Yellow
         else
             chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);    // Green
+    }
+
+    private void ChargeBarVisibility()
+    {
+        bool isHoldingCtrl = playerController.GetCtrlHeld();
+
+        // Show charge bar only when holding Ctrl
+        if (isHoldingCtrl)
+        {
+            chargeContainer.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            chargeContainer.style.display = DisplayStyle.None;
+        }
     }
 
     public void ShowNextDialogue()
