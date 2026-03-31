@@ -29,28 +29,39 @@ public class PlayerController : MonoBehaviour
 
     private bool _ctrlHeld;   
     private float charge;    
-    private Vector3 _horizontalVelocity; // units per second
+    private Vector3 horizontalVelocity; // units per second
 
     // pickup-applied temporary multiplier (consumed per charged jump)
     private float pickupChargeMultiplier = 0f;
     private int pickupMultiplierUses = 0;
 
     // Input values to record from the new input system
-    private Vector2 _moveInput;
-    private Vector2 _lookInput;
-    private float _verticalVelocity; // value to control vertical movement 
-    private float _pitch;
+    private Vector2 moveInput;
+    private Vector2 lookInput;
+    private float verticalVelocity; // value to control vertical movement 
+    private float pitch;
+
+    // Getters for the UI.
+    public float GetCharge()
+    {
+        return charge;
+    }
+
+    public float GetMaxCharge()
+    {
+        return maxCharge;
+    }
 
     #region Record Inputs
 
     public void OnMove(InputValue value)
     {
-        _moveInput = value.Get<Vector2>();
+        moveInput = value.Get<Vector2>();
     }
 
     public void OnLook(InputValue value)
     {
-        _lookInput = value.Get<Vector2>();
+        lookInput = value.Get<Vector2>();
     }
 
     // Jump input checks for both normal and charged jumps using 
@@ -66,7 +77,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (!_ctrlHeld && IsGrounded())
         {
-            _verticalVelocity = jumpForce; // Normal jump
+            verticalVelocity = jumpForce; // Normal jump
             Debug.Log("Normal jump");
         }
     }
@@ -87,7 +98,7 @@ public class PlayerController : MonoBehaviour
                 // Use pickup multiplier or otherwise use base chargeMultiplier
                 float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
                 float launchForce = charge * activeMultiplier;
-                _verticalVelocity = Mathf.Max(_verticalVelocity, launchForce);
+                verticalVelocity = Mathf.Max(verticalVelocity, launchForce);
 
                 // consume one pickup use if active
                 if (pickupMultiplierUses > 0)
@@ -106,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    // Public API for pickups to apply a temporary charge multiplier for N charged launches
+    // Apply a temporary charge multiplier.
     public void ApplyChargeMultiplier(float multiplier, int uses)
     {
         if (uses >= 0)
@@ -125,26 +136,26 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         
-        Vector3 desiredDir = transform.forward * _moveInput.y + transform.right * _moveInput.x;
+        Vector3 desiredDir = transform.forward * moveInput.y + transform.right * moveInput.x;
         if (desiredDir.sqrMagnitude > 1f) desiredDir.Normalize();
 
         if (IsGrounded())
         {
-            _horizontalVelocity = desiredDir * speed;
+            horizontalVelocity = desiredDir * speed;
         }
         else
         {
             // No control in air when airControl is 0
             Vector3 desiredVel = desiredDir * speed;
-            _horizontalVelocity = Vector3.Lerp(_horizontalVelocity, desiredVel, airControl * Time.deltaTime);
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, desiredVel, airControl * Time.deltaTime);
         }
 
-        _verticalVelocity += gravity * Time.deltaTime;
-        if (IsGrounded() && _verticalVelocity < 0f)
-            _verticalVelocity = -0.5f;
+        verticalVelocity += gravity * Time.deltaTime;
+        if (IsGrounded() && verticalVelocity < 0f)
+            verticalVelocity = -0.5f;
 
-        Vector3 move = _horizontalVelocity * Time.deltaTime;
-        move.y = _verticalVelocity * Time.deltaTime;
+        Vector3 move = horizontalVelocity * Time.deltaTime;
+        move.y = verticalVelocity * Time.deltaTime;
 
         transform.Translate(move, Space.World);
 
@@ -156,14 +167,14 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         // Camera rotation — yaw rotates the player, pitch rotates the camera pivot
-        float yaw = _lookInput.x * lookSensitivity;
+        float yaw = lookInput.x * lookSensitivity;
         transform.Rotate(0f, yaw, 0f);
 
         if (cameraPivot != null)
         {
-            _pitch -= _lookInput.y * lookSensitivity;
-            _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
-            cameraPivot.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+            pitch -= lookInput.y * lookSensitivity;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+            cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         }
     }
 }
