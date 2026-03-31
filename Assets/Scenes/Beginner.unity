@@ -1672,7 +1672,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2563736, y: -0, z: -0, w: 0.96657777}
-  m_LocalPosition: {x: 0, y: 3.0640001, z: -6.33}
+  m_LocalPosition: {x: 0, y: 1.72, z: -3.5589998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2721,8 +2721,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e4f22f46fa90b4aaba9f2c3cab4be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathHandling
-  player: {fileID: 0}
-  checkPoints: {fileID: 0}
+  player: {fileID: 992219502}
+  checkPoints: {fileID: 992219504}
   deathCanvas: {fileID: 123309067}
   healthThird: {fileID: 406723896}
   healthSecond: {fileID: 1431655445}
@@ -2739,7 +2739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b97456cc641e941aeb0e5e1164aacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButtons
-  player: {fileID: 0}
+  player: {fileID: 992219502}
   deathHandling: {fileID: 413533353}
   deathCanvas: {fileID: 123309067}
 --- !u!1 &415270585
@@ -6430,6 +6430,18 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.3750467
       objectReference: {fileID: 0}
@@ -6439,7 +6451,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.3053427
+      value: -21.02
       objectReference: {fileID: 0}
     - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6468,6 +6480,10 @@ PrefabInstance:
     - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4339348627803264028, guid: 1d18f2757d70d6546af90938dbbc1d98, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6569,7 +6585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   coinText: {fileID: 805722837}
   health: 3
-  playerTrans: {fileID: 0}
+  playerTrans: {fileID: 992219500}
   coins: 0
   upgradeCheck: 0
 --- !u!114 &992219503
@@ -6584,7 +6600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60eefcf3a404ecd4fa3b86c3de33c89d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  playerRef: {fileID: 0}
+  playerRef: {fileID: 992219498}
   speed: 10
   jumpForce: 15
   gravity: -18
@@ -9396,7 +9412,7 @@ Transform:
   m_GameObject: {fileID: 1481382114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.33, z: 2.67}
+  m_LocalPosition: {x: 0, y: 1.674, z: -0.101}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

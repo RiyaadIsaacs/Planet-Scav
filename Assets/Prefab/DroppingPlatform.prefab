@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2138952798638103841}
   - component: {fileID: 7412618290815052968}
   - component: {fileID: 3054528590453457449}
-  - component: {fileID: 6289238943681758803}
+  - component: {fileID: 6203889725864556189}
   m_Layer: 0
   m_Name: DroppingPlatform
   m_TagString: Platform
@@ -110,8 +110,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6289238943681758803
-BoxCollider:
+--- !u!64 &6203889725864556189
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -128,9 +128,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: ddb599c8edfa2b74fb8acb4797a58784, type: 3}
 --- !u!1001 &133959613624419415
 PrefabInstance:
   m_ObjectHideFlags: 0
