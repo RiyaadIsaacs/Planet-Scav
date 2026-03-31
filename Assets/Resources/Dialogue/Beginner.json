@@ -2,7 +2,7 @@
   "dialogues": [
     {
       "key": "BEGINNER_INTRO_001",
-      "value": "Good job getting to the planet safely Investigator. You have entered the suspected zone of the last signs of life. Navigate the area carefully and see what you can find."
+      "value": "Good job getting to the planet safely Investigator 305. You have entered the suspected zone of the last signs of life. Navigate the area carefully and see what you can find."
     },
     {
       "key": "BEGINNER_INTRO_002",
@@ -11,6 +11,22 @@
     {
       "key": "BEGINNER_INTRO_003",
       "value": "Space Gov is granting you special pay based on the areas you've explored when you collect a beacon."
+    },
+    {
+      "key": "BEGINNER_INTRO_004",
+      "value": "Copy that Captain. Deckhardt over and out."
+    },
+    {
+      "key": "BEACON_EXPLANATION_001",
+      "value": "This must be one of the beacons the captain mentioned."
+    },
+    {
+      "key": "BEACON_EXPLANATION_002",
+      "value": "Beacon detected! updating ground exploration progress. Updating credits. Thank you for your service, 305."
+    },
+    {
+      "key": "BEACON_EXPLANATION_003",
+      "value": "Oh look at that. My credits got updated in the top right hand corner."
     }
   ]
 }

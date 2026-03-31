@@ -144,10 +144,21 @@ public class UIManager : MonoBehaviour
         // Update the dialogue UI.
         if (alertNameElement != null) alertNameElement.text = item.alertName;
         if (messageElement != null) messageElement.text = LocalizationManager.GetText(item.textID);
-        
+
         if (iconElement != null && item.icon != null)
         {
             iconElement.style.backgroundImage = new StyleBackground(item.icon);
+
+            // Making sure the sprite displays correctly
+            iconElement.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
+            iconElement.style.backgroundPositionX = new BackgroundPosition(BackgroundPositionKeyword.Center);
+            iconElement.style.backgroundPositionY = new BackgroundPosition(BackgroundPositionKeyword.Center);
+            iconElement.style.backgroundRepeat = new BackgroundRepeat(Repeat.NoRepeat, Repeat.NoRepeat);
+        }
+        else if (iconElement != null)
+        {
+            // Clear the image if no sprite is assigned
+            iconElement.style.backgroundImage = null;
         }
 
         if (nextButton != null)
