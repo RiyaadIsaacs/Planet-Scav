@@ -41,6 +41,10 @@ public class PlayerController : MonoBehaviour
     private float verticalVelocity; // value to control vertical movement 
     private float pitch;
 
+    private Transform currentPlatform;
+    private Vector3 lastPlatformPosition;
+
+
     // Getters for the UI.
     public float GetCharge()
     {
@@ -177,5 +181,36 @@ public class PlayerController : MonoBehaviour
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         }
+
+        if (currentPlatform != null)
+        {
+            // Calculate how much the platform moved since last frame
+            Vector3 platformDelta = currentPlatform.position - lastPlatformPosition;
+
+            // Apply that delta to the player
+            transform.position += platformDelta;
+
+            // Update last position for next frame
+            lastPlatformPosition = currentPlatform.position;
+        }
+
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            currentPlatform = collision.transform;
+            lastPlatformPosition = currentPlatform.position;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            currentPlatform = null;
+        }
+    }
+
 }
