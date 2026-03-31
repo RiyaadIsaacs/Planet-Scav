@@ -124,5 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b1317eac046fe4f9cd42b7b7d2faeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickUpHandler
-  pickupMultiplier: 3
+  pickupMultiplier: 1.5
   uses: 5
+  coins: 50
