@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
 
     // References to UI elements for displaying. 
     private VisualElement root;
+    private VisualElement dialogueContainer;
     private VisualElement iconElement;
     private Label alertNameElement;
     private Label messageElement;
@@ -53,6 +54,7 @@ public class UIManager : MonoBehaviour
 
         // find the UI elements by name.
         iconElement = root.Q<VisualElement>("icon");
+        dialogueContainer = root.Q<VisualElement>("dialogue-container");
         alertNameElement = root.Q<Label>("alert-name");
         messageElement = root.Q<Label>("message");
         nextButton = root.Q<Button>("next-button");
@@ -168,15 +170,15 @@ public class UIManager : MonoBehaviour
     // Makes the whole dialogue visible.
     private void ShowDialogueBox()
     {
-        if (root != null)
-            root.style.display = DisplayStyle.Flex;     
+        if (dialogueContainer != null)
+            dialogueContainer.style.display = DisplayStyle.Flex;     
     }
 
     // Makes the whole dialogue invisible.
     private void HideDialogueBox()
     {
-        if (root != null)
-            root.style.display = DisplayStyle.None;
+        if (dialogueContainer != null)
+            dialogueContainer.style.display = DisplayStyle.None;
     }
 
     // Allows starting a new dialogue sequence at runtime.
