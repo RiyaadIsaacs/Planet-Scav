@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CheckPoint
   - ExplPickUp
+  - PropaneTankPickUp
   layers:
   - Default
   - TransparentFX

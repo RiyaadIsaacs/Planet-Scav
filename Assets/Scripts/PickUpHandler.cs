@@ -10,11 +10,11 @@ public class PickUpHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             var player = other; //.GetComponent<PlayerController>();
 
-            if (CompareTag("PropaneTank"))
+            if (CompareTag("PropaneTankPickUp"))
             {
                 if (player != null)
                 {
