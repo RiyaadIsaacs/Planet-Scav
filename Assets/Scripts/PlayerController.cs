@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float airControl = 0f; // Control how much the player can move in the air - 0 = no control / 1 = full control
 
-    private bool _ctrlHeld;   
+    private bool ctrlHeld;   
     private float charge;    
     private Vector3 horizontalVelocity; // units per second
 
@@ -56,6 +56,11 @@ public class PlayerController : MonoBehaviour
         return maxCharge;
     }
 
+    public bool GetCtrlHeld()
+    {
+        return ctrlHeld;
+    }
+
     #region Record Inputs
 
     public void OnMove(InputValue value)
@@ -73,13 +78,13 @@ public class PlayerController : MonoBehaviour
     {
         if (!value.isPressed) return;
 
-        if (_ctrlHeld && IsGrounded())
+        if (ctrlHeld && IsGrounded())
         {
             charge += chargePerPress;
             charge = Mathf.Clamp(charge, 0f, maxCharge);
             Debug.Log($"Charge added: {charge}");
         }
-        else if (!_ctrlHeld && IsGrounded())
+        else if (!ctrlHeld && IsGrounded())
         {
             verticalVelocity = jumpForce; // Normal jump
             Debug.Log("Normal jump");
@@ -89,18 +94,16 @@ public class PlayerController : MonoBehaviour
     // crouch for pump-action jump using callback context to detect when the key is pressed and released
     public void OnCrouch(InputValue value)
     {
-        bool wasHeld = _ctrlHeld;
-        _ctrlHeld = value.isPressed;
-
-        Debug.Log($"Ctrl: {_ctrlHeld}");
+        bool wasHeld = ctrlHeld;
+        ctrlHeld = value.isPressed;
 
         // On release player jumps 
-        if (wasHeld && !_ctrlHeld)
+        if (wasHeld && !ctrlHeld)
         {
             if (charge > 0f && IsGrounded())
             {
                 // Use pickup multiplier or otherwise use base chargeMultiplier
-                float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
+                float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier; 
                 float launchForce = charge * activeMultiplier;
                 verticalVelocity = Mathf.Max(verticalVelocity, launchForce);
 
@@ -110,11 +113,9 @@ public class PlayerController : MonoBehaviour
                     pickupMultiplierUses--;
                     if (pickupMultiplierUses == 0)
                         pickupChargeMultiplier = 0f;
-                    Debug.Log($"Pickup multiplier uses left: {pickupMultiplierUses}");
                 }
 
                 charge = 0f;
-                Debug.Log($"Charged launch: {launchForce}");
             }
         }
     }

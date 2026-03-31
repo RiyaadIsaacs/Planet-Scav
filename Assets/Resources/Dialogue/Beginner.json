@@ -6,7 +6,11 @@
     },
     {
       "key": "BEGINNER_INTRO_002",
-      "value": "We are monitoring your progress from up here With some beacons we sent down earlier. You should try to get as many as you cab on your exploration. Space Gov is granting you special pay based on the areas you've explored by collecting them."
+      "value": "We are monitoring your progress from up here With some beacons we sent down earlier. You should try to get as many as you can on your exploration."
+    },
+    {
+      "key": "BEGINNER_INTRO_003",
+      "value": "Space Gov is granting you special pay based on the areas you've explored when you collect a beacon."
     }
   ]
 }

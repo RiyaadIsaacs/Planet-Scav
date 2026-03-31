@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 549684}
   - component: {fileID: 549683}
   m_Layer: 0
-  m_Name: DialogueManager
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
   sequence: {fileID: 11400000, guid: a92c55c1df9f09f4b95ac298b9f89342, type: 2}
   localizationFile: Beginner
+  playerController: {fileID: 1361433796}
   dialogueUIDocument: {fileID: 594020524}
 --- !u!4 &549684
 Transform:
