@@ -8,12 +8,12 @@ public class NPCInteractable : MonoBehaviour
     public string upgradeName = "Speed Booster";
 
     private bool playerInRange = false;
-    private UIManager uiManager;
+    private DialogueUIManager uiManager;
     private PlayerController playerController;
 
     private void Start()
     {
-        uiManager = FindFirstObjectByType<UIManager>();
+        uiManager = FindFirstObjectByType<DialogueUIManager>();
         playerController = FindFirstObjectByType<PlayerController>();
     }
 
