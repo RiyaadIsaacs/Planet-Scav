@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -119,6 +120,14 @@ public class PlayerController : MonoBehaviour
 
                 charge = 0f;
             }
+        }
+    }
+
+    public void OnPause(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            EventHandler.OnPauseRequested?.Invoke();
         }
     }
 

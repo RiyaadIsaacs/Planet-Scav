@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Calls UIManager to start a new dialogue sequence when the player enters the trigger zone.
+// Calls DialogueUIManager to start a new dialogue sequence when the player enters the trigger zone.
 public class DialogueTrigger : MonoBehaviour
 {
     [Header("Dialogue to Play")]
@@ -14,8 +14,8 @@ public class DialogueTrigger : MonoBehaviour
         if (hasTriggered) return;
         if (!other.CompareTag("Player")) return;
 
-        // Find the UIManager and start new dialogue.
-        UIManager dm = GameObject.FindFirstObjectByType<UIManager>();
+        // Find the DialogueUIManager and start new dialogue.
+        DialogueUIManager dm = GameObject.FindFirstObjectByType<DialogueUIManager>();
         if (dm != null)
         {
             dm.StartNewDialogue(dialogueSequence, localizationFile);
@@ -23,7 +23,7 @@ public class DialogueTrigger : MonoBehaviour
         }
         else
         {
-            Debug.LogError("UIManager not found in scene!");
+            Debug.LogError("DialogueUIManager not found in scene!");
         }
     }
 }
