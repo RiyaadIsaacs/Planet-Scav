@@ -7,11 +7,12 @@ TagManager:
   - CheckPoint
   - ExplPickUp
   - PropaneTankPickUp
+  - Platform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Walkable
   - Water
   - UI
   - 
