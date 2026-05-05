@@ -54,7 +54,7 @@ public class PickUpHandler : MonoBehaviour
             {
                 player.GetComponent<PlayerStats>().CoinGainHandler(coins);
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
 
