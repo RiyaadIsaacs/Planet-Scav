@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a8d50f5d348a04fb1817c634660be6, type: 3}
+  m_Name: BeginnerDialogueSequence
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  dialogues:
+  - {fileID: 11400000, guid: 7ed47c707a12acd449251ed897d9bd7f, type: 2}
+  - {fileID: 11400000, guid: d8e6324fbf6d3214abf182b3d0f7a01c, type: 2}
+  - {fileID: 11400000, guid: a86539d0341cfce40ac2ddcbfad17603, type: 2}
+  - {fileID: 11400000, guid: 39f81f25ae0b6704988daf48eec46df9, type: 2}
