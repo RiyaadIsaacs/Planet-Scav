@@ -982,6 +982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36359d4e3aa3b61478fe1c28eaf10491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuButtons
+  selectedScene: 
 --- !u!4 &1362919624
 Transform:
   m_ObjectHideFlags: 0
@@ -1082,7 +1083,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1362919623}
         m_TargetAssemblyTypeName: MainMenuButtons, Assembly-CSharp
-        m_MethodName: PlayButton
+        m_MethodName: sceneSelectButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

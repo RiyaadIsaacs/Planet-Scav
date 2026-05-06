@@ -11,7 +11,7 @@ public class MainMenuButtons : MonoBehaviour
 
     public void PlayButton()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(selectedScene);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Beginner");
     }
 
     public void MainMenuButton()
