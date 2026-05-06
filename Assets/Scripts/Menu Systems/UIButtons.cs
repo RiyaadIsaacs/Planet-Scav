@@ -13,9 +13,9 @@ public class UIButtons : MonoBehaviour
 
     public void retry()
     {
-        //player.health = 3;
-        //deathHandling.HPGainHandler(); // Restore health visuals
-        //deathCanvas.gameObject.SetActive(false); // Hide the death canvas
+        player.health = 3;
+        deathHandling.HPGainHandler(); // Restore health visuals
+        deathCanvas.gameObject.SetActive(false); // Hide the death canvas
         Time.timeScale = 1f; // Resume the game
         AudioListener.pause = false;
 

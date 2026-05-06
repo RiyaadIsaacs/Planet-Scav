@@ -29,9 +29,9 @@ public class UIManager : MonoBehaviour
 
         Time.timeScale = isPaused ? 0f : 1f;
 
-        // Cursor control 
-        Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = isPaused;
+        //// Cursor control 
+        //Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        //Cursor.visible = isPaused;
     }
 
     // Button Functions for UI
@@ -45,7 +45,7 @@ public class UIManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
