@@ -53,6 +53,8 @@ public class EnemyMovement : MonoBehaviour
             AdvanceWaypoint();
     }
 
+    public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
+
     private bool HasReachedWaypoint(Transform target)
     {
         float dist = Vector3.Distance(transform.position, target.position);

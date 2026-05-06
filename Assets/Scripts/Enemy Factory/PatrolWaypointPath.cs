@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public sealed class PatrolWaypointPath : MonoBehaviour
+public class PatrolWaypointPath : MonoBehaviour
 {
     [SerializeField] private Transform[] _waypointsInPatrolOrder;
 

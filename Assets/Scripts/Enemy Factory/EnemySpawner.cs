@@ -55,17 +55,10 @@ public class EnemySpawner : MonoBehaviour
         foreach (var p in points)
         {
             if (p == null) continue;
-
             var enemy = factory.CreateEnemy(p.type, p.SpawnPosition);
             if (enemy == null) continue;
-
-            // If this spawn point specifies a patrol path, assign it to EnemyMovement.
             if (p.patrolPath != null && enemy.TryGetComponent<EnemyMovement>(out var movement))
-            {
-                // EnemyMovement._patrolPath is private, so we assign via inspector normally.
-                // To keep this lightweight, we only auto-assign if you expose a setter later.
-                // For now: ensure your prefab already has the correct PatrolWaypointPath assigned.
-            }
+                movement.SetPatrolPath(p.patrolPath);
         }
     }
 }
