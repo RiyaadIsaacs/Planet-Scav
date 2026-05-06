@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: AdvancedVendorDialogueSequence
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
   dialogues:
-  - {fileID: 11400000, guid: e94fd550982faad46bfb0fec38792d81, type: 2}
-  - {fileID: 11400000, guid: a34fae21db2130c478ce9d17a2e7e5e3, type: 2}
-  - {fileID: 11400000, guid: 3c2cdda026e76784cae07bd85e1a1337, type: 2}
+  - {fileID: 11400000, guid: b3692e40601ae5241a941fde5e70a68e, type: 2}
+  - {fileID: 11400000, guid: c016446df1d7c4349b5e584e82299d27, type: 2}
+  - {fileID: 11400000, guid: 9a3882a726a513247ac7bc373aa681b3, type: 2}
+  - {fileID: 11400000, guid: d30c6fbcea0e51649b9a567246c66e33, type: 2}
+  - {fileID: 11400000, guid: cd3a5b2b9ba37264095e7cfcd8a184b1, type: 2}
