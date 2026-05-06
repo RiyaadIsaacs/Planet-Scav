@@ -419,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be49bbf6b087eeb4a8b684a36d583678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  type: 0
+  type: 2
   spawnTransform: {fileID: 57707023}
   patrolPath: {fileID: 57707022}
 --- !u!1001 &98662218

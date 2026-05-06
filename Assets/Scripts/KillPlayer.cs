@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DeathPlane : MonoBehaviour
+public class KillPlayer : MonoBehaviour
 {
     [SerializeField] public PlayerController player;
 
@@ -11,7 +11,7 @@ public class DeathPlane : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("DeathPlane: OnTriggerEnter with " + other.name);
+        Debug.Log("KillPlayer: OnTriggerEnter with " + other.name);
         if (other.CompareTag("Player"))
         {
             if (player == null)
@@ -19,7 +19,7 @@ public class DeathPlane : MonoBehaviour
                 player = FindFirstObjectByType<PlayerController>();
                 if (player == null)
                 {
-                    Debug.LogError("DeathPlane: no PlayerController in the scene. Add one or assign 'player'.");
+                    Debug.LogError("KillPlayer: no PlayerController in the scene. Add one or assign 'player'.");
                     return;
                 }
             }

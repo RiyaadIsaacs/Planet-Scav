@@ -858,6 +858,7 @@ GameObject:
   - component: {fileID: 2422969553426893804}
   - component: {fileID: 173092676339702274}
   - component: {fileID: -7066186957555604122}
+  - component: {fileID: 1917382874769129653}
   m_Layer: 0
   m_Name: Sentry
   m_TagString: Untagged
@@ -891,7 +892,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9185678018841366976}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 05748777faed4b138a9efedfa00c10ad, type: 3}
   m_Controller: {fileID: 9100000, guid: 03730bceb22a49ef8f018a0019003810, type: 2}
   m_CullingMode: 1
@@ -923,6 +924,19 @@ MonoBehaviour:
   enemyName: Sentry
   projectilePrefab: {fileID: 1688157287071401247, guid: 98be6a389ff7f7c4d8e081fd7925ae99, type: 3}
   fireRate: 3
-  firePoint: {fileID: 959168290590823389, guid: 33ffaa505ad7fb94398b07d97cacdedf, type: 3}
+  firePoint: {fileID: 8864251241662465080}
   projectileSpeed: 12
   projectileLifetime: 6
+--- !u!114 &1917382874769129653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185678018841366976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855fbbe4feb6bd047a8f0ea0b98376d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
+  player: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}

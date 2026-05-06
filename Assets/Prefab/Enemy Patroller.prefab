@@ -678,6 +678,7 @@ GameObject:
   - component: {fileID: 6447325183018209366}
   - component: {fileID: 187535186655597148}
   - component: {fileID: 18005148610493441}
+  - component: {fileID: 3823818765718663991}
   m_Layer: 0
   m_Name: Enemy Patroller
   m_TagString: Untagged
@@ -739,7 +740,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -798,6 +799,19 @@ MonoBehaviour:
   maxHealth: 100
   speed: 30
   enemyName: Sentry
+--- !u!114 &3823818765718663991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293556897942819231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855fbbe4feb6bd047a8f0ea0b98376d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
+  player: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
 --- !u!1 &1293569743954194735
 GameObject:
   m_ObjectHideFlags: 0
