@@ -1,18 +1,19 @@
 using UnityEngine;
 
-public class IdleState : IPlayerState
+public class WalkState : IPlayerState
 {
-    private PlayerController player;
-    public IdleState(PlayerController controller) => player = controller;
+    private readonly PlayerController player;
+    public WalkState(PlayerController controller) => player = controller;
 
     public void Enter()
     {
         var anim = player.Anim;
         if (anim == null) return;
 
-        anim.SetFloat(player.SpeedHash, 0f);
         anim.SetBool(player.IsRunningHash, false);
         anim.SetBool(player.IsJumpingHash, false);
+        anim.SetFloat(player.SpeedHash, 0.5f);
     }
     public void Exit() { }
 }
+

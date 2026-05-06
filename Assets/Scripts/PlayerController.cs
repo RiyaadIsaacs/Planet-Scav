@@ -6,6 +6,13 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject playerRef;
+    [SerializeField] private Animator animator;
+
+    [Header("Animation Params (Animator)")]
+    [SerializeField] private string speedParam = "Speed";
+    [SerializeField] private string isRunningParam = "IsRunning";
+    [SerializeField] private string isJumpingParam = "IsJumping";
+    [SerializeField] private string isGroundedParam = "IsGrounded";
 
     // Player WASD movement and jump settings
     [Header("Movement")]
@@ -41,11 +48,50 @@ public class PlayerController : MonoBehaviour
     // Input values to record from the new input system
     private Vector2 moveInput;
     private Vector2 lookInput;
+    private bool sprintHeld;
     private float verticalVelocity; // value to control vertical movement 
     private float pitch;
 
     private Transform currentPlatform;
     private Vector3 lastPlatformPosition;
+
+    private IPlayerState currentState;
+    private IdleState idleState;
+    private WalkState walkState;
+    private RunState runState;
+    private JumpAnimState jumpState;
+
+    private int speedHash;
+    private int isRunningHash;
+    private int isJumpingHash;
+    private int isGroundedHash;
+
+    public float MoveMagnitude => moveInput.magnitude;
+    public bool SprintHeld => sprintHeld;
+    public float VerticalVelocity => verticalVelocity;
+    public Animator Anim => animator;
+    public int SpeedHash => speedHash;
+    public int IsRunningHash => isRunningHash;
+    public int IsJumpingHash => isJumpingHash;
+    public int IsGroundedHash => isGroundedHash;
+
+    private void Awake()
+    {
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        speedHash = Animator.StringToHash(speedParam);
+        isRunningHash = Animator.StringToHash(isRunningParam);
+        isJumpingHash = Animator.StringToHash(isJumpingParam);
+        isGroundedHash = Animator.StringToHash(isGroundedParam);
+
+        idleState = new IdleState(this);
+        walkState = new WalkState(this);
+        runState = new RunState(this);
+        jumpState = new JumpAnimState(this);
+
+        TransitionTo(idleState);
+    }
 
 
     // Getters for the UI.
@@ -74,6 +120,11 @@ public class PlayerController : MonoBehaviour
     public void OnLook(InputValue value)
     {
         lookInput = value.Get<Vector2>();
+    }
+
+    public void OnSprint(InputValue value)
+    {
+        sprintHeld = value.isPressed;
     }
 
     // Jump input checks for both normal and charged jumps using 
@@ -178,6 +229,42 @@ public class PlayerController : MonoBehaviour
         // Charge cannot be built up mid air
         if (!IsGrounded())
             charge = 0f;
+
+        UpdateAnimationStateMachine();
+    }
+
+    private void UpdateAnimationStateMachine()
+    {
+        bool grounded = IsGrounded();
+
+        if (animator != null)
+            animator.SetBool(isGroundedHash, grounded);
+
+        // If we're in the air (or just jumped), we want the jump animation state.
+        if (!grounded)
+        {
+            TransitionTo(jumpState);
+            return;
+        }
+
+        // Grounded states:
+        if (MoveMagnitude < 0.1f)
+        {
+            TransitionTo(idleState);
+            return;
+        }
+
+        TransitionTo(sprintHeld ? runState : walkState);
+    }
+
+    public void TransitionTo(IPlayerState next)
+    {
+        if (next == null || ReferenceEquals(currentState, next))
+            return;
+
+        currentState?.Exit();
+        currentState = next;
+        currentState.Enter();
     }
 
     private void LateUpdate()
@@ -235,4 +322,7 @@ public class PlayerController : MonoBehaviour
 
         return false;
     }
+
+    // Exposed for states (animation-only) and future systems.
+    public bool IsGroundedPublic() => IsGrounded();
 }
