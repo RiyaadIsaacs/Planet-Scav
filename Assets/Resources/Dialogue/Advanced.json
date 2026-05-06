@@ -1,0 +1,64 @@
+{
+  "dialogues": [
+    {
+      "key": "Advanced_INTRO_001",
+      "value": "Great, youve made it inside the mines 305. Its the same as before. Navigate the area carefully and see what you can find and careful."
+    },
+    {
+      "key": "Advanced_INTRO_002",
+      "value": "We are monitoring your progress and we haven't been able to get a signal, down there but your credits should still update."
+    },
+    {
+      "key": "Advanced_INTRO_003",
+      "value": "Keep us posted on anything you find."
+    },
+    {
+      "key": "BEGINNER_INTRO_004",
+      "value": "Copy that Captain. Deckhardt over and out."
+    },
+    {
+      "key": "BEACON_EXPLANATION_001",
+      "value": "This must be one of the beacons the captain mentioned."
+    },
+    {
+      "key": "BEACON_EXPLANATION_002",
+      "value": "Beacon detected! updating ground exploration progress. Updating credits. Thank you for your service, 305."
+    },
+    {
+      "key": "BEACON_EXPLANATION_003",
+      "value": "Oh, look at that. My credits are in the top right hand corner. Didn't notice that."
+    },
+    {
+      "key": "PROPANE_EXPLANATION_001",
+      "value": "Our systems show you've made some decent progress. Could you hurry it up a little?"
+    },
+    {
+      "key": "PROPANE_EXPLANATION_002",
+      "value": "Well I'm the one doing all the work here Captain. It'd go faster if you actually did something."
+    },
+    {
+      "key": "PROPANE_EXPLANATION_003",
+      "value": "Well we've sent down some extra gas for you to use along the way. Should give you a nice boost for your pump action pack you've got."
+    },
+    {
+      "key": "VENDOR_INTERACTION_001",
+      "value": "Oh hey, 305! Over here! In the little bin. We sent down a vendor for you to use. Its got everything you need but not on company credit."
+    },
+    {
+      "key": "VENDOR_INTERACTION_002",
+      "value": "You're going to need a bigger jump pack if you want to continue, so you've got to pay the toll fee."
+    },
+    {
+      "key": "VENDOR_INTERACTION_003",
+      "value": "You can buy one for 200 credits. I hope you've got enough."
+    },
+    {
+      "key": "VENDOR_INTERACTION_004",
+      "value": "Well there goes all my pay for this job."
+    },
+    {
+      "key": "EXIT_WIN_001",
+      "value": "Well done! You did it. "
+    }
+  ]
+}
