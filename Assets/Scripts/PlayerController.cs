@@ -7,11 +7,18 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject playerRef;
     [SerializeField] private Animator animator;
+    [SerializeField] private DeathHandling deathHandling;
 
     [Header("Animation Params (Animator)")]
     [SerializeField] private string speedParam = "Speed";
     [SerializeField] private string isRunningParam = "IsRunning";
+    [SerializeField] private string isJumpingParam = "IsJumping";
     [SerializeField] private string isGroundedParam = "IsGrounded";
+
+    [Header("Animation (Jump)")]
+    [SerializeField] private bool forceJumpAnimationOnPress = true;
+    [SerializeField] private string jumpStateName = "Jump";
+    [SerializeField] private float jumpCrossFadeTime = 0.05f;
 
     // Player WASD movement and jump settings
     [Header("Movement")]
@@ -62,7 +69,17 @@ public class PlayerController : MonoBehaviour
 
     private int speedHash;
     private int isRunningHash;
+    private int isJumpingHash;
     private int isGroundedHash;
+
+    private bool isJumping;
+
+    [Header("Fall Death")]
+    [SerializeField] private bool killAfterLongFall = true;
+    [SerializeField] private float secondsFallingToDie = 6f;
+    [SerializeField] private float fallingVelocityThreshold = -0.1f;
+    private float fallingTimer;
+    private bool longFallDeathTriggered;
 
     public float MoveMagnitude => moveInput.magnitude;
     public bool SprintHeld => sprintHeld;
@@ -70,6 +87,7 @@ public class PlayerController : MonoBehaviour
     public Animator Anim => animator;
     public int SpeedHash => speedHash;
     public int IsRunningHash => isRunningHash;
+    public int IsJumpingHash => isJumpingHash;
     public int IsGroundedHash => isGroundedHash;
 
     private void Awake()
@@ -77,8 +95,12 @@ public class PlayerController : MonoBehaviour
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
+        if (deathHandling == null)
+            deathHandling = FindFirstObjectByType<DeathHandling>();
+
         speedHash = Animator.StringToHash(speedParam);
         isRunningHash = Animator.StringToHash(isRunningParam);
+        isJumpingHash = Animator.StringToHash(isJumpingParam);
         isGroundedHash = Animator.StringToHash(isGroundedParam);
 
         idleState = new IdleState(this);
@@ -136,6 +158,7 @@ public class PlayerController : MonoBehaviour
         else if (!ctrlHeld && IsGrounded())
         {
             verticalVelocity = jumpForce; // Normal jump
+            SetJumping(true);
             Debug.Log("Normal jump");
         }
     }
@@ -155,6 +178,7 @@ public class PlayerController : MonoBehaviour
                 float activeMultiplier = pickupMultiplierUses > 0 ? pickupChargeMultiplier : chargeMultiplier;
                 float launchForce = charge * activeMultiplier;
                 verticalVelocity = Mathf.Max(verticalVelocity, launchForce);
+                SetJumping(true);
 
                 // consume one pickup use if active
                 if (pickupMultiplierUses > 0)
@@ -203,7 +227,8 @@ public class PlayerController : MonoBehaviour
 
         float targetSpeed = sprintHeld ? runSpeed : walkSpeed;
 
-        if (IsGrounded())
+        bool grounded = IsGrounded();
+        if (grounded)
         {
             horizontalVelocity = desiredDir * targetSpeed;
         }
@@ -215,7 +240,7 @@ public class PlayerController : MonoBehaviour
         }
 
         verticalVelocity += gravity * Time.deltaTime;
-        if (IsGrounded() && verticalVelocity < 0f)
+        if (grounded && verticalVelocity < 0f)
             verticalVelocity = -0.5f;
 
         Vector3 move = horizontalVelocity * Time.deltaTime;
@@ -224,10 +249,45 @@ public class PlayerController : MonoBehaviour
         transform.Translate(move, Space.World);
 
         // Charge cannot be built up mid air
-        if (!IsGrounded())
+        if (!grounded)
             charge = 0f;
 
+        if (grounded && isJumping && verticalVelocity <= 0f)
+            SetJumping(false);
+
+        UpdateLongFallDeath(grounded);
+
         UpdateAnimationStateMachine();
+    }
+
+    private void UpdateLongFallDeath(bool grounded)
+    {
+        if (!killAfterLongFall || secondsFallingToDie <= 0f)
+            return;
+
+        if (grounded)
+        {
+            fallingTimer = 0f;
+            longFallDeathTriggered = false;
+            return;
+        }
+
+        bool isFallingDown = verticalVelocity <= fallingVelocityThreshold;
+        if (!isFallingDown)
+        {
+            fallingTimer = 0f;
+            return;
+        }
+
+        fallingTimer += Time.deltaTime;
+        if (!longFallDeathTriggered && fallingTimer >= secondsFallingToDie)
+        {
+            longFallDeathTriggered = true;
+            fallingTimer = 0f;
+
+            if (deathHandling != null)
+                deathHandling.KillPlayer();
+        }
     }
 
     private void UpdateAnimationStateMachine()
@@ -237,18 +297,32 @@ public class PlayerController : MonoBehaviour
         if (animator != null)
             animator.SetBool(isGroundedHash, grounded);
 
-        // Jump animation is driven only by `IsGrounded` in the Animator.
-        // While airborne we don't force an animation state; we just keep updating `IsGrounded`.
+        // While airborne we don't force locomotion state changes.
         if (!grounded) return;
 
         // Grounded locomotion states:
         if (MoveMagnitude < 0.1f)
         {
             TransitionTo(idleState);
+            if (animator != null)
+            {
+                animator.SetFloat(speedHash, 0f);
+                animator.SetBool(isRunningHash, false);
+            }
             return;
         }
 
         TransitionTo(sprintHeld ? runState : walkState);
+
+        // Blend tree driver:
+        // - 0.0 = idle
+        // - 0.5 = walk
+        // - 1.0 = run
+        if (animator != null)
+        {
+            animator.SetFloat(speedHash, sprintHeld ? 1f : 0.5f);
+            animator.SetBool(isRunningHash, sprintHeld);
+        }
     }
 
     public void TransitionTo(IPlayerState next)
@@ -261,9 +335,25 @@ public class PlayerController : MonoBehaviour
         currentState.Enter();
     }
 
+    private void SetJumping(bool value)
+    {
+        isJumping = value;
+        if (animator != null)
+        {
+            animator.SetBool(isJumpingHash, value);
+
+            // If your Animator transition is waiting for falling/grounded conditions,
+            // force the jump state to start immediately on button press.
+            if (value && forceJumpAnimationOnPress && !string.IsNullOrWhiteSpace(jumpStateName))
+            {
+                animator.CrossFadeInFixedTime(jumpStateName, jumpCrossFadeTime);
+            }
+        }
+    }
+
     private void LateUpdate()
     {
-        // Camera rotation — yaw rotates the player, pitch rotates the camera pivot
+        // Camera rotation - yaw rotates the player, pitch rotates the camera pivot
         float yaw = lookInput.x * lookSensitivity;
         transform.Rotate(0f, yaw, 0f);
 
