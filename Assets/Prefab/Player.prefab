@@ -276,11 +276,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11
+      value: 34.16
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -22.75
+      value: 17.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
       propertyPath: m_LocalRotation.w
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   playerRef: {fileID: 1466879854186546899}
   animator: {fileID: 6237697134982719702}
-  deathHandling: {fileID: 8122924657500125054, guid: 98fe7c9dc2cfeac48a4894785f284c34, type: 3}
+  deathHandling: {fileID: 1575774001715414696}
   speedParam: Speed
   isRunningParam: IsRunning
   isJumpingParam: IsJumping
@@ -487,9 +487,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6e6a413a586f93449be98c215148e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  coinText: {fileID: 0}
-  health: 0
-  playerTrans: {fileID: 0}
+  coinText: {fileID: 4063636971565193322}
+  health: 3
+  playerTrans: {fileID: 2238491153249279081}
   coins: 0
   upgradeCheck: 0
 --- !u!136 &6241639457677757273
@@ -557,6 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469fe21d3c1320945b9bcdfebc032d27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DontDestroy
+  spawnPoint: {fileID: 0}
 --- !u!4 &2238491153249279081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
@@ -695,6 +696,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+--- !u!114 &4063636971565193322 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 989046345480753538, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
+  m_PrefabInstance: {fileID: 3881324573048621544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &4167388028928871332 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 867142453978432076, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}

@@ -8,6 +8,7 @@ TagManager:
   - ExplPickUp
   - PropaneTankPickUp
   - Platform
+  - Spawn
   layers:
   - Default
   - TransparentFX
