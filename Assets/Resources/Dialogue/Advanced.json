@@ -13,52 +13,36 @@
       "value": "Keep us posted on anything you find."
     },
     {
-      "key": "BEGINNER_INTRO_004",
-      "value": "Copy that Captain. Deckhardt over and out."
+      "key": "Advanced_Middle_001",
+      "value": "Alright, 305. We have sent the vendor ahead. Meet up with him and pick up any of the beacons that are still available."
     },
     {
-      "key": "BEACON_EXPLANATION_001",
-      "value": "This must be one of the beacons the captain mentioned."
+      "key": "Advanced_Middle_002",
+      "value": "We can't reach further with our systems. Can you ... th.. ignal's cutting out."
     },
     {
-      "key": "BEACON_EXPLANATION_002",
-      "value": "Beacon detected! updating ground exploration progress. Updating credits. Thank you for your service, 305."
+      "key": "Advanced_Middle_003",
+      "value": "Well so much for an easy job."
     },
     {
-      "key": "BEACON_EXPLANATION_003",
-      "value": "Oh, look at that. My credits are in the top right hand corner. Didn't notice that."
+      "key": "Advanced_VENDOR_001",
+      "value": "Oh hey, 305! It's me again! The little bin man. You remember the deal from last time."
     },
     {
-      "key": "PROPANE_EXPLANATION_001",
-      "value": "Our systems show you've made some decent progress. Could you hurry it up a little?"
+      "key": "Advanced_VENDOR_002",
+      "value": "You're going to need a bigger ass gun if you want to continue, so you've got to pay the toll fee, yet again!"
     },
     {
-      "key": "PROPANE_EXPLANATION_002",
-      "value": "Well I'm the one doing all the work here Captain. It'd go faster if you actually did something."
+      "key": "Advanced_VENDOR_003",
+      "value": "You can buy one for another 200 credits. I sure do hope you've got enough."
     },
     {
-      "key": "PROPANE_EXPLANATION_003",
-      "value": "Well we've sent down some extra gas for you to use along the way. Should give you a nice boost for your pump action pack you've got."
+      "key": "Advanced_VENDOR_004",
+      "value": "What's with this system? At this point I might lose more than I make."
     },
     {
-      "key": "VENDOR_INTERACTION_001",
-      "value": "Oh hey, 305! Over here! In the little bin. We sent down a vendor for you to use. Its got everything you need but not on company credit."
-    },
-    {
-      "key": "VENDOR_INTERACTION_002",
-      "value": "You're going to need a bigger jump pack if you want to continue, so you've got to pay the toll fee."
-    },
-    {
-      "key": "VENDOR_INTERACTION_003",
-      "value": "You can buy one for 200 credits. I hope you've got enough."
-    },
-    {
-      "key": "VENDOR_INTERACTION_004",
-      "value": "Well there goes all my pay for this job."
-    },
-    {
-      "key": "EXIT_WIN_001",
-      "value": "Well done! You did it. "
+      "key": "Advanced_VENDOR_005",
+      "value": "Well blame the captain for it!"
     }
   ]
 }
