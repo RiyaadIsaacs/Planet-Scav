@@ -267,6 +267,14 @@ public class PlayerController : MonoBehaviour
 
         if (grounded)
         {
+            // Only apply the "long fall" consequence once we land.
+            if (!longFallDeathTriggered && fallingTimer >= secondsFallingToDie)
+            {
+                longFallDeathTriggered = true;
+                if (deathHandling != null)
+                    deathHandling.KillPlayer();
+            }
+
             fallingTimer = 0f;
             longFallDeathTriggered = false;
             return;
@@ -280,14 +288,6 @@ public class PlayerController : MonoBehaviour
         }
 
         fallingTimer += Time.deltaTime;
-        if (!longFallDeathTriggered && fallingTimer >= secondsFallingToDie)
-        {
-            longFallDeathTriggered = true;
-            fallingTimer = 0f;
-
-            if (deathHandling != null)
-                deathHandling.KillPlayer();
-        }
     }
 
     private void UpdateAnimationStateMachine()
@@ -314,10 +314,7 @@ public class PlayerController : MonoBehaviour
 
         TransitionTo(sprintHeld ? runState : walkState);
 
-        // Blend tree driver:
-        // - 0.0 = idle
-        // - 0.5 = walk
-        // - 1.0 = run
+        
         if (animator != null)
         {
             animator.SetFloat(speedHash, sprintHeld ? 1f : 0.5f);
@@ -342,7 +339,6 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isJumpingHash, value);
 
-            // If your Animator transition is waiting for falling/grounded conditions,
             // force the jump state to start immediately on button press.
             if (value && forceJumpAnimationOnPress && !string.IsNullOrWhiteSpace(jumpStateName))
             {
@@ -369,7 +365,6 @@ public class PlayerController : MonoBehaviour
             // Calculate how much the platform moved since last frame
             Vector3 platformDelta = currentPlatform.position - lastPlatformPosition;
 
-            // Apply that delta to the player
             transform.position += platformDelta;
 
             // Update last position for next frame
@@ -407,6 +402,6 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Exposed for states (animation-only) and future systems.
+    // Exposed for states
     public bool IsGroundedPublic() => IsGrounded();
 }
