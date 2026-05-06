@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7412618290815052968}
   - component: {fileID: 3054528590453457449}
   - component: {fileID: 6203889725864556189}
+  - component: {fileID: 1286115288685455334}
   m_Layer: 0
   m_Name: DroppingPlatform
   m_TagString: Platform
@@ -132,6 +133,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: ddb599c8edfa2b74fb8acb4797a58784, type: 3}
+--- !u!114 &1286115288685455334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871475988587214426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4877253ff6b77e4888604e2f4089283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DroppingPlatform
+  fallDelay: 2
+  returnDelay: 3
+  speed: 3
+  oldPosition: {fileID: 0}
+  fallLimit: {fileID: 0}
 --- !u!1001 &133959613624419415
 PrefabInstance:
   m_ObjectHideFlags: 0

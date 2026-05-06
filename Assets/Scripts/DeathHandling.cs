@@ -25,7 +25,13 @@ public class DeathHandling : MonoBehaviour
 
     public void KillPlayer()
     {
-        if (player != null && player.playerTrans != null && checkPoints != null)
+        if (player == null)
+        {
+            Debug.LogError("DeathHandling: assign the PlayerStats reference in the Inspector (field 'player').");
+            return;
+        }
+
+        if (player.playerTrans != null && checkPoints != null)
             player.playerTrans.SetPositionAndRotation(checkPoints.initialPosition, checkPoints.initialRotation);
 
         HPLossHandler();
@@ -33,29 +39,37 @@ public class DeathHandling : MonoBehaviour
 
     public void HPLossHandler()
     {
+        if (player == null)
+        {
+            Debug.LogError("DeathHandling: assign the PlayerStats reference in the Inspector (field 'player').");
+            return;
+        }
+
         player.health += -1;
         Debug.Log(player.health);
 
         if (player.health == 2)
         {
-            healthThird.gameObject.SetActive(false);
+            if (healthThird != null) healthThird.gameObject.SetActive(false);
         }
         else if (player.health == 1)
         {
-            healthSecond.gameObject.SetActive(false);
+            if (healthSecond != null) healthSecond.gameObject.SetActive(false);
         }
 
         if (player.health <= 0)
         {
-            healthFirst.gameObject.SetActive(false);
+            if (healthFirst != null) healthFirst.gameObject.SetActive(false);
             Debug.Log("Player has died.");
-            deathCanvas.gameObject.SetActive(true); // Show the death canvas
+            if (deathCanvas != null) deathCanvas.gameObject.SetActive(true); // Show the death canvas
             Time.timeScale = 0f; // Pause the game
         }
     }
 
     public void HPGainHandler()
     {
+        if (player == null) return;
+
         if (player.health == 3)
         {
             healthThird.gameObject.SetActive(true);

@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject playerRef;
     [SerializeField] private Animator animator;
-    [SerializeField] private DeathHandling deathHandling;
+    [SerializeField] public DeathHandling deathHandling;
 
     [Header("Animation Params (Animator)")]
     [SerializeField] private string speedParam = "Speed";
