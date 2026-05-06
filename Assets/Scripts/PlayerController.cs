@@ -11,12 +11,12 @@ public class PlayerController : MonoBehaviour
     [Header("Animation Params (Animator)")]
     [SerializeField] private string speedParam = "Speed";
     [SerializeField] private string isRunningParam = "IsRunning";
-    [SerializeField] private string isJumpingParam = "IsJumping";
     [SerializeField] private string isGroundedParam = "IsGrounded";
 
     // Player WASD movement and jump settings
     [Header("Movement")]
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float runSpeed = 8f;
     [SerializeField] private float jumpForce = 10f; // Jump force for normal jumps
     [SerializeField] private float gravity = -18f;
     [SerializeField] private float groundCheckDistance = 1.1f; // Allowable distance from ground to player
@@ -59,11 +59,9 @@ public class PlayerController : MonoBehaviour
     private IdleState idleState;
     private WalkState walkState;
     private RunState runState;
-    private JumpAnimState jumpState;
 
     private int speedHash;
     private int isRunningHash;
-    private int isJumpingHash;
     private int isGroundedHash;
 
     public float MoveMagnitude => moveInput.magnitude;
@@ -72,7 +70,6 @@ public class PlayerController : MonoBehaviour
     public Animator Anim => animator;
     public int SpeedHash => speedHash;
     public int IsRunningHash => isRunningHash;
-    public int IsJumpingHash => isJumpingHash;
     public int IsGroundedHash => isGroundedHash;
 
     private void Awake()
@@ -82,13 +79,11 @@ public class PlayerController : MonoBehaviour
 
         speedHash = Animator.StringToHash(speedParam);
         isRunningHash = Animator.StringToHash(isRunningParam);
-        isJumpingHash = Animator.StringToHash(isJumpingParam);
         isGroundedHash = Animator.StringToHash(isGroundedParam);
 
         idleState = new IdleState(this);
         walkState = new WalkState(this);
         runState = new RunState(this);
-        jumpState = new JumpAnimState(this);
 
         TransitionTo(idleState);
     }
@@ -206,14 +201,16 @@ public class PlayerController : MonoBehaviour
         Vector3 desiredDir = transform.forward * moveInput.y + transform.right * moveInput.x;
         if (desiredDir.sqrMagnitude > 1f) desiredDir.Normalize();
 
+        float targetSpeed = sprintHeld ? runSpeed : walkSpeed;
+
         if (IsGrounded())
         {
-            horizontalVelocity = desiredDir * speed;
+            horizontalVelocity = desiredDir * targetSpeed;
         }
         else
         {
             // No control in air when airControl is 0
-            Vector3 desiredVel = desiredDir * speed;
+            Vector3 desiredVel = desiredDir * targetSpeed;
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, desiredVel, airControl * Time.deltaTime);
         }
 
@@ -240,14 +237,11 @@ public class PlayerController : MonoBehaviour
         if (animator != null)
             animator.SetBool(isGroundedHash, grounded);
 
-        // If we're in the air (or just jumped), we want the jump animation state.
-        if (!grounded)
-        {
-            TransitionTo(jumpState);
-            return;
-        }
+        // Jump animation is driven only by `IsGrounded` in the Animator.
+        // While airborne we don't force an animation state; we just keep updating `IsGrounded`.
+        if (!grounded) return;
 
-        // Grounded states:
+        // Grounded locomotion states:
         if (MoveMagnitude < 0.1f)
         {
             TransitionTo(idleState);

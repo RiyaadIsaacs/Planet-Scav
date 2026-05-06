@@ -12,7 +12,6 @@ public class IdleState : IPlayerState
 
         anim.SetFloat(player.SpeedHash, 0f);
         anim.SetBool(player.IsRunningHash, false);
-        anim.SetBool(player.IsJumpingHash, false);
     }
     public void Exit() { }
 }
