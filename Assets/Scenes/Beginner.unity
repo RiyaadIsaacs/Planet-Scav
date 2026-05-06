@@ -6717,17 +6717,29 @@ PrefabInstance:
       propertyPath: spawnPoint
       value: 
       objectReference: {fileID: 712834452}
+    - target: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+      propertyPath: runSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+      propertyPath: walkSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+      propertyPath: cameraPivot
+      value: 
+      objectReference: {fileID: 1391426054}
     - target: {fileID: 2238491153249279081, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.56
       objectReference: {fileID: 0}
     - target: {fileID: 2238491153249279081, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34.16
+      value: 70.43
       objectReference: {fileID: 0}
     - target: {fileID: 2238491153249279081, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.3
+      value: 427.25
       objectReference: {fileID: 0}
     - target: {fileID: 2238491153249279081, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7179,6 +7191,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf4740eaf9aeb5a41b0cf2da7d57e278, type: 3}
+--- !u!4 &1391426054 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8176572062324683946, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+  m_PrefabInstance: {fileID: 1301071029}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1393014781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10834,6 +10851,10 @@ PrefabInstance:
     - target: {fileID: 4418601958648352532, guid: c6a771f069ba1ea4caf4aee994bef3f9, type: 3}
       propertyPath: m_Name
       value: Spawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418601958648352532, guid: c6a771f069ba1ea4caf4aee994bef3f9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4418601958648352532, guid: c6a771f069ba1ea4caf4aee994bef3f9, type: 3}
       propertyPath: m_TagString

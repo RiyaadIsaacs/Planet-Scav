@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5397778e44503884eacdacba164612ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VerticalPlatform
-  moveSpeed: 2
+  moveSpeed: 6
   upDuration: 2
   downDuration: 2
 --- !u!1 &822687988068613681

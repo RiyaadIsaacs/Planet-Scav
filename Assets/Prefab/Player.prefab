@@ -451,7 +451,7 @@ MonoBehaviour:
   chargeMultiplier: 1.2
   airControl: 0.5
   killAfterLongFall: 1
-  secondsFallingToDie: 6
+  secondsFallingToDie: 2
   fallingVelocityThreshold: -0.1
 --- !u!95 &6237697134982719702
 Animator:
