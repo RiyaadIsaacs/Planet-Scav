@@ -6,8 +6,15 @@ public class UIManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private DialogueUIManager dialogueUI;
 
     private bool isPaused;
+
+    private void Awake()
+    {
+        if (dialogueUI == null)
+            dialogueUI = FindFirstObjectByType<DialogueUIManager>();
+    }
 
     private void OnEnable()
     {
@@ -27,11 +34,14 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(isPaused);
         optionsMenu.SetActive(false); // always close options when toggling pause
 
+        if (dialogueUI != null)
+            dialogueUI.SetHudOverlayActive(!isPaused);
+
         Time.timeScale = isPaused ? 0f : 1f;
 
-        //// Cursor control 
-        //Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
-        //Cursor.visible = isPaused;
+        // Cursor control 
+        Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isPaused;
     }
 
     // Button Functions for UI
@@ -43,9 +53,12 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
 
+        if (dialogueUI != null)
+            dialogueUI.SetHudOverlayActive(true);
+
         Time.timeScale = 1f;
 
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
@@ -66,6 +79,9 @@ public class UIManager : MonoBehaviour
         // Unpause before switching scenes
         Time.timeScale = 1f;
         isPaused = false;
+
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
 
         SceneManager.LoadScene("MainMenu");
     }

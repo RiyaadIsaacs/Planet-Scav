@@ -11,7 +11,6 @@ public class WalkState : IPlayerState
         if (anim == null) return;
 
         anim.SetBool(player.IsRunningHash, false);
-        anim.SetFloat(player.SpeedHash, 0.5f);
     }
     public void Exit() { }
 }

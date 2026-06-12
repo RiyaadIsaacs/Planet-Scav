@@ -63,6 +63,13 @@ public class DeathHandling : MonoBehaviour
             Debug.Log("Player has died.");
             if (deathCanvas != null) deathCanvas.gameObject.SetActive(true); // Show the death canvas
             Time.timeScale = 0f; // Pause the game
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            var dialogueUI = FindFirstObjectByType<DialogueUIManager>();
+            if (dialogueUI != null)
+                dialogueUI.SetHudOverlayActive(false);
         }
     }
 

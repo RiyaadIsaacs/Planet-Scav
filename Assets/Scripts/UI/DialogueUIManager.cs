@@ -12,6 +12,8 @@ public class DialogueUIManager : MonoBehaviour
 
     [Header("UI Toolkit")]
     [SerializeField] private UIDocument dialogueUIDocument;
+    [Tooltip("Keep below uGUI Canvas Sort Order so pause/death menus render on top.")]
+    [SerializeField] private int hudSortingOrder = -100;
 
     // References to UI elements for displaying. 
     private VisualElement root;
@@ -29,6 +31,12 @@ public class DialogueUIManager : MonoBehaviour
     private Label interactPrompt; // for interact when close to npc.
 
     private DialogueQueue queue = new DialogueQueue(); // Custom queue to manage dialogue items.
+
+    private void Awake()
+    {
+        if (dialogueUIDocument != null && dialogueUIDocument.panelSettings != null)
+            dialogueUIDocument.panelSettings.sortingOrder = hudSortingOrder;
+    }
 
     void Start()
     {
@@ -221,5 +229,19 @@ public class DialogueUIManager : MonoBehaviour
             interactPrompt.AddToClassList("show");
         else
             interactPrompt.RemoveFromClassList("show");
+    }
+
+    /// <summary>
+    /// Hides and disables UI Toolkit while pause/death menus are open.
+    /// pickingMode alone is not enough — UIToolkit can still draw over uGUI.
+    /// </summary>
+    public void SetHudOverlayActive(bool active)
+    {
+        if (dialogueUIDocument == null) return;
+
+        dialogueUIDocument.enabled = active;
+
+        if (root != null)
+            root.pickingMode = active ? PickingMode.Position : PickingMode.Ignore;
     }
 }

@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float runSpeed = 8f;
+    [SerializeField] private float groundAcceleration = 24f;
+    [SerializeField] private float groundDeceleration = 28f;
     [SerializeField] private float jumpForce = 10f; // Jump force for normal jumps
     [SerializeField] private float gravity = -18f;
     [SerializeField] private float groundCheckDistance = 1.1f; // Allowable distance from ground to player
@@ -42,7 +44,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxCharge = 25f;
     [SerializeField] private float chargeMultiplier = 1.2f; // Converts charge into jump force
 
-    [SerializeField] private float airControl = 0f; // Control how much the player can move in the air - 0 = no control / 1 = full control
+    [SerializeField] [Range(0f, 1f)] private float airControl = 0f; // 0 = keep jump momentum only, 1 = full movement control
 
     private bool ctrlHeld;
     private float charge;
@@ -84,6 +86,7 @@ public class PlayerController : MonoBehaviour
     public float MoveMagnitude => moveInput.magnitude;
     public bool SprintHeld => sprintHeld;
     public float VerticalVelocity => verticalVelocity;
+    public float HorizontalSpeed => new Vector3(horizontalVelocity.x, 0f, horizontalVelocity.z).magnitude;
     public Animator Anim => animator;
     public int SpeedHash => speedHash;
     public int IsRunningHash => isRunningHash;
@@ -127,26 +130,32 @@ public class PlayerController : MonoBehaviour
         return ctrlHeld;
     }
 
+    private static bool IsGameplayBlocked => Time.timeScale <= 0f; // Check if the game is paused
+
     #region Record Inputs
 
     public void OnMove(InputValue value)
     {
+        if (IsGameplayBlocked) { moveInput = Vector2.zero; return; }
         moveInput = value.Get<Vector2>();
     }
 
     public void OnLook(InputValue value)
     {
+        if (IsGameplayBlocked) { lookInput = Vector2.zero; return; }
         lookInput = value.Get<Vector2>();
     }
 
     public void OnSprint(InputValue value)
     {
+        if (IsGameplayBlocked) { sprintHeld = false; return; }
         sprintHeld = value.isPressed;
     }
 
     // Jump input checks for both normal and charged jumps using 
     public void OnJump(InputValue value)
     {
+        if (IsGameplayBlocked) return;
         if (!value.isPressed) return;
 
         if (ctrlHeld && IsGrounded())
@@ -166,6 +175,7 @@ public class PlayerController : MonoBehaviour
     // crouch for pump-action jump using callback context to detect when the key is pressed and released
     public void OnCrouch(InputValue value)
     {
+        if (IsGameplayBlocked) return;
         bool wasHeld = ctrlHeld;
         ctrlHeld = value.isPressed;
 
@@ -221,23 +231,33 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsGameplayBlocked)
+            return;
 
         Vector3 desiredDir = transform.forward * moveInput.y + transform.right * moveInput.x;
         if (desiredDir.sqrMagnitude > 1f) desiredDir.Normalize();
 
         float targetSpeed = sprintHeld ? runSpeed : walkSpeed;
+        Vector3 desiredVel = desiredDir * targetSpeed;
 
         bool grounded = IsGrounded();
-        if (grounded)
+
+        // Don't use ground movement while going up.
+        bool useGroundMovement = grounded && verticalVelocity <= 0f;
+
+        if (useGroundMovement)
         {
-            horizontalVelocity = desiredDir * targetSpeed;
+            bool hasMoveInput = moveInput.sqrMagnitude > 0.01f;
+            float accel = hasMoveInput ? groundAcceleration : groundDeceleration;
+            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, desiredVel, accel * Time.deltaTime);
         }
-        else
+        else if (airControl > 0f)
         {
-            // No control in air when airControl is 0
-            Vector3 desiredVel = desiredDir * targetSpeed;
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, desiredVel, airControl * Time.deltaTime);
+            // Limited mid-air steering; scaled by airControl (0 = none, skip entirely).
+            float airAccel = groundAcceleration * airControl;
+            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, desiredVel, airAccel * Time.deltaTime);
         }
+        // else: airborne with airControl 0 — keep launch momentum, ignore WASD
 
         verticalVelocity += gravity * Time.deltaTime;
         if (grounded && verticalVelocity < 0f)
@@ -295,31 +315,36 @@ public class PlayerController : MonoBehaviour
         bool grounded = IsGrounded();
 
         if (animator != null)
+        {
             animator.SetBool(isGroundedHash, grounded);
+            animator.SetFloat(speedHash, GetAnimatorSpeed());
+            animator.SetBool(isRunningHash, sprintHeld && HorizontalSpeed > 0.1f);
+        }
 
-        // While airborne we don't force locomotion state changes.
         if (!grounded) return;
 
-        // Grounded locomotion states:
-        if (MoveMagnitude < 0.1f)
-        {
+        if (MoveMagnitude < 0.1f && HorizontalSpeed < 0.1f)
             TransitionTo(idleState);
-            if (animator != null)
-            {
-                animator.SetFloat(speedHash, 0f);
-                animator.SetBool(isRunningHash, false);
-            }
-            return;
-        }
+        else if (sprintHeld)
+            TransitionTo(runState);
+        else
+            TransitionTo(walkState);
+    }
 
-        TransitionTo(sprintHeld ? runState : walkState);
+    // Maps actual horizontal speed to blend tree thresholds.
+    private float GetAnimatorSpeed()
+    {
+        float speed = HorizontalSpeed;
+        if (speed < 0.05f)
+            return 0f;
 
-        
-        if (animator != null)
-        {
-            animator.SetFloat(speedHash, sprintHeld ? 1f : 0.5f);
-            animator.SetBool(isRunningHash, sprintHeld);
-        }
+        if (speed <= walkSpeed)
+            return Mathf.Lerp(0f, 0.5f, speed / walkSpeed);
+
+        if (runSpeed <= walkSpeed)
+            return 0.5f;
+
+        return Mathf.Lerp(0.5f, 1f, Mathf.Clamp01((speed - walkSpeed) / (runSpeed - walkSpeed)));
     }
 
     public void TransitionTo(IPlayerState next)
@@ -349,6 +374,9 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (IsGameplayBlocked)
+            return;
+
         // Camera rotation - yaw rotates the player, pitch rotates the camera pivot
         float yaw = lookInput.x * lookSensitivity;
         transform.Rotate(0f, yaw, 0f);
