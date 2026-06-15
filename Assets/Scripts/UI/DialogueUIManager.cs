@@ -1,247 +1,263 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine.UIElements;
+using UIE_Button = UnityEngine.UI.Button;
+using UIE_Image = UnityEngine.UI.Image;
 
 public class DialogueUIManager : MonoBehaviour
 {
     [Header("Dialogue Data")]
     public DialogueSequence sequence;
-    public string localizationFile = "Beginner";   // Changes dialog per scene. 
+    public string localizationFile = "Beginner";
 
     [Header("Player Reference")]
     [SerializeField] private PlayerController playerController;
 
-    [Header("UI Toolkit")]
-    [SerializeField] private UIDocument dialogueUIDocument;
-    [Tooltip("Keep below uGUI Canvas Sort Order so pause/death menus render on top.")]
+    [Header("Dialogue Panel (uGUI on Player Canvas)")]
+    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private TMP_Text alertNameText;
+    [SerializeField] private TMP_Text messageText;
+    [SerializeField] private UIE_Image iconImage;
+    [SerializeField] private UIE_Button nextButton;
+    [SerializeField] private TMP_Text interactPromptText;
+
+    [Header("Charge Bar (optional UI Toolkit — leave empty if using uGUI charge below)")]
+    [SerializeField] private UIDocument chargeUIDocument;
     [SerializeField] private int hudSortingOrder = -100;
 
-    // References to UI elements for displaying. 
-    private VisualElement root;
-    private VisualElement dialogueContainer;
-    private VisualElement iconElement;
-    private Label alertNameElement;
-    private Label messageElement;
-    private Button nextButton;
+    [Header("Charge Bar (optional uGUI)")]
+    [SerializeField] private GameObject chargePanel;
+    [SerializeField] private UIE_Image chargeFillImage;
+    [SerializeField] private TMP_Text chargeValueText;
 
-    // HUD (Charge Bar) elements
-    private VisualElement chargeContainer;
-    private VisualElement chargeFill;
-    private Label chargeValueLabel;
+    private VisualElement _chargeContainer;
+    private VisualElement _chargeFill;
+    private Label _chargeValueLabel;
 
-    private Label interactPrompt; // for interact when close to npc.
-
-    private DialogueQueue queue = new DialogueQueue(); // Custom queue to manage dialogue items.
+    private DialogueQueue queue = new DialogueQueue();
+    private DialogueItem _currentItem;
+    private bool _hasCurrentLine;
+    private bool _panelVisible;
 
     private void Awake()
     {
-        if (dialogueUIDocument != null && dialogueUIDocument.panelSettings != null)
-            dialogueUIDocument.panelSettings.sortingOrder = hudSortingOrder;
+        if (chargeUIDocument != null && chargeUIDocument.panelSettings != null)
+            chargeUIDocument.panelSettings.sortingOrder = hudSortingOrder;
+
+        if (chargeUIDocument != null)
+        {
+            var root = chargeUIDocument.rootVisualElement;
+            _chargeContainer = root.Q<VisualElement>("charge-container");
+            _chargeFill = root.Q<VisualElement>("charge-fill");
+            _chargeValueLabel = root.Q<Label>("charge-value");
+        }
     }
 
-    void Start()
+    private void Start()
     {
-        if (dialogueUIDocument == null)
-        {
-            Debug.LogError("UIDocument is not assigned. pls fix");
-            return;
-        }
-
         if (sequence == null)
         {
-            Debug.LogError("DialogueSequence is not assigned. should fix");
+            Debug.LogError("DialogueSequence is not assigned.");
             return;
         }
 
         if (playerController == null)
-        {
             playerController = FindFirstObjectByType<PlayerController>();
-            if (playerController == null)
-                Debug.LogWarning("PlayerController not found in scene. Where did he go?");
-        }
 
-        // Setup UI references.
-        root = dialogueUIDocument.rootVisualElement;
-
-        // find the UI elements by name.
-        iconElement = root.Q<VisualElement>("icon");
-        dialogueContainer = root.Q<VisualElement>("dialogue-container");
-        alertNameElement = root.Q<Label>("alert-name");
-        messageElement = root.Q<Label>("message");
-        nextButton = root.Q<Button>("next-button");
-
-        // Charge bar elements by name.
-        chargeContainer = root.Q<VisualElement>("charge-container");
-        chargeFill = root.Q<VisualElement>("charge-fill");
-        chargeValueLabel = root.Q<Label>("charge-value");
-
-        interactPrompt = root.Q<Label>("interact-prompt");
-
-        // Subscribing to the next button.
         if (nextButton != null)
-            nextButton.clicked += ShowNextDialogue;
+            nextButton.onClick.AddListener(OnNextButtonClicked);
 
-        // Load the JSON for this level
         LocalizationManager.LoadLanguage(localizationFile);
 
-        // Fill the queue from the sequence
+        queue = new DialogueQueue();
         foreach (DialogueItem item in sequence.dialogues)
-        {
             queue.Enqueue(item);
-        }
 
-        ShowNextDialogue();
+        LoadFirstLineHidden();
     }
 
-    void Update()
+    private void Update()
     {
-        // Update charge bar every frame
         UpdateChargeBar();
     }
 
-    private void UpdateChargeBar()
+    private void LoadFirstLineHidden()
     {
-        // safety check.
-        if (playerController == null || chargeFill == null || chargeValueLabel == null)
-            return;
+        if (!queue.IsEmpty())
+        {
+            _currentItem = queue.Dequeue();
+            _hasCurrentLine = true;
+            ApplyCurrentLineToUI();
+        }
 
-        ChargeBarVisibility();
-
-        // Get current charge and max charge 
-        float currentCharge = playerController.GetCharge();
-        float maxCharge = playerController.GetMaxCharge();
-
-        float percentage = maxCharge > 0 ? (currentCharge / maxCharge) * 100f : 0f; // return percentage if >0, else return 0.
-
-        // fill charge bar vertically based on perventage.
-        chargeFill.style.height = new Length(percentage, LengthUnit.Percent);
-
-        // Update text
-        chargeValueLabel.text = $"{currentCharge:F1} / {maxCharge}";
-
-        // Color changes based on charge.
-        if (percentage > 80f)
-            chargeFill.style.backgroundColor = new Color(1f, 0.3f, 0.3f);     // Red (high)
-        else if (percentage > 50f)
-            chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);   // Yellow
-        else
-            chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);    // Green
+        HideDialoguePanel();
+        if (interactPromptText != null)
+            interactPromptText.gameObject.SetActive(false);
     }
 
-    private void ChargeBarVisibility()
+    private void OnNextButtonClicked()
     {
-        bool isHoldingCtrl = playerController.GetCtrlHeld();
+        ShowNextDialogue();
+    }
 
-        // Show charge bar only when holding Ctrl
-        if (isHoldingCtrl)
+    public void ToggleDialoguePanel()
+    {
+        if (!_hasCurrentLine && !queue.IsEmpty())
         {
-            chargeContainer.style.display = DisplayStyle.Flex;
+            _currentItem = queue.Dequeue();
+            _hasCurrentLine = true;
+            ApplyCurrentLineToUI();
         }
-        else
-        {
-            chargeContainer.style.display = DisplayStyle.None;
-        }
+
+        if (!_hasCurrentLine)
+            return;
+
+        _panelVisible = !_panelVisible;
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(_panelVisible);
     }
 
     public void ShowNextDialogue()
     {
-        // hide the dialogue box cause no more dialogue. 
         if (queue.IsEmpty())
         {
-            HideDialogueBox();
+            _hasCurrentLine = false;
+            HideDialoguePanel();
             return;
         }
 
-        ShowDialogueBox();
-
-        DialogueItem item = queue.Dequeue();
-
-        // Update the dialogue UI.
-        if (alertNameElement != null) alertNameElement.text = item.alertName;
-        if (messageElement != null) messageElement.text = LocalizationManager.GetText(item.textID);
-
-        if (iconElement != null && item.icon != null)
-        {
-            iconElement.style.backgroundImage = new StyleBackground(item.icon);
-
-            // Making sure the sprite displays correctly
-            iconElement.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
-            iconElement.style.backgroundPositionX = new BackgroundPosition(BackgroundPositionKeyword.Center);
-            iconElement.style.backgroundPositionY = new BackgroundPosition(BackgroundPositionKeyword.Center);
-            iconElement.style.backgroundRepeat = new BackgroundRepeat(Repeat.NoRepeat, Repeat.NoRepeat);
-        }
-        else if (iconElement != null)
-        {
-            // Clear the image if no sprite is assigned
-            iconElement.style.backgroundImage = null;
-        }
-
-        if (nextButton != null)
-            nextButton.text = "Next";
+        _currentItem = queue.Dequeue();
+        _hasCurrentLine = true;
+        ApplyCurrentLineToUI();
+        ShowDialoguePanel();
     }
 
-    // Makes the whole dialogue visible.
-    private void ShowDialogueBox()
+    private void ApplyCurrentLineToUI()
     {
-        if (dialogueContainer != null)
-            dialogueContainer.style.display = DisplayStyle.Flex;     
+        if (alertNameText != null)
+            alertNameText.text = _currentItem.alertName;
+
+        if (messageText != null)
+            messageText.text = LocalizationManager.GetText(_currentItem.textID);
+
+        if (iconImage != null)
+        {
+            if (_currentItem.icon != null)
+            {
+                iconImage.sprite = _currentItem.icon;
+                iconImage.enabled = true;
+            }
+            else
+            {
+                iconImage.sprite = null;
+                iconImage.enabled = false;
+            }
+        }
     }
 
-    // Makes the whole dialogue invisible.
-    private void HideDialogueBox()
+    private void ShowDialoguePanel()
     {
-        if (dialogueContainer != null)
-            dialogueContainer.style.display = DisplayStyle.None;
+        _panelVisible = true;
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
     }
 
-    // Allows starting a new dialogue sequence at runtime.
+    private void HideDialoguePanel()
+    {
+        _panelVisible = false;
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+    }
+
     public void StartNewDialogue(DialogueSequence newSequence, string newLocalizationFile)
     {
         if (newSequence == null)
         {
-            Debug.LogError("Cannot start dialogue, you lost the sequence");
+            Debug.LogError("Cannot start dialogue: sequence is null.");
             return;
         }
 
-        // Clear the old queue.
         queue = new DialogueQueue();
 
-        // Load level localization file just in case.
         if (!string.IsNullOrEmpty(newLocalizationFile))
-        {
             LocalizationManager.LoadLanguage(newLocalizationFile);
-        }
 
-        // Fill the queue with the new dialogue items.
         foreach (DialogueItem item in newSequence.dialogues)
-        {
             queue.Enqueue(item);
-        }
 
-        // Show the dialogue box and display first item.
         ShowNextDialogue();
     }
 
     public void ShowInteractPrompt(bool show)
     {
-        if (interactPrompt == null) return;
-
-        if (show)
-            interactPrompt.AddToClassList("show");
-        else
-            interactPrompt.RemoveFromClassList("show");
+        if (interactPromptText != null)
+            interactPromptText.gameObject.SetActive(show);
     }
 
-    /// <summary>
-    /// Hides and disables UI Toolkit while pause/death menus are open.
-    /// pickingMode alone is not enough — UIToolkit can still draw over uGUI.
-    /// </summary>
     public void SetHudOverlayActive(bool active)
     {
-        if (dialogueUIDocument == null) return;
+        if (!active)
+        {
+            HideDialoguePanel();
+            ShowInteractPrompt(false);
+            if (chargePanel != null)
+                chargePanel.SetActive(false);
+            if (chargeUIDocument != null)
+                chargeUIDocument.enabled = false;
+            return;
+        }
 
-        dialogueUIDocument.enabled = active;
+        if (chargeUIDocument != null)
+            chargeUIDocument.enabled = true;
+    }
 
-        if (root != null)
-            root.pickingMode = active ? PickingMode.Position : PickingMode.Ignore;
+    private void UpdateChargeBar()
+    {
+        if (playerController == null)
+            return;
+
+        bool showCharge = playerController.GetCtrlHeld();
+
+        if (chargePanel != null)
+            chargePanel.SetActive(showCharge);
+
+        if (_chargeContainer != null)
+            _chargeContainer.style.display = showCharge ? DisplayStyle.Flex : DisplayStyle.None;
+
+        if (!showCharge)
+            return;
+
+        float currentCharge = playerController.GetCharge();
+        float maxCharge = playerController.GetMaxCharge();
+        float percentage = maxCharge > 0 ? currentCharge / maxCharge : 0f;
+
+        if (chargeValueText != null)
+            chargeValueText.text = $"{currentCharge:F1} / {maxCharge}";
+
+        if (_chargeValueLabel != null)
+            _chargeValueLabel.text = $"{currentCharge:F1} / {maxCharge}";
+
+        if (chargeFillImage != null)
+        {
+            chargeFillImage.fillAmount = percentage;
+            if (percentage > 0.8f)
+                chargeFillImage.color = new Color(1f, 0.3f, 0.3f);
+            else if (percentage > 0.5f)
+                chargeFillImage.color = new Color(1f, 0.85f, 0.2f);
+            else
+                chargeFillImage.color = new Color(0.4f, 1f, 0.6f);
+        }
+
+        if (_chargeFill != null)
+        {
+            _chargeFill.style.height = new Length(percentage * 100f, LengthUnit.Percent);
+            if (percentage > 0.8f)
+                _chargeFill.style.backgroundColor = new Color(1f, 0.3f, 0.3f);
+            else if (percentage > 0.5f)
+                _chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);
+            else
+                _chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);
+        }
     }
 }

@@ -113,6 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   pauseMenu: {fileID: 385268999816831844}
   optionsMenu: {fileID: 9143404375909877538}
+  dialogueUI: {fileID: 7100000000000000100}
 --- !u!1 &8316438257847361653
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +740,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5422010645901119178, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
   m_PrefabInstance: {fileID: 3881324573048621544}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7100000000000000100 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7100000000000000099, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
+  m_PrefabInstance: {fileID: 3881324573048621544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a90437ce427a349bd3c60191f863c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueUIManager
 --- !u!1001 &4902793242816549859
 PrefabInstance:
   m_ObjectHideFlags: 0

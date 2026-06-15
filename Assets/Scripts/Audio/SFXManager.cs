@@ -46,7 +46,7 @@ public class SFXManager : MonoBehaviour
         if (persistAcrossScenes)
             DontDestroyOnLoad(gameObject);
 
-        // Try to find an AudioSource on this GameObject (the speaker).
+        // Try to find an AudioSource on the speaker.
         audioSource = GetComponent<AudioSource>();
 
         // If there isn't one, add it so we can play sounds.

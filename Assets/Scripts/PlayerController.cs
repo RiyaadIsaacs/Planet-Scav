@@ -211,6 +211,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnToggleDialogue(InputValue value)
+    {
+        if (!value.isPressed || IsGameplayBlocked)
+            return;
+
+        var dialogueUI = FindFirstObjectByType<DialogueUIManager>();
+        dialogueUI?.ToggleDialoguePanel();
+    }
+
     #endregion
 
     // Apply a temporary charge multiplier.
