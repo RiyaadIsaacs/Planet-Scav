@@ -16,7 +16,17 @@ public class FallingStalactite : MonoBehaviour
             SetHanging();
     }
 
+    public void TriggerFall()
+    {
+        BeginFall();
+    }
+
     public void TriggerFall(PlayerProjectile source)
+    {
+        BeginFall();
+    }
+
+    private void BeginFall()
     {
         if (isFalling)
             return;

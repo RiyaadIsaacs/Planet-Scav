@@ -114,7 +114,9 @@ public class SFXManager : MonoBehaviour
         audioSource.PlayOneShot(clip, volume);
     }
 
-    // Convenience for other scripts. Example: SFXManager.Play("jump");
+    // Convenience for other scripts. Example: SFXManager.Play("click");
+    public const string ClickSoundId = "click";
+
     public static void Play(string id)
     {
         // If the singleton exists, ask it to play the sound.

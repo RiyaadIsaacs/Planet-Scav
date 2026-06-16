@@ -1987,6 +1987,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d73608e3696a304fb1c62454eb5f293, type: 3}
+--- !u!114 &347774144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
 --- !u!1 &370709168
 GameObject:
   m_ObjectHideFlags: 0
@@ -6794,6 +6807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
   cost: 80
   upgradeName: Speed Booster
+  upgradeType: 0
 --- !u!65 &1525964797
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6836,6 +6850,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.615445, y: 2.861515, z: 3.2571566}
   m_Center: {x: 0.02751863, y: 0.43075752, z: 2.6378222}
+--- !u!114 &1565464052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
 --- !u!1001 &1582714580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8022,6 +8049,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &1733280293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
 --- !u!1 &1762431799
 GameObject:
   m_ObjectHideFlags: 0
@@ -8200,8 +8240,137 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1774073501}
+    - targetCorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1774073500}
+    - targetCorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1774073499}
+    - targetCorrespondingSourceObject: {fileID: 7744309116914911650, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1774073498}
+    - targetCorrespondingSourceObject: {fileID: 817365493602524122, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1774073497}
+    - targetCorrespondingSourceObject: {fileID: 1655479694642794886, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1565464052}
+    - targetCorrespondingSourceObject: {fileID: 958541871824736800, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1733280293}
+    - targetCorrespondingSourceObject: {fileID: 4588219144818647492, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 347774144}
   m_SourcePrefab: {fileID: 100100000, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+--- !u!1 &1774073489 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4588219144818647492, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 958541871824736800, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073491 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655479694642794886, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073492 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 817365493602524122, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073493 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7744309116914911650, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073494 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774073496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
+  m_PrefabInstance: {fileID: 1774073488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1774073497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
+--- !u!114 &1774073498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
+--- !u!114 &1774073499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
+--- !u!114 &1774073500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
+--- !u!114 &1774073501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774073496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
+  soundId: click
 --- !u!1001 &1777149940
 PrefabInstance:
   m_ObjectHideFlags: 0
