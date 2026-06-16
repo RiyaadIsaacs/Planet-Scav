@@ -51,11 +51,13 @@ public class DialogueUIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (messageAlert == null)
-            messageAlert = transform.Find("Message Alert")?.gameObject;
+        EnsureUiReferences();
+        WireNextButton();
+    }
 
-        if (nextButton != null)
-            nextButton.onClick.AddListener(OnNextButtonClicked);
+    private void OnEnable()
+    {
+        WireNextButton();
     }
 
     public void ConfigureForLevel(PlayerController controller, DialogueSequence levelSequence, string levelLocalization)
@@ -68,6 +70,9 @@ public class DialogueUIManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(levelLocalization))
             localizationFile = levelLocalization;
+
+        EnsureUiReferences();
+        WireNextButton();
 
         if (sequence == null)
         {
@@ -112,6 +117,44 @@ public class DialogueUIManager : MonoBehaviour
     private void OnNextButtonClicked()
     {
         ShowNextDialogue();
+    }
+
+    private void EnsureUiReferences()
+    {
+        if (messageAlert == null)
+            messageAlert = transform.Find("Message Alert")?.gameObject;
+
+        if (dialoguePanel == null)
+            dialoguePanel = transform.Find("DialoguePanel")?.gameObject;
+
+        if (dialoguePanel == null)
+            return;
+
+        if (alertNameText == null)
+            alertNameText = dialoguePanel.transform.Find("AlertName")?.GetComponent<TMP_Text>();
+        if (messageText == null)
+            messageText = dialoguePanel.transform.Find("Message")?.GetComponent<TMP_Text>();
+        if (iconImage == null)
+            iconImage = dialoguePanel.transform.Find("Icon")?.GetComponent<UIE_Image>();
+        if (nextButton == null)
+            nextButton = dialoguePanel.transform.Find("NextButton")?.GetComponent<UIE_Button>();
+        if (interactPromptText == null)
+            interactPromptText = transform.Find("InteractPrompt")?.GetComponent<TMP_Text>();
+        if (chargePanel == null)
+            chargePanel = transform.Find("ChargePanel")?.gameObject;
+        if (chargeFillImage == null && chargePanel != null)
+            chargeFillImage = chargePanel.transform.Find("ChargeBackground/ChargeFill")?.GetComponent<UIE_Image>();
+        if (chargeValueText == null && chargePanel != null)
+            chargeValueText = chargePanel.transform.Find("ChargeValue")?.GetComponent<TMP_Text>();
+    }
+
+    private void WireNextButton()
+    {
+        if (nextButton == null)
+            return;
+
+        nextButton.onClick.RemoveListener(OnNextButtonClicked);
+        nextButton.onClick.AddListener(OnNextButtonClicked);
     }
 
     public void ToggleDialoguePanel()

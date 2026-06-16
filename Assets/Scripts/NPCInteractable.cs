@@ -11,6 +11,23 @@ public class NPCInteractable : MonoBehaviour
     private DialogueUIManager uiManager;
     private PlayerController playerController;
 
+    private void ResolveReferences(Collider otherTrigger)
+    {
+        // With spawn-on-demand, the player may not exist yet when Start() runs.
+        if (uiManager == null)
+            uiManager = FindFirstObjectByType<DialogueUIManager>();
+
+        if (playerController == null)
+        {
+            // Prefer grabbing the controller from the player that entered the trigger.
+            if (otherTrigger != null)
+                playerController = otherTrigger.GetComponentInParent<PlayerController>();
+
+            if (playerController == null)
+                playerController = FindFirstObjectByType<PlayerController>();
+        }
+    }
+
     private void Start()
     {
         uiManager = FindFirstObjectByType<DialogueUIManager>();
@@ -21,6 +38,7 @@ public class NPCInteractable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            ResolveReferences(other);
             playerInRange = true;
             if (uiManager != null)
                 uiManager.ShowInteractPrompt(true);
@@ -50,6 +68,7 @@ public class NPCInteractable : MonoBehaviour
 
     private void TryInteract()
     {
+        ResolveReferences(null);
         if (playerController == null) return;
 
         if (playerController.CanSpendMoney(cost))
