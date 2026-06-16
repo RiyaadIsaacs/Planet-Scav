@@ -19,6 +19,7 @@ public class BossMovement : MonoBehaviour
     [SerializeField] private float _stunDuration = 7f;
     [SerializeField] private float _arriveThreshold = 1.5f;
     [SerializeField] private float _sampleMaxDistance = 40f;
+    [SerializeField] private float _agentAcceleration = 1000f;
 
     private NavMeshAgent _agent;
     private BossState _state = BossState.Patrol;
@@ -34,6 +35,7 @@ public class BossMovement : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        ConfigureNavMeshForConstantSpeed();
     }
 
     private void Start()
@@ -58,7 +60,7 @@ public class BossMovement : MonoBehaviour
             Debug.LogWarning($"BossMovement could not sample NavMesh for {name}.", this);
 
         _currentNodeIndex = Mathf.Clamp(_startNodeIndex, 0, _patrolPath.WaypointCount - 1);
-        _agent.speed = _patrolSpeed;
+        ApplyCurrentSpeed();
         GoToGraphNode(_currentNodeIndex);
     }
 
@@ -85,9 +87,27 @@ public class BossMovement : MonoBehaviour
     {
         _patrolSpeed = patrolSpeed;
         _rushSpeed = rushSpeed;
+        ApplyCurrentSpeed();
+    }
 
-        if (_agent != null && _state == BossState.Patrol)
-            _agent.speed = _patrolSpeed;
+    private void ConfigureNavMeshForConstantSpeed()
+    {
+        if (_agent == null)
+            return;
+
+        // High acceleration + no auto-braking keeps movement at a steady speed
+        // instead of easing in/out around each waypoint.
+        _agent.acceleration = _agentAcceleration;
+        _agent.autoBraking = false;
+        _agent.stoppingDistance = 0f;
+    }
+
+    private void ApplyCurrentSpeed()
+    {
+        if (_agent == null)
+            return;
+
+        _agent.speed = _state == BossState.Rush ? _rushSpeed : _patrolSpeed;
     }
 
     public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
@@ -149,7 +169,7 @@ public class BossMovement : MonoBehaviour
     {
         _state = BossState.Rush;
         _agent.isStopped = false;
-        _agent.speed = _rushSpeed;
+        ApplyCurrentSpeed();
 
         _rushTargetPosition = GetCenterOfGraphPatrol();
         _hasRushTarget = true;
@@ -174,7 +194,7 @@ public class BossMovement : MonoBehaviour
         _waypointsSinceRest = 0;
         _state = BossState.Patrol;
         _agent.isStopped = false;
-        _agent.speed = _patrolSpeed;
+        ApplyCurrentSpeed();
 
         _currentNodeIndex = _patrolPath.FindNearestNodeIndex(transform.position);
         _previousNodeIndex = -1;
