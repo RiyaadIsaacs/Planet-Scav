@@ -34,6 +34,8 @@ public class EnemyMovement : MonoBehaviour
 
         else
             Debug.LogWarning("Couldn't find the navmesh" + gameObject.name);
+
+        GoToCurrentWaypoint();
     }
 
     private void Update()
