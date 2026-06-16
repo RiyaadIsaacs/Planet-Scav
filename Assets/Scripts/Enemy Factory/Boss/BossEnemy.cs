@@ -32,7 +32,12 @@ public class BossEnemy : AIEnemy
         bossMovement.ConfigureMovement(speed, rushSpeed);
 
         if (agent != null)
+        {
+            agent.acceleration = 1000f;
+            agent.autoBraking = false;
+            agent.stoppingDistance = 0f;
             agent.speed = speed;
+        }
     }
 
     public void TakeDamage(float amount)
