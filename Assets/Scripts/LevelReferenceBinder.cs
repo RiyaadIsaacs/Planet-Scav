@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +31,8 @@ public class LevelReferenceBinder : MonoBehaviour
 
     public void BindSceneReferences()
     {
+        EnsureEventSystemActive();
+
         if (playerController == null)
             playerController = GetComponent<PlayerController>();
         if (playerStats == null)
@@ -37,9 +40,25 @@ public class LevelReferenceBinder : MonoBehaviour
         if (playerCheckpoints == null)
             playerCheckpoints = GetComponent<PlayerCheckpoints>();
 
-        var playerCanvasGo = FindSceneObjectByName(playerCanvasName);
-        var deathCanvasGo = FindSceneObjectByName(deathCanvasName);
-        var gameManagerGo = FindSceneObjectByName(gameManagerName);
+        var levelConfig = Object.FindFirstObjectByType<LevelConfig>(FindObjectsInactive.Include);
+        if (levelConfig != null && !levelConfig.gameObject.activeSelf)
+            levelConfig.gameObject.SetActive(true);
+
+        GameObject playerCanvasGo;
+        GameObject deathCanvasGo;
+        GameObject gameManagerGo;
+        if (levelConfig != null)
+        {
+            playerCanvasGo = FindChildByNameIncludingInactive(levelConfig.transform, playerCanvasName)?.gameObject;
+            deathCanvasGo = FindChildByNameIncludingInactive(levelConfig.transform, deathCanvasName)?.gameObject;
+            gameManagerGo = FindChildByNameIncludingInactive(levelConfig.transform, gameManagerName)?.gameObject;
+        }
+        else
+        {
+            playerCanvasGo = FindSceneObjectByName(playerCanvasName);
+            deathCanvasGo = FindSceneObjectByName(deathCanvasName);
+            gameManagerGo = FindSceneObjectByName(gameManagerName);
+        }
 
         if (playerCanvasGo == null)
             Debug.LogWarning($"LevelReferenceBinder: '{playerCanvasName}' not found in scene.");
@@ -207,11 +226,21 @@ public class LevelReferenceBinder : MonoBehaviour
         if (dialogueUI == null)
             return;
 
-        var levelConfig = FindFirstObjectByType<LevelConfig>();
+        var levelConfig = Object.FindFirstObjectByType<LevelConfig>(FindObjectsInactive.Include);
         if (levelConfig != null && levelConfig.dialogueSequence != null)
             dialogueUI.ConfigureForLevel(controller, levelConfig.dialogueSequence, levelConfig.localizationFile);
         else
             dialogueUI.ConfigureForLevel(controller, dialogueUI.sequence, dialogueUI.localizationFile);
+    }
+
+    private static void EnsureEventSystemActive()
+    {
+        var eventSystem = EventSystem.current;
+        if (eventSystem == null)
+            eventSystem = Object.FindFirstObjectByType<EventSystem>(FindObjectsInactive.Include);
+
+        if (eventSystem != null && !eventSystem.gameObject.activeSelf)
+            eventSystem.gameObject.SetActive(true);
     }
 
     private static GameObject FindSceneObjectByName(string objectName)
