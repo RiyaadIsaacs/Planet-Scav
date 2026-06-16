@@ -1,0 +1,56 @@
+{
+  "dialogues": [
+    {
+      "key": "Final_INTRO_001",
+      "value": "Great, you're still around 305. Thought we lost you with the communivations. Navigate the area carefully, theres something big down there and its messing with our coms."
+    },
+    {
+      "key": "Final_INTRO_002",
+      "value": "Does this mean I get a bonus?"
+    },
+    {
+      "key": "Final_INTRO_003",
+      "value": "What was that? You're cutting out again."
+    },
+    {
+      "key": "Final_MIDDLE_001",
+      "value": "Alright, 305. We have sent the vendor again this time. Meet up with him if you need any assistance and pick up any of the beacons that are still available."
+    },
+    {
+      "key": "Final_MIDDLE_002",
+      "value": "I better be getting compensated for all this stuff I've had to buy."
+    },
+    {
+      "key": "Final_MIDDLE_003",
+      "value": "We'll sort that out with your bonus when you get back on board the ship."
+    },
+    {
+      "key": "Final_MIDDLE_004",
+      "value": "So I am geting a bonus."
+    },
+    {
+      "key": "Final_MIDDLE_005",
+      "value": "Ah what... it looks like you're cutting out again. Good luck out there 305."
+    },
+    {
+      "key": "Final_VENDOR_001",
+      "value": "Oh hey, it's me, your favourite bin man! You remember the deal from last time."
+    },
+    {
+      "key": "Final_VENDOR_002",
+      "value": "You're going to need pay up yet again if you want to continue. Don't worry, this time its worth it. This path should help deal with the big guy downstairs."
+    },
+    {
+      "key": "Final_VENDOR_003",
+      "value": "You can buy your way over for 500 credits. I sure do hope you've got enough. Otherwise, just jump down there and face him yourself."
+    },
+    {
+      "key": "Final_VENDOR_004",
+      "value": "Really? More money? You're real greedy."
+    },
+    {
+      "key": "Final_VENDOR_005",
+      "value": "It's business!"
+    }
+  ]
+}

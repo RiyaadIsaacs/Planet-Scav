@@ -2,7 +2,7 @@
   "dialogues": [
     {
       "key": "Advanced_INTRO_001",
-      "value": "Great, youve made it inside the mines 305. Its the same as before. Navigate the area carefully and see what you can find and careful."
+      "value": "Great, you've made it inside the mines 305. Its the same as before. Navigate the area carefully and see what you can find and careful."
     },
     {
       "key": "Advanced_INTRO_002",
@@ -30,7 +30,7 @@
     },
     {
       "key": "Advanced_VENDOR_002",
-      "value": "You're going to need a bigger ass gun if you want to continue, so you've got to pay the toll fee, yet again!"
+      "value": "You're going to need a mask if you want to continue, so you've got to pay the toll fee, yet again!"
     },
     {
       "key": "Advanced_VENDOR_003",

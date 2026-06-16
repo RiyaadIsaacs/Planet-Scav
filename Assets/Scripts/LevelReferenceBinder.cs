@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -86,6 +87,7 @@ public class LevelReferenceBinder : MonoBehaviour
         BindDeathCanvasButtons(deathCanvasGo, uiButtons);
         BindUIManager(uiManager, playerCanvasGo, dialogueUI);
         BindDialogueUI(dialogueUI, playerController);
+        BindDialogueNextButton(playerCanvasGo, dialogueUI);
 
         ResetPlayerForLevel(playerStats, deathHandling, deathCanvasGo);
     }
@@ -233,11 +235,32 @@ public class LevelReferenceBinder : MonoBehaviour
             dialogueUI.ConfigureForLevel(controller, dialogueUI.sequence, dialogueUI.localizationFile);
     }
 
+    private static void BindDialogueNextButton(GameObject playerCanvasGo, DialogueUIManager dialogueUI)
+    {
+        if (playerCanvasGo == null || dialogueUI == null)
+            return;
+
+        var nextButton = playerCanvasGo.transform.Find("DialoguePanel/NextButton")?.GetComponent<Button>();
+        if (nextButton == null)
+            return;
+
+        nextButton.onClick.RemoveAllListeners();
+        nextButton.onClick.AddListener(dialogueUI.ShowNextDialogue);
+    }
+
     private static void EnsureEventSystemActive()
     {
         var eventSystem = EventSystem.current;
         if (eventSystem == null)
             eventSystem = Object.FindFirstObjectByType<EventSystem>(FindObjectsInactive.Include);
+
+        if (eventSystem == null)
+        {
+            var go = new GameObject("EventSystem");
+            eventSystem = go.AddComponent<EventSystem>();
+            go.AddComponent<InputSystemUIInputModule>();
+            Debug.LogWarning("LevelReferenceBinder: created missing EventSystem for UI input.");
+        }
 
         if (eventSystem != null && !eventSystem.gameObject.activeSelf)
             eventSystem.gameObject.SetActive(true);
