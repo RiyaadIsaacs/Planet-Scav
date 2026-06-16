@@ -1,38 +1,32 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuButtons : MonoBehaviour
 {
-    public string selectedScene;
+    public void LoadBeginnerLevel() => LoadGameplayScene("Beginner");
 
-    public void sceneSelectButton()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Scene Select");
-    }
+    public void LoadAdvancedLevel() => LoadGameplayScene("Advanced");
 
-    public void PlayButton()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Beginner");
-    }
+    public void LoadFinalLevel() => LoadGameplayScene("Final Level");
 
-    public void MainMenuButton()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
-    }
-
-    public void OnApplicationQuit()
+    public void QuitGame()
     {
         Application.Quit();
     }
 
-    public void firstSceneSelected()
+    private static void LoadGameplayScene(string sceneName)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Beginner");
-        selectedScene = "Beginner";
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        SceneManager.LoadScene(sceneName);
     }
 
-    public void secondSceneSelected()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Advanced");
-        selectedScene = "Advanced";
-    }
+    // Kept for any legacy UI hooks still pointing at old method names.
+    public void PlayButton() => LoadBeginnerLevel();
+
+    public void OnApplicationQuit() => QuitGame();
+
+    public void firstSceneSelected() => LoadBeginnerLevel();
+
+    public void secondSceneSelected() => LoadAdvancedLevel();
 }
