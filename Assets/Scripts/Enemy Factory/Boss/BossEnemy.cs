@@ -9,7 +9,6 @@ public class BossEnemy : AIEnemy
 
     private BossMovement bossMovement;
     private NavMeshAgent agent;
-    private bool isDead;
 
     private void Awake()
     {

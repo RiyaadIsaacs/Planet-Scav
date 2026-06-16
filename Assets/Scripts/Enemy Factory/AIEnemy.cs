@@ -11,15 +11,8 @@ public abstract class AIEnemy : MonoBehaviour
     public float speed; // Enemy's movement speed.
     public string enemyName; // Name of the enemy.
 
+    public bool isDead; // Flag to indicate if the enemy is dead.
+
     // called by the factory after spawning.
     public abstract void Initialize();
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            // Handle collision/death handling.
-            Debug.Log($"{enemyName} collided with the player!");
-        }
-    }
 }

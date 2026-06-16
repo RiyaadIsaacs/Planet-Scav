@@ -60,7 +60,13 @@ public class FallingStalactite : MonoBehaviour
                 death.KillPlayer();
             return;
         }
-        
+
+        if (collision.gameObject.GetComponent<StationaryEnemy>())
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         var boss = collision.collider.GetComponentInParent<BossEnemy>();
         if (boss != null)
             boss.TakeDamage(fallDamageToBoss);
