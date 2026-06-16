@@ -268,6 +268,8 @@ public static class PlayerCanvasDialogueSetup
         so.FindProperty("iconImage").objectReferenceValue = dialoguePanel.transform.Find("Icon")?.GetComponent<Image>();
         so.FindProperty("nextButton").objectReferenceValue = dialoguePanel.transform.Find("NextButton")?.GetComponent<Button>();
         so.FindProperty("interactPromptText").objectReferenceValue = interactPrompt.GetComponent<TextMeshProUGUI>();
+        so.FindProperty("messageAlert").objectReferenceValue =
+            dialoguePanel.transform.parent?.Find("Message Alert")?.gameObject;
         so.FindProperty("chargePanel").objectReferenceValue = chargePanel;
         so.FindProperty("chargeFillImage").objectReferenceValue =
             chargePanel.transform.Find("ChargeBackground/ChargeFill")?.GetComponent<Image>();

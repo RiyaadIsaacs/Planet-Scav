@@ -16,6 +16,7 @@ public class PlayerStats : MonoBehaviour
     {
         coins += coinGain;
 
-        coinText.text = coins.ToString();
+        if (coinText != null)
+            coinText.text = coins.ToString();
     }
 }

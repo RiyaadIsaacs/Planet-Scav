@@ -115,6 +115,11 @@ public class PlayerController : MonoBehaviour
 
 
     // Getters for the UI.
+    public void BindCameraPivot(Transform pivot)
+    {
+        cameraPivot = pivot;
+    }
+
     public float GetCharge()
     {
         return charge;
@@ -213,11 +218,18 @@ public class PlayerController : MonoBehaviour
 
     public void OnToggleDialogue(InputValue value)
     {
-        if (!value.isPressed || IsGameplayBlocked)
+        if (!value.isPressed)
             return;
 
         var dialogueUI = FindFirstObjectByType<DialogueUIManager>();
-        dialogueUI?.ToggleDialoguePanel();
+        if (dialogueUI == null)
+            return;
+
+        // Allow closing dialogue while it has paused the game; block opening during other pauses.
+        if (IsGameplayBlocked && !dialogueUI.IsDialoguePanelVisible)
+            return;
+
+        dialogueUI.ToggleDialoguePanel();
     }
 
     #endregion

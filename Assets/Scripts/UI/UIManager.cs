@@ -16,6 +16,16 @@ public class UIManager : MonoBehaviour
             dialogueUI = FindFirstObjectByType<DialogueUIManager>();
     }
 
+    public void BindSceneUI(GameObject pause, GameObject options, DialogueUIManager dialogue)
+    {
+        if (pause != null)
+            pauseMenu = pause;
+        if (options != null)
+            optionsMenu = options;
+        if (dialogue != null)
+            dialogueUI = dialogue;
+    }
+
     private void OnEnable()
     {
         EventHandler.OnPauseRequested += TogglePause;
@@ -29,6 +39,9 @@ public class UIManager : MonoBehaviour
     // handling the pause toggle
     void TogglePause()
     {
+        if (pauseMenu == null)
+            return;
+
         isPaused = !isPaused;
 
         pauseMenu.SetActive(isPaused);

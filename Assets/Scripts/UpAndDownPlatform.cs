@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Moves the platform vertically between two world-space points (bottom → top → bottom).
-/// Create two empty transforms in the scene, place them at the low and high positions, assign here.
-/// </summary>
+// Moves the platform vertically between two world-space points
 public class UpAndDownPlatform : MonoBehaviour
 {
     [SerializeField] private Transform bottomPoint;
