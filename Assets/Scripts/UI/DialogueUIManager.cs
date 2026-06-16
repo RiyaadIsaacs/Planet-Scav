@@ -1,9 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.UIElements;
 using UIE_Button = UnityEngine.UI.Button;
 using UIE_Image = UnityEngine.UI.Image;
+using UIE_Label = UnityEngine.UIElements.Label;
+using UIE_UIDocument = UnityEngine.UIElements.UIDocument;
+using UIE_VisualElement = UnityEngine.UIElements.VisualElement;
+using DisplayStyle = UnityEngine.UIElements.DisplayStyle;
+using Length = UnityEngine.UIElements.Length;
+using LengthUnit = UnityEngine.UIElements.LengthUnit;
 
 public class DialogueUIManager : MonoBehaviour
 {
@@ -22,51 +27,53 @@ public class DialogueUIManager : MonoBehaviour
     [SerializeField] private UIE_Button nextButton;
     [SerializeField] private TMP_Text interactPromptText;
 
-    [Header("Charge Bar (optional UI Toolkit — leave empty if using uGUI charge below)")]
-    [SerializeField] private UIDocument chargeUIDocument;
-    [SerializeField] private int hudSortingOrder = -100;
+    [Header("New Message Indicator")]
+    [SerializeField] private GameObject messageAlert;
 
     [Header("Charge Bar (optional uGUI)")]
     [SerializeField] private GameObject chargePanel;
     [SerializeField] private UIE_Image chargeFillImage;
     [SerializeField] private TMP_Text chargeValueText;
 
-    private VisualElement _chargeContainer;
-    private VisualElement _chargeFill;
-    private Label _chargeValueLabel;
+    private UIE_VisualElement chargeContainer;
+    private UIE_VisualElement chargeFill;
+    private UIE_Label chargeValueLabel;
 
     private DialogueQueue queue = new DialogueQueue();
-    private DialogueItem _currentItem;
-    private bool _hasCurrentLine;
-    private bool _panelVisible;
+    private DialogueItem currentItem;
+    private bool hasCurrentLine;
+    private bool panelVisible;
+    private bool dialogueCausedPause;
+
+    public bool IsDialoguePanelVisible => panelVisible;
+
+    private bool levelConfigured;
 
     private void Awake()
     {
-        if (chargeUIDocument != null && chargeUIDocument.panelSettings != null)
-            chargeUIDocument.panelSettings.sortingOrder = hudSortingOrder;
-
-        if (chargeUIDocument != null)
-        {
-            var root = chargeUIDocument.rootVisualElement;
-            _chargeContainer = root.Q<VisualElement>("charge-container");
-            _chargeFill = root.Q<VisualElement>("charge-fill");
-            _chargeValueLabel = root.Q<Label>("charge-value");
-        }
-    }
-
-    private void Start()
-    {
-        if (sequence == null)
-        {
-            Debug.LogError("DialogueSequence is not assigned.");
-            return;
-        }
-
-        if (playerController == null)
-            playerController = FindFirstObjectByType<PlayerController>();
+        if (messageAlert == null)
+            messageAlert = transform.Find("Message Alert")?.gameObject;
 
         if (nextButton != null)
             nextButton.onClick.AddListener(OnNextButtonClicked);
+    }
+
+    public void ConfigureForLevel(PlayerController controller, DialogueSequence levelSequence, string levelLocalization)
+    {
+        if (controller != null)
+            playerController = controller;
+
+        if (levelSequence != null)
+            sequence = levelSequence;
+
+        if (!string.IsNullOrEmpty(levelLocalization))
+            localizationFile = levelLocalization;
+
+        if (sequence == null)
+        {
+            Debug.LogWarning("DialogueUIManager: no dialogue sequence for this level.");
+            return;
+        }
 
         LocalizationManager.LoadLanguage(localizationFile);
 
@@ -75,6 +82,18 @@ public class DialogueUIManager : MonoBehaviour
             queue.Enqueue(item);
 
         LoadFirstLineHidden();
+        levelConfigured = true;
+    }
+
+    private void Start()
+    {
+        if (levelConfigured || sequence == null)
+            return;
+
+        if (playerController == null)
+            playerController = FindFirstObjectByType<PlayerController>();
+
+        ConfigureForLevel(playerController, sequence, localizationFile);
     }
 
     private void Update()
@@ -84,14 +103,8 @@ public class DialogueUIManager : MonoBehaviour
 
     private void LoadFirstLineHidden()
     {
-        if (!queue.IsEmpty())
-        {
-            _currentItem = queue.Dequeue();
-            _hasCurrentLine = true;
-            ApplyCurrentLineToUI();
-        }
-
-        HideDialoguePanel();
+        PrepareCurrentLineHidden();
+        RefreshMessageAlert();
         if (interactPromptText != null)
             interactPromptText.gameObject.SetActive(false);
     }
@@ -103,32 +116,34 @@ public class DialogueUIManager : MonoBehaviour
 
     public void ToggleDialoguePanel()
     {
-        if (!_hasCurrentLine && !queue.IsEmpty())
+        if (!hasCurrentLine && !queue.IsEmpty())
         {
-            _currentItem = queue.Dequeue();
-            _hasCurrentLine = true;
+            currentItem = queue.Dequeue();
+            hasCurrentLine = true;
             ApplyCurrentLineToUI();
         }
 
-        if (!_hasCurrentLine)
+        if (!hasCurrentLine)
             return;
 
-        _panelVisible = !_panelVisible;
-        if (dialoguePanel != null)
-            dialoguePanel.SetActive(_panelVisible);
+        if (panelVisible)
+            HideDialoguePanel();
+        else
+            ShowDialoguePanel();
     }
 
     public void ShowNextDialogue()
     {
         if (queue.IsEmpty())
         {
-            _hasCurrentLine = false;
+            hasCurrentLine = false;
             HideDialoguePanel();
+            RefreshMessageAlert();
             return;
         }
 
-        _currentItem = queue.Dequeue();
-        _hasCurrentLine = true;
+        currentItem = queue.Dequeue();
+        hasCurrentLine = true;
         ApplyCurrentLineToUI();
         ShowDialoguePanel();
     }
@@ -136,16 +151,16 @@ public class DialogueUIManager : MonoBehaviour
     private void ApplyCurrentLineToUI()
     {
         if (alertNameText != null)
-            alertNameText.text = _currentItem.alertName;
+            alertNameText.text = currentItem.alertName;
 
         if (messageText != null)
-            messageText.text = LocalizationManager.GetText(_currentItem.textID);
+            messageText.text = LocalizationManager.GetText(currentItem.textID);
 
         if (iconImage != null)
         {
-            if (_currentItem.icon != null)
+            if (currentItem.icon != null)
             {
-                iconImage.sprite = _currentItem.icon;
+                iconImage.sprite = currentItem.icon;
                 iconImage.enabled = true;
             }
             else
@@ -158,16 +173,50 @@ public class DialogueUIManager : MonoBehaviour
 
     private void ShowDialoguePanel()
     {
-        _panelVisible = true;
+        panelVisible = true;
         if (dialoguePanel != null)
             dialoguePanel.SetActive(true);
+
+        ShowMessageAlert(false);
+        ApplyDialoguePause(true);
     }
 
-    private void HideDialoguePanel()
+    private void HideDialoguePanel(bool restoreGameplay = true)
     {
-        _panelVisible = false;
+        panelVisible = false;
         if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
+
+        if (restoreGameplay)
+        {
+            ApplyDialoguePause(false);
+            RefreshMessageAlert();
+        }
+        else
+            dialogueCausedPause = false;
+    }
+
+    private void ApplyDialoguePause(bool pause)
+    {
+        if (pause)
+        {
+            if (Time.timeScale <= 0f)
+                return;
+
+            Time.timeScale = 0f;
+            dialogueCausedPause = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            return;
+        }
+
+        if (!dialogueCausedPause)
+            return;
+
+        Time.timeScale = 1f;
+        dialogueCausedPause = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void StartNewDialogue(DialogueSequence newSequence, string newLocalizationFile)
@@ -186,7 +235,34 @@ public class DialogueUIManager : MonoBehaviour
         foreach (DialogueItem item in newSequence.dialogues)
             queue.Enqueue(item);
 
-        ShowNextDialogue();
+        PrepareCurrentLineHidden();
+        RefreshMessageAlert();
+    }
+
+    public void ShowMessageAlert(bool show)
+    {
+        if (messageAlert != null)
+            messageAlert.SetActive(show);
+    }
+
+    private void RefreshMessageAlert()
+    {
+        ShowMessageAlert(!panelVisible && (hasCurrentLine || !queue.IsEmpty()));
+    }
+
+    private void PrepareCurrentLineHidden()
+    {
+        hasCurrentLine = false;
+        currentItem = null;
+
+        if (!queue.IsEmpty())
+        {
+            currentItem = queue.Dequeue();
+            hasCurrentLine = true;
+            ApplyCurrentLineToUI();
+        }
+
+        HideDialoguePanel(restoreGameplay: false);
     }
 
     public void ShowInteractPrompt(bool show)
@@ -199,17 +275,15 @@ public class DialogueUIManager : MonoBehaviour
     {
         if (!active)
         {
-            HideDialoguePanel();
+            HideDialoguePanel(restoreGameplay: false);
             ShowInteractPrompt(false);
+            ShowMessageAlert(false);
             if (chargePanel != null)
                 chargePanel.SetActive(false);
-            if (chargeUIDocument != null)
-                chargeUIDocument.enabled = false;
             return;
         }
 
-        if (chargeUIDocument != null)
-            chargeUIDocument.enabled = true;
+        RefreshMessageAlert();
     }
 
     private void UpdateChargeBar()
@@ -222,8 +296,8 @@ public class DialogueUIManager : MonoBehaviour
         if (chargePanel != null)
             chargePanel.SetActive(showCharge);
 
-        if (_chargeContainer != null)
-            _chargeContainer.style.display = showCharge ? DisplayStyle.Flex : DisplayStyle.None;
+        if (chargeContainer != null)
+            chargeContainer.style.display = showCharge ? DisplayStyle.Flex : DisplayStyle.None;
 
         if (!showCharge)
             return;
@@ -235,8 +309,8 @@ public class DialogueUIManager : MonoBehaviour
         if (chargeValueText != null)
             chargeValueText.text = $"{currentCharge:F1} / {maxCharge}";
 
-        if (_chargeValueLabel != null)
-            _chargeValueLabel.text = $"{currentCharge:F1} / {maxCharge}";
+        if (chargeValueLabel != null)
+            chargeValueLabel.text = $"{currentCharge:F1} / {maxCharge}";
 
         if (chargeFillImage != null)
         {
@@ -249,15 +323,15 @@ public class DialogueUIManager : MonoBehaviour
                 chargeFillImage.color = new Color(0.4f, 1f, 0.6f);
         }
 
-        if (_chargeFill != null)
+        if (chargeFill != null)
         {
-            _chargeFill.style.height = new Length(percentage * 100f, LengthUnit.Percent);
+            chargeFill.style.height = new Length(percentage * 100f, LengthUnit.Percent);
             if (percentage > 0.8f)
-                _chargeFill.style.backgroundColor = new Color(1f, 0.3f, 0.3f);
+                chargeFill.style.backgroundColor = new Color(1f, 0.3f, 0.3f);
             else if (percentage > 0.5f)
-                _chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);
+                chargeFill.style.backgroundColor = new Color(1f, 0.85f, 0.2f);
             else
-                _chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);
+                chargeFill.style.backgroundColor = new Color(0.4f, 1f, 0.6f);
         }
     }
 }

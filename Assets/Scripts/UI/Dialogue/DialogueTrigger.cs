@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Calls DialogueUIManager to start a new dialogue sequence when the player enters the trigger zone.
+// Queues dialogue and shows the message alert when the player enters the trigger zone.
 public class DialogueTrigger : MonoBehaviour
 {
     [Header("Dialogue to Play")]

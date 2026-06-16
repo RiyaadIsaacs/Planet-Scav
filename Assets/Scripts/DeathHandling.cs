@@ -79,18 +79,18 @@ public class DeathHandling : MonoBehaviour
 
         if (player.health == 3)
         {
-            healthThird.gameObject.SetActive(true);
-            healthSecond.gameObject.SetActive(true);
-            healthFirst.gameObject.SetActive(true);
+            if (healthThird != null) healthThird.gameObject.SetActive(true);
+            if (healthSecond != null) healthSecond.gameObject.SetActive(true);
+            if (healthFirst != null) healthFirst.gameObject.SetActive(true);
         }
         else if (player.health == 2)
         {
-            healthSecond.gameObject.SetActive(true);
-            healthFirst.gameObject.SetActive(true);
+            if (healthSecond != null) healthSecond.gameObject.SetActive(true);
+            if (healthFirst != null) healthFirst.gameObject.SetActive(true);
         }
         else if (player.health == 1)
         {
-            healthFirst.gameObject.SetActive(true);
+            if (healthFirst != null) healthFirst.gameObject.SetActive(true);
         }
     }
 

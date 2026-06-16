@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c4e2f19a3d4c5e8f7a6b5c4d3e2f1a, type: 3}
+  m_Name: GameSessionConfig
+  m_EditorClassIdentifier: Assembly-CSharp::GameSessionConfig
+  playerPrefab: {fileID: 1466879854186546899, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+  menuSceneNames:
+  - MainMenu
+  - Scene Select

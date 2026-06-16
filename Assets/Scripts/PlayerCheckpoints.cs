@@ -17,11 +17,24 @@ public class PlayerCheckpoints : MonoBehaviour
     private void Awake()
     {
         if (respawnPoints != null)
-        {
-            initialPosition = respawnPoints.position;
-            initialRotation = respawnPoints.rotation;
-            checkPointStack.Push(respawnPoints);
-        }
+            ApplySpawnPoint(respawnPoints);
+    }
+
+    public void SetSpawnPoint(Transform spawn)
+    {
+        respawnPoints = spawn;
+        ApplySpawnPoint(spawn);
+    }
+
+    private void ApplySpawnPoint(Transform spawn)
+    {
+        if (spawn == null)
+            return;
+
+        initialPosition = spawn.position;
+        initialRotation = spawn.rotation;
+        checkPointStack.Clear();
+        checkPointStack.Push(spawn);
     }
 
     private void OnTriggerEnter(Collider other)

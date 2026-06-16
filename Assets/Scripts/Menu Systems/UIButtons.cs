@@ -13,6 +13,15 @@ public class UIButtons : MonoBehaviour
 
     public void retry()
     {
+        if (player == null || deathHandling == null || deathCanvas == null)
+        {
+            Debug.LogError("UIButtons: missing references for retry.");
+            Time.timeScale = 1f;
+            AudioListener.pause = false;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+        }
+
         player.health = 3;
         deathHandling.HPGainHandler(); // Restore health visuals
         deathCanvas.gameObject.SetActive(false); // Hide the death canvas
