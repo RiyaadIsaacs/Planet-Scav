@@ -245,6 +245,22 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7078722787440015773, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.44268984
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078722787440015773, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5531967
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078722787440015773, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.44042405
+      objectReference: {fileID: 0}
+    - target: {fileID: 7078722787440015773, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5513854
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -276,6 +292,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1037593730902579406}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 840000000000000001}
   m_SourcePrefab: {fileID: 100100000, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}
 --- !u!1 &1466879854186546899 stripped
 GameObject:
@@ -473,6 +492,26 @@ MonoBehaviour:
   deathCanvasName: DeathCanvas
   gameManagerName: Game Manager
   cameraPivotName: Camera Pivot
+--- !u!114 &840000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466879854186546899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
+  projectilePrefab: {fileID: 8200000000000000001, guid: e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1, type: 3}
+  firePoint: {fileID: 8176572062324683946}
+  fireCooldown: 0.4
+  normalBossDamage: 25
+  animator: {fileID: 6237697134982719702}
+  shootTriggerName: Shoot
+  shootStateName: Shoot
+  upperBodyLayerIndex: 1
 --- !u!4 &2238491153249279081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bb2d8b73a8519eb4c8ce1ccd27583030, type: 3}

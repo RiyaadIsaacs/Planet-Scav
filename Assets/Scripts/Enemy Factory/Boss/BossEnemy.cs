@@ -4,7 +4,12 @@ using UnityEngine.AI;
 [DefaultExecutionOrder(-10)]
 public class BossEnemy : AIEnemy
 {
-    [SerializeField] private float _rushSpeedMultiplier = 2.5f;
+    [SerializeField] private float rushSpeedMultiplier = 2.5f;
+    [SerializeField] private float destroyDelay = 2f;
+
+    private BossMovement bossMovement;
+    private NavMeshAgent agent;
+    private bool isDead;
 
     private void Awake()
     {
@@ -14,14 +19,54 @@ public class BossEnemy : AIEnemy
     public override void Initialize()
     {
         enemyName = "Boss";
+        if (maxHealth <= 0f)
+            maxHealth = health;
 
-        if (!TryGetComponent<BossMovement>(out var bossMovement))
+        TryGetComponent(out bossMovement);
+        TryGetComponent(out agent);
+
+        if (bossMovement == null)
             return;
 
-        var rushSpeed = speed * _rushSpeedMultiplier;
+        var rushSpeed = speed * rushSpeedMultiplier;
         bossMovement.ConfigureMovement(speed, rushSpeed);
 
-        if (TryGetComponent<NavMeshAgent>(out var agent))
+        if (agent != null)
             agent.speed = speed;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (isDead || amount <= 0f)
+            return;
+
+        health -= amount;
+        if (health <= 0f)
+            Die();
+    }
+
+    public void InstantKill()
+    {
+        if (isDead)
+            return;
+
+        health = 0f;
+        Die();
+    }
+
+    private void Die()
+    {
+        if (isDead)
+            return;
+
+        isDead = true;
+
+        if (bossMovement != null)
+            bossMovement.enabled = false;
+
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = true;
+
+        Destroy(gameObject, destroyDelay);
     }
 }

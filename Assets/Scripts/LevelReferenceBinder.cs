@@ -88,6 +88,7 @@ public class LevelReferenceBinder : MonoBehaviour
         BindUIManager(uiManager, playerCanvasGo, dialogueUI);
         BindDialogueUI(dialogueUI, playerController);
         BindDialogueNextButton(playerCanvasGo, dialogueUI);
+        BindPlayerShooting(levelConfig, cameraPivot);
 
         ResetPlayerForLevel(playerStats, deathHandling, deathCanvasGo);
     }
@@ -221,6 +222,16 @@ public class LevelReferenceBinder : MonoBehaviour
             playerCanvasGo.transform.Find("PauseMenu")?.gameObject,
             playerCanvasGo.transform.Find("OptionsMenu")?.gameObject,
             dialogueUI);
+    }
+
+    private void BindPlayerShooting(LevelConfig levelConfig, Transform cameraPivot)
+    {
+        var shooting = GetComponent<PlayerShooting>();
+        if (shooting == null)
+            return;
+
+        var enabled = levelConfig != null && levelConfig.enablePlayerShooting;
+        shooting.Configure(enabled, cameraPivot);
     }
 
     private static void BindDialogueUI(DialogueUIManager dialogueUI, PlayerController controller)

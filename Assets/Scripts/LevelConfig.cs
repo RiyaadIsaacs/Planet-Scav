@@ -8,4 +8,7 @@ public class LevelConfig : MonoBehaviour
     [Header("Opening Dialogue")]
     public DialogueSequence dialogueSequence;
     public string localizationFile = "Beginner";
+
+    [Header("Gameplay")]
+    public bool enablePlayerShooting;
 }

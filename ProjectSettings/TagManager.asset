@@ -9,6 +9,8 @@ TagManager:
   - PropaneTankPickUp
   - Platform
   - Spawn
+  - Stalactite
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX

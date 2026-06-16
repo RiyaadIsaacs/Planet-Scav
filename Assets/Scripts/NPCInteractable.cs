@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum VendorUpgradeType
+{
+    SpeedBooster,
+    BossKillerShot
+}
+
 public class NPCInteractable : MonoBehaviour
 {
     [Header("Interaction Settings")]
-    public int cost = 80;                    // How much money this upgrade costs
+    public int cost = 80;
     public string upgradeName = "Speed Booster";
+    public VendorUpgradeType upgradeType = VendorUpgradeType.SpeedBooster;
 
     private bool playerInRange = false;
     private DialogueUIManager uiManager;
@@ -13,13 +20,11 @@ public class NPCInteractable : MonoBehaviour
 
     private void ResolveReferences(Collider otherTrigger)
     {
-        // With spawn-on-demand, the player may not exist yet when Start() runs.
         if (uiManager == null)
             uiManager = FindFirstObjectByType<DialogueUIManager>();
 
         if (playerController == null)
         {
-            // Prefer grabbing the controller from the player that entered the trigger.
             if (otherTrigger != null)
                 playerController = otherTrigger.GetComponentInParent<PlayerController>();
 
@@ -59,11 +64,8 @@ public class NPCInteractable : MonoBehaviour
     {
         if (!playerInRange) return;
 
-        // Check for E key press using new Input System because lazy and didnt want to set up in playerController.
         if (Keyboard.current.eKey.wasPressedThisFrame)
-        {
             TryInteract();
-        }
     }
 
     private void TryInteract()
@@ -71,15 +73,30 @@ public class NPCInteractable : MonoBehaviour
         ResolveReferences(null);
         if (playerController == null) return;
 
-        if (playerController.CanSpendMoney(cost))
+        if (!playerController.CanSpendMoney(cost))
+            return;
+
+        var stats = playerController.GetComponent<PlayerStats>();
+        if (stats == null)
+            return;
+
+        switch (upgradeType)
         {
-            playerController.GetComponent<PlayerStats>().upgradeCheck = true; // Grant the upgrade to the player.
-
-            playerController.GetComponent<PlayerStats>().CoinGainHandler(-cost); // Deduct cost from player's credits.
-
-            // Hide prompt after successful purchase.
-            if (uiManager != null)
-                uiManager.ShowInteractPrompt(false);
+            case VendorUpgradeType.SpeedBooster:
+                stats.upgradeCheck = true;
+                break;
+            case VendorUpgradeType.BossKillerShot:
+                var shooting = playerController.GetComponent<PlayerShooting>();
+                if (shooting != null)
+                    shooting.GrantBossKillerShot();
+                else
+                    Debug.LogWarning("NPCInteractable: BossKillerShot purchased but PlayerShooting is missing.");
+                break;
         }
+
+        stats.CoinGainHandler(-cost);
+
+        if (uiManager != null)
+            uiManager.ShowInteractPrompt(false);
     }
 }

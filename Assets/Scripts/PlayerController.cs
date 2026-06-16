@@ -232,6 +232,14 @@ public class PlayerController : MonoBehaviour
         dialogueUI.ToggleDialoguePanel();
     }
 
+    public void OnAttack(InputValue value)
+    {
+        if (IsGameplayBlocked || !value.isPressed)
+            return;
+
+        GetComponent<PlayerShooting>()?.TryShoot();
+    }
+
     #endregion
 
     // Apply a temporary charge multiplier.
