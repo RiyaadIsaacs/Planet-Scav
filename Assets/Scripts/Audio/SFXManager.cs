@@ -55,9 +55,12 @@ public class SFXManager : MonoBehaviour
 
         // don't play sounds automatically when the scene starts.
         audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+        audioSource.priority = 0;
 
         // Build the quick lookup map from the Inspector list.
         BuildSoundMap();
+        PreloadSounds();
     }
 
     private void OnDestroy()
@@ -82,6 +85,21 @@ public class SFXManager : MonoBehaviour
 
             // Put the name + clip into the map.
             RegisterSound(entry.id, entry.clip);
+        }
+    }
+
+    private void PreloadSounds()
+    {
+        if (sounds == null)
+            return;
+
+        foreach (SoundEntry entry in sounds)
+        {
+            if (entry.clip == null)
+                continue;
+
+            if (entry.clip.loadState == AudioDataLoadState.Unloaded)
+                entry.clip.LoadAudioData();
         }
     }
 
@@ -110,16 +128,20 @@ public class SFXManager : MonoBehaviour
             return;
         }
 
-        // Play the clip once at the configured volume.
+        // Play the clip once.
         audioSource.PlayOneShot(clip, volume);
     }
 
-    // Convenience for other scripts. Example: SFXManager.Play("click");
     public const string ClickSoundId = "click";
+    public const string CrashSoundId = "crash";
+    public const string HurtSoundId = "hurt";
+    public const string NotificationSoundId = "notification";
+    public const string ShootSoundId = "shoot";
+    public const string JumpSoundId = "jump";
 
     public static void Play(string id)
     {
-        // If the singleton exists, ask it to play the sound.
+        // If the singleton exists, play sound.
         if (Instance != null)
             Instance.PlaySound(id);
     }

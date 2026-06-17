@@ -7,7 +7,7 @@ public static class SFXManagerBootstrap
 {
     private const string ResourcePath = "SFXManager";
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void EnsureSFXManager()
     {
         if (SFXManager.Instance != null)
