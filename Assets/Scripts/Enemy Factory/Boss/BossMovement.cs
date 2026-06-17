@@ -20,6 +20,7 @@ public class BossMovement : MonoBehaviour
     [SerializeField] private float _arriveThreshold = 1.5f;
     [SerializeField] private float _sampleMaxDistance = 40f;
     [SerializeField] private float _agentAcceleration = 1000f;
+    [SerializeField] private RockMonsterLocomotion locomotion;
 
     private NavMeshAgent _agent;
     private BossState _state = BossState.Patrol;
@@ -35,6 +36,8 @@ public class BossMovement : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        if (locomotion == null)
+            locomotion = GetComponent<RockMonsterLocomotion>();
         ConfigureNavMeshForConstantSpeed();
     }
 
@@ -87,6 +90,7 @@ public class BossMovement : MonoBehaviour
     {
         _patrolSpeed = patrolSpeed;
         _rushSpeed = rushSpeed;
+        locomotion?.ConfigureSpeeds(patrolSpeed, rushSpeed);
         ApplyCurrentSpeed();
     }
 
@@ -187,6 +191,7 @@ public class BossMovement : MonoBehaviour
         _stunTimer = _stunDuration;
         _agent.ResetPath();
         _agent.isStopped = true;
+        locomotion?.SetStunned(true);
     }
 
     private void ResumePatrol()
@@ -194,6 +199,7 @@ public class BossMovement : MonoBehaviour
         _waypointsSinceRest = 0;
         _state = BossState.Patrol;
         _agent.isStopped = false;
+        locomotion?.SetStunned(false);
         ApplyCurrentSpeed();
 
         _currentNodeIndex = _patrolPath.FindNearestNodeIndex(transform.position);

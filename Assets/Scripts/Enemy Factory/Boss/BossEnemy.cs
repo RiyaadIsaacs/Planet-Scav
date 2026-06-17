@@ -8,6 +8,7 @@ public class BossEnemy : AIEnemy
     [SerializeField] private float destroyDelay = 2f;
 
     private BossMovement bossMovement;
+    private RockMonsterLocomotion locomotion;
     private NavMeshAgent agent;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class BossEnemy : AIEnemy
             maxHealth = health;
 
         TryGetComponent(out bossMovement);
+        TryGetComponent(out locomotion);
         TryGetComponent(out agent);
 
         if (bossMovement == null)
@@ -29,6 +31,7 @@ public class BossEnemy : AIEnemy
 
         var rushSpeed = speed * rushSpeedMultiplier;
         bossMovement.ConfigureMovement(speed, rushSpeed);
+        locomotion?.ConfigureSpeeds(speed, rushSpeed);
 
         if (agent != null)
         {

@@ -673,12 +673,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1289979639670761049}
-  - component: {fileID: 1198745978186255837}
   - component: {fileID: 5841654035328904681}
   - component: {fileID: 6447325183018209366}
   - component: {fileID: 187535186655597148}
   - component: {fileID: 18005148610493441}
   - component: {fileID: 3823818765718663991}
+  - component: {fileID: 7346130508192339186}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -701,30 +701,9 @@ Transform:
   m_Children:
   - {fileID: 1290181763988675233}
   - {fileID: 1294803097196091763}
+  - {fileID: 7818357175257790639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1198745978186255837
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1293556897942819231}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 599b2dc9e6c44a8ebc02ddea1f18d215, type: 3}
-  m_Controller: {fileID: 9100000, guid: 1f68948a5bb74f2fa9e9087a872750e9, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!65 &5841654035328904681
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -759,7 +738,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMovement
   _patrolPath: {fileID: 0}
-  _cornerPoints: []
   _startNodeIndex: 0
   _patrolSpeed: 4
   _rushSpeed: 10
@@ -768,6 +746,7 @@ MonoBehaviour:
   _arriveThreshold: 2
   _sampleMaxDistance: 40
   _agentAcceleration: 1000
+  locomotion: {fileID: 7346130508192339186}
 --- !u!195 &187535186655597148
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -806,7 +785,9 @@ MonoBehaviour:
   maxHealth: 300
   speed: 5
   enemyName: Boss
-  _rushSpeedMultiplier: 2.5
+  isDead: 0
+  rushSpeedMultiplier: 2.5
+  destroyDelay: 2
 --- !u!114 &3823818765718663991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,6 +801,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
   player: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+--- !u!114 &7346130508192339186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293556897942819231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff691e6f95cb57e43b3c574e369544c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RockMonsterLocomotion
+  animator: {fileID: 4649610814193113844}
+  speedParam: Speed
+  stunnedParam: Stunned
+  walkAgentSpeed: 5
+  runAgentSpeed: 12.5
+  speedDampTime: 0.12
 --- !u!1 &1293569743954194735
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,7 +835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1294803097196091763
 Transform:
   m_ObjectHideFlags: 0
@@ -1236,3 +1235,82 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1295100622325611543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3914865884576583063
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1289979639670761049}
+    m_Modifications:
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622645415103530734, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+      propertyPath: m_Name
+      value: Rock Monster
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+--- !u!95 &4649610814193113844 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8562145127679661923, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+  m_PrefabInstance: {fileID: 3914865884576583063}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7818357175257790639 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6544864588811629880, guid: 35af933d030bf2b48ab13157c036fd18, type: 3}
+  m_PrefabInstance: {fileID: 3914865884576583063}
+  m_PrefabAsset: {fileID: 0}
