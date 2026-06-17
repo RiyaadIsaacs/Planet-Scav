@@ -35,17 +35,17 @@ public class EnemySpawner : MonoBehaviour
     {
         foreach (Transform point in patrolSpawnPoints)
         {
-            factory.CreateEnemy(EEnemyType.EnemyType.Patrol, point.position);
+            factory.CreateEnemy(EEnemyType.EnemyType.Patrol, point.position, point.rotation);
         }
 
         foreach (Transform point in stationarySpawnPoints)
         {
-            factory.CreateEnemy(EEnemyType.EnemyType.Stationary, point.position);
+            factory.CreateEnemy(EEnemyType.EnemyType.Stationary, point.position, point.rotation);
         }
 
         foreach (Transform point in fastSpawnPoints)
         {
-            factory.CreateEnemy(EEnemyType.EnemyType.Fast, point.position);
+            factory.CreateEnemy(EEnemyType.EnemyType.Fast, point.position, point.rotation);
         }
     }
 
@@ -55,7 +55,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (var p in points)
         {
             if (p == null) continue;
-            var enemy = factory.CreateEnemy(p.type, p.SpawnPosition);
+            var enemy = factory.CreateEnemy(p.type, p.SpawnPosition, p.SpawnRotation);
             if (enemy == null) continue;
             if (p.patrolPath != null && enemy.TryGetComponent<EnemyMovement>(out var movement))
                 movement.SetPatrolPath(p.patrolPath);

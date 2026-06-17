@@ -2,11 +2,11 @@
   "dialogues": [
     {
       "key": "Final_INTRO_001",
-      "value": "Great, you're still around 305. Thought we lost you with the communivations. Navigate the area carefully, theres something big down there and its messing with our coms."
+      "value": "Great, you're still around 305. Thought we lost you with the communications. The new pulse bullet you bought should come in handy at shooting down those stalctites. Navigate the area carefully, theres something big down there and its messing with our coms."
     },
     {
       "key": "Final_INTRO_002",
-      "value": "Does this mean I get a bonus?"
+      "value": "Do I get a bonus for all this money I was required to spend?"
     },
     {
       "key": "Final_INTRO_003",
@@ -18,7 +18,7 @@
     },
     {
       "key": "Final_MIDDLE_002",
-      "value": "I better be getting compensated for all this stuff I've had to buy."
+      "value": "I better be getting compensated for all this stuff I've had to buy Captain."
     },
     {
       "key": "Final_MIDDLE_003",
@@ -26,7 +26,7 @@
     },
     {
       "key": "Final_MIDDLE_004",
-      "value": "So I am geting a bonus."
+      "value": "So I am getting a bonus."
     },
     {
       "key": "Final_MIDDLE_005",
@@ -38,7 +38,7 @@
     },
     {
       "key": "Final_VENDOR_002",
-      "value": "You're going to need pay up yet again if you want to continue. Don't worry, this time its worth it. This path should help deal with the big guy downstairs."
+      "value": "You're going to need pay up yet again if you want to continue to that side area. Don't worry, this time its worth it. This path should help deal with the big guy downstairs."
     },
     {
       "key": "Final_VENDOR_003",
