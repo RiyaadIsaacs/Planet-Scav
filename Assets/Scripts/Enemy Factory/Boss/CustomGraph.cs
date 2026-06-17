@@ -16,30 +16,30 @@ public sealed class CustomGraph<T>
         }
     }
 
-    private GraphNode[] _nodes;
-    private int _nodeCount;
-    private int _capacity;
+    private GraphNode[] nodes;
+    private int nodeCount;
+    private int capacity;
 
-    public int NodeCount => _nodeCount;
+    public int NodeCount => nodeCount;
 
     public CustomGraph(int initialCapacity = 8)
     {
         if (initialCapacity < 1)
             initialCapacity = 8;
 
-        _capacity = initialCapacity;
-        _nodes = new GraphNode[_capacity];
-        _nodeCount = 0;
+        capacity = initialCapacity;
+        nodes = new GraphNode[capacity];
+        nodeCount = 0;
     }
 
     public int AddNode(T value)
     {
-        if (_nodeCount >= _capacity)
-            ResizeNodes(_capacity * 2);
+        if (nodeCount >= capacity)
+            ResizeNodes(capacity * 2);
 
-        var index = _nodeCount;
-        _nodes[index] = new GraphNode(value);
-        _nodeCount++;
+        var index = nodeCount;
+        nodes[index] = new GraphNode(value);
+        nodeCount++;
         return index;
     }
 
@@ -51,25 +51,25 @@ public sealed class CustomGraph<T>
         if (from == to)
             return;
 
-        AddNeighborIfMissing(_nodes[from], to);
+        AddNeighborIfMissing(nodes[from], to);
     }
 
     public T GetNodeValue(int index)
     {
         ValidateNodeIndex(index);
-        return _nodes[index].Value;
+        return nodes[index].Value;
     }
 
     public int GetNeighborCount(int nodeIndex)
     {
         ValidateNodeIndex(nodeIndex);
-        return _nodes[nodeIndex].NeighborCount;
+        return nodes[nodeIndex].NeighborCount;
     }
 
     public void CopyNeighbors(int nodeIndex, int[] destination, out int copiedCount)
     {
         ValidateNodeIndex(nodeIndex);
-        var node = _nodes[nodeIndex];
+        var node = nodes[nodeIndex];
         copiedCount = node.NeighborCount;
 
         if (destination == null || destination.Length < copiedCount)
@@ -97,14 +97,14 @@ public sealed class CustomGraph<T>
     private void ResizeNodes(int newCapacity)
     {
         var resized = new GraphNode[newCapacity];
-        Array.Copy(_nodes, resized, _nodeCount);
-        _nodes = resized;
-        _capacity = newCapacity;
+        Array.Copy(nodes, resized, nodeCount);
+        nodes = resized;
+        capacity = newCapacity;
     }
 
     private void ValidateNodeIndex(int index)
     {
-        if (index < 0 || index >= _nodeCount)
+        if (index < 0 || index >= nodeCount)
             throw new ArgumentOutOfRangeException(nameof(index));
     }
 }

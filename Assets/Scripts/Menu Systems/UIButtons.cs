@@ -35,7 +35,9 @@ public class UIButtons : MonoBehaviour
 
     public void MainMenu()
     {
-        Time.timeScale= 1f; // Ensure the game is not paused when returning to the main menu
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        SFXManager.ResumeMusic();
+        SceneManager.LoadScene("MainMenu");
     }
 }

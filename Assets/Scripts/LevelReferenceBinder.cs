@@ -16,6 +16,7 @@ public class LevelReferenceBinder : MonoBehaviour
     [Header("Scene Object Names")]
     [SerializeField] private string playerCanvasName = "PlayerCanvas";
     [SerializeField] private string deathCanvasName = "DeathCanvas";
+    [SerializeField] private string winCanvasName = "WinCanvas";
     [SerializeField] private string gameManagerName = "Game Manager";
     [SerializeField] private string cameraPivotName = "Camera Pivot";
 
@@ -47,17 +48,20 @@ public class LevelReferenceBinder : MonoBehaviour
 
         GameObject playerCanvasGo;
         GameObject deathCanvasGo;
+        GameObject winCanvasGo;
         GameObject gameManagerGo;
         if (levelConfig != null)
         {
             playerCanvasGo = FindChildByNameIncludingInactive(levelConfig.transform, playerCanvasName)?.gameObject;
             deathCanvasGo = FindChildByNameIncludingInactive(levelConfig.transform, deathCanvasName)?.gameObject;
+            winCanvasGo = FindChildByNameIncludingInactive(levelConfig.transform, winCanvasName)?.gameObject;
             gameManagerGo = FindChildByNameIncludingInactive(levelConfig.transform, gameManagerName)?.gameObject;
         }
         else
         {
             playerCanvasGo = FindSceneObjectByName(playerCanvasName);
             deathCanvasGo = FindSceneObjectByName(deathCanvasName);
+            winCanvasGo = FindSceneObjectByName(winCanvasName);
             gameManagerGo = FindSceneObjectByName(gameManagerName);
         }
 
@@ -65,11 +69,15 @@ public class LevelReferenceBinder : MonoBehaviour
             Debug.LogWarning($"LevelReferenceBinder: '{playerCanvasName}' not found in scene.");
         if (deathCanvasGo == null)
             Debug.LogWarning($"LevelReferenceBinder: '{deathCanvasName}' not found in scene.");
+        if (winCanvasGo == null)
+            Debug.LogWarning($"LevelReferenceBinder: '{winCanvasName}' not found in scene.");
         if (gameManagerGo == null)
             Debug.LogWarning($"LevelReferenceBinder: '{gameManagerName}' not found in scene.");
 
         var deathCanvas = deathCanvasGo != null ? deathCanvasGo.GetComponent<Canvas>() : null;
+        var winCanvas = winCanvasGo != null ? winCanvasGo.GetComponent<Canvas>() : null;
         var deathHandling = gameManagerGo != null ? gameManagerGo.GetComponent<DeathHandling>() : null;
+        var winHandling = gameManagerGo != null ? gameManagerGo.GetComponent<WinHandling>() : null;
         var uiButtons = gameManagerGo != null ? gameManagerGo.GetComponent<UIButtons>() : null;
         var uiManager = gameManagerGo != null ? gameManagerGo.GetComponent<UIManager>() : null;
         var dialogueUI = playerCanvasGo != null
@@ -83,14 +91,16 @@ public class LevelReferenceBinder : MonoBehaviour
         BindPlayerStats(playerStats, playerCanvasGo);
         BindPlayerCheckpoints(playerCheckpoints);
         BindDeathHandling(deathHandling, playerStats, playerCheckpoints, deathCanvas, playerCanvasGo);
+        BindWinHandling(winHandling, winCanvas);
         BindUIButtons(uiButtons, playerStats, deathHandling, deathCanvas);
         BindDeathCanvasButtons(deathCanvasGo, uiButtons);
+        BindWinCanvasButtons(winCanvasGo, uiButtons);
         BindUIManager(uiManager, playerCanvasGo, dialogueUI);
         BindDialogueUI(dialogueUI, playerController);
         BindDialogueNextButton(playerCanvasGo, dialogueUI);
         BindPlayerShooting(levelConfig, cameraPivot);
 
-        ResetPlayerForLevel(playerStats, deathHandling, deathCanvasGo);
+        ResetPlayerForLevel(playerStats, deathHandling, deathCanvasGo, winCanvasGo);
     }
 
     private static void BindPlayerController(PlayerController controller, DeathHandling deathHandling,
@@ -157,6 +167,15 @@ public class LevelReferenceBinder : MonoBehaviour
         deathHandling.healthFirst = playerCanvasGo.transform.Find("HPRawImage")?.GetComponent<RawImage>();
     }
 
+    private static void BindWinHandling(WinHandling winHandling, Canvas winCanvas)
+    {
+        if (winHandling == null)
+            return;
+
+        if (winCanvas != null)
+            winHandling.winCanvas = winCanvas;
+    }
+
     private static void BindUIButtons(UIButtons uiButtons, PlayerStats stats, DeathHandling deathHandling,
         Canvas deathCanvas)
     {
@@ -179,7 +198,16 @@ public class LevelReferenceBinder : MonoBehaviour
         WireRuntimeButton(FindButtonByName(deathCanvasGo, "QuitButton"), uiButtons.QuitApplication);
     }
 
-    private static void ResetPlayerForLevel(PlayerStats stats, DeathHandling deathHandling, GameObject deathCanvasGo)
+    private static void BindWinCanvasButtons(GameObject winCanvasGo, UIButtons uiButtons)
+    {
+        if (winCanvasGo == null || uiButtons == null)
+            return;
+
+        WireRuntimeButton(FindButtonByName(winCanvasGo, "MainMenuButton"), uiButtons.MainMenu);
+    }
+
+    private static void ResetPlayerForLevel(PlayerStats stats, DeathHandling deathHandling, GameObject deathCanvasGo,
+        GameObject winCanvasGo)
     {
         if (stats == null)
             return;
@@ -190,6 +218,9 @@ public class LevelReferenceBinder : MonoBehaviour
 
         if (deathCanvasGo != null)
             deathCanvasGo.SetActive(false);
+
+        if (winCanvasGo != null)
+            winCanvasGo.SetActive(false);
 
         if (deathHandling != null)
             deathHandling.HPGainHandler();

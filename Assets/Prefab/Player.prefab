@@ -490,6 +490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelReferenceBinder
   playerCanvasName: PlayerCanvas
   deathCanvasName: DeathCanvas
+  winCanvasName: WinCanvas
   gameManagerName: Game Manager
   cameraPivotName: Camera Pivot
 --- !u!114 &840000000000000001

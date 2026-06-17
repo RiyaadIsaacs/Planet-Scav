@@ -4,7 +4,6 @@ using UnityEngine.AI;
 [DefaultExecutionOrder(-10)]
 public class BossEnemy : AIEnemy
 {
-    [SerializeField] private float rushSpeedMultiplier = 2.5f;
     [SerializeField] private float destroyDelay = 2f;
 
     private BossMovement bossMovement;
@@ -73,6 +72,8 @@ public class BossEnemy : AIEnemy
 
         if (agent != null && agent.isOnNavMesh)
             agent.isStopped = true;
+
+        EventHandler.OnBossDefeated?.Invoke();
 
         Destroy(gameObject, destroyDelay);
     }
