@@ -75,7 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   _patrolPath: {fileID: 0}
   _sampleMaxDistance: 40
-  _arriveThreshold: 20
+  _arriveThreshold: 2
 --- !u!195 &515460321385561602
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -86,8 +86,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 100
-  m_Acceleration: 50
+  m_Speed: 10
+  m_Acceleration: 1000
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -107,13 +107,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6660914084708596980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b475fb5408d07ad4886636cab922898d, type: 3}
+  m_Script: {fileID: 11500000, guid: c3177bb7ec5e6684d8239129c664e384, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PatrolEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::FastEnemy
   health: 100
   maxHealth: 100
   speed: 30
   enemyName: Sentry
+  isDead: 0
+  speedMultiplier: 1.6
 --- !u!65 &2238488926037774578
 BoxCollider:
   m_ObjectHideFlags: 0

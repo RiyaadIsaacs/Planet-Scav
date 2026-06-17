@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 173092676339702274}
   - component: {fileID: -7066186957555604122}
   - component: {fileID: 1917382874769129653}
+  - component: {fileID: 4848143086549915579}
   m_Layer: 0
   m_Name: Sentry
   m_TagString: Untagged
@@ -922,6 +923,7 @@ MonoBehaviour:
   maxHealth: 100
   speed: 0
   enemyName: Sentry
+  isDead: 0
   projectilePrefab: {fileID: 1688157287071401247, guid: 98be6a389ff7f7c4d8e081fd7925ae99, type: 3}
   fireRate: 3
   firePoint: {fileID: 8864251241662465080}
@@ -940,3 +942,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
   player: {fileID: 1945397691632650376, guid: 6c0244558d88b1c48a315c56b87bd1e4, type: 3}
+--- !u!65 &4848143086549915579
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185678018841366976}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.05, z: 1}
+  m_Center: {x: 0, y: 1.54, z: 0}
