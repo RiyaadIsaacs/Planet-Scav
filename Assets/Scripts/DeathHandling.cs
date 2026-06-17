@@ -1,6 +1,3 @@
-using JetBrains.Annotations;
-using System.Collections;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
