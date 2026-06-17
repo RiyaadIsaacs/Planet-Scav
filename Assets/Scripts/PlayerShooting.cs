@@ -8,7 +8,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float fireCooldown = 0.4f;
     [SerializeField] private float normalBossDamage = 25f;
-
+    
     [Header("Animation")]
     [SerializeField] private Animator animator;
     [SerializeField] private string shootTriggerName = "Shoot";

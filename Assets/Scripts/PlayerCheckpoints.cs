@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerCheckpoints : MonoBehaviour
 {
+    public static event Action<Transform> CheckpointReached;
+
     public Transform respawnPoints;
 
     [NonSerialized]
@@ -42,44 +44,31 @@ public class PlayerCheckpoints : MonoBehaviour
         if (!other.CompareTag("CheckPoint"))
             return;
 
-        if (CompareTag("Player"))
+        if (!CompareTag("Player"))
+            return;
+
+        RegisterCheckpoint(other.transform);
+    }
+
+    private void RegisterCheckpoint(Transform newCheckPoint)
+    {
+        respawnPoints = newCheckPoint;
+
+        if (checkPointStack.Count == 0)
         {
-
-
-            Transform newCheckPoint = other.transform;
-
-            // Keep the public field in sync
-            respawnPoints = newCheckPoint;
-
-            // If stack is empty, add the new respawn point
-            if (checkPointStack.Count == 0)
-            {
-                checkPointStack.Push(newCheckPoint);
-                UpdateInitialFromTop();
-                return;
-            }
-
-            // If stack has exactly one item, do nothing (per your rule)
-            if (checkPointStack.Count == 1)
-            {
-                checkPointStack.Pop();
-                checkPointStack.Push(newCheckPoint);
-                UpdateInitialFromTop();
-            }
-
-            // If stack has more than one item: remove the current top and add the new one
-            //if (checkPointStack.Count > 1)
-            //{
-
-            //}
-
+            checkPointStack.Push(newCheckPoint);
+            UpdateInitialFromTop();
+            CheckpointReached?.Invoke(newCheckPoint);
+            return;
         }
 
-        else
+        if (checkPointStack.Count == 1)
         {
-                       return;
+            checkPointStack.Pop();
+            checkPointStack.Push(newCheckPoint);
+            UpdateInitialFromTop();
+            CheckpointReached?.Invoke(newCheckPoint);
         }
-
     }
 
     private void UpdateInitialFromTop()
@@ -95,7 +84,6 @@ public class PlayerCheckpoints : MonoBehaviour
         initialRotation = top.rotation;
     }
 
-    // Optional helpers you can call from other code
     public Transform PeekRespawn() => checkPointStack.Count > 0 ? checkPointStack.Peek() : null;
     public int RespawnStackCount() => checkPointStack.Count;
 }
