@@ -8,6 +8,7 @@ public class StationaryEnemy : AIEnemy
     public Transform firePoint;
     public float projectileSpeed = 12f;
     public float projectileLifetime = 6f;
+    public float projectileScale = 0.5f;
 
     public override void Initialize()
     {
@@ -27,6 +28,7 @@ public class StationaryEnemy : AIEnemy
             return;
 
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        proj.transform.localScale = Vector3.one * projectileScale;
 
         // If the prefab has a Rigidbody, launch it forward.
         if (proj.TryGetComponent<Rigidbody>(out var rb))

@@ -128,11 +128,23 @@ public class GameSession : MonoBehaviour
         var controllers = FindObjectsByType<PlayerController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (var controller in controllers)
         {
-            if (playerInstance != null && controller.gameObject == playerInstance)
+            if (IsPersistentPlayer(controller.gameObject))
                 continue;
 
             Destroy(controller.gameObject);
         }
+    }
+
+    private bool IsPersistentPlayer(GameObject candidate)
+    {
+        if (playerInstance == null || candidate == null)
+            return false;
+
+        if (candidate == playerInstance)
+            return true;
+
+        return candidate.transform.IsChildOf(playerInstance.transform)
+            || playerInstance.transform.IsChildOf(candidate.transform);
     }
 
     private void EnsurePlayer()
@@ -147,6 +159,7 @@ public class GameSession : MonoBehaviour
         playerInstance = (GameObject)Instantiate(prefab);
         playerInstance.name = "Player";
         playerInstance.SetActive(true);
+        DontDestroyOnLoad(playerInstance);
 
         levelBinder = playerInstance.GetComponent<LevelReferenceBinder>();
         if (levelBinder == null)

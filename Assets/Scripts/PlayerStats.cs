@@ -18,7 +18,11 @@ public class PlayerStats : MonoBehaviour
     public void CoinGainHandler(int coinGain)
     {
         coins += coinGain;
+        RefreshCoinDisplay();
+    }
 
+    public void RefreshCoinDisplay()
+    {
         if (coinText != null)
             coinText.text = coins.ToString();
     }

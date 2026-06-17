@@ -122,6 +122,8 @@ public class LevelReferenceBinder : MonoBehaviour
         var moneyText = playerCanvasGo.transform.Find("MoneyText")?.GetComponent<TMP_Text>();
         if (moneyText != null)
             stats.coinText = moneyText;
+
+        stats.RefreshCoinDisplay();
     }
 
     private void BindPlayerCheckpoints(PlayerCheckpoints checkpoints)

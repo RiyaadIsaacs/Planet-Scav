@@ -929,6 +929,7 @@ MonoBehaviour:
   firePoint: {fileID: 8864251241662465080}
   projectileSpeed: 12
   projectileLifetime: 6
+  projectileScale: 0.5
 --- !u!114 &1917382874769129653
 MonoBehaviour:
   m_ObjectHideFlags: 0

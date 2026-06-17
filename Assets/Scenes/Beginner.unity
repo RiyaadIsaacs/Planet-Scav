@@ -1972,7 +1972,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6662023109527839999, guid: 3c1229320839bee408f15653f30827da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 434.5
+      value: 415.5
       objectReference: {fileID: 0}
     - target: {fileID: 6662023109527839999, guid: 3c1229320839bee408f15653f30827da, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7950,9 +7950,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce7b2bc7771afb46835c94fed0f355a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
-  cost: 80
+  cost: 100
   upgradeName: Speed Booster
   upgradeType: 0
+  revealOnPurchase: []
+  disableVendorAfterPurchase: 1
 --- !u!65 &1520513372
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10629,6 +10631,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5786535445635280425, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6235437969323840539, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
       propertyPath: m_Name
       value: GateParent
