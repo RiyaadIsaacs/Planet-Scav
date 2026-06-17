@@ -3524,11 +3524,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8177017002206867934, guid: 5a10875ec3db89c4a967767a9e3d2ef4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 56.34
+      value: 53.47
       objectReference: {fileID: 0}
     - target: {fileID: 8177017002206867934, guid: 5a10875ec3db89c4a967767a9e3d2ef4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 41.34
+      value: 44.25
       objectReference: {fileID: 0}
     - target: {fileID: 8177017002206867934, guid: 5a10875ec3db89c4a967767a9e3d2ef4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6948,9 +6948,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1377453641}
-    - targetCorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1377453640}
     - targetCorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1377453639}
@@ -7000,11 +6997,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
   m_PrefabInstance: {fileID: 1377453628}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1377453635 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
-  m_PrefabInstance: {fileID: 1377453628}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1377453636 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
@@ -7043,19 +7035,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1377453634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
-  soundId: click
---- !u!114 &1377453640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1377453635}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
@@ -10631,10 +10610,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5786535445635280425, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
-      propertyPath: moveSpeed
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 6235437969323840539, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
       propertyPath: m_Name
       value: GateParent

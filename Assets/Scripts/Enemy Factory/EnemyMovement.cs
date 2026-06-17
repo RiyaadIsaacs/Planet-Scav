@@ -4,32 +4,32 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     //To identify which WaypointPath to use.
-    [SerializeField] private PatrolWaypointPath _patrolPath;
+    [SerializeField] private PatrolWaypointPath patrolPath;
 
     //Provides a distance that lets the enemy move to the point incase they are far.
-    [SerializeField] private float _sampleMaxDistance = 2f;
+    [SerializeField] private float sampleMaxDistance = 2f;
 
-    [SerializeField] private float _arriveThreshold = 1f;
+    [SerializeField] private float arriveThreshold = 1f;
 
-    private NavMeshAgent _agent;
-    private int _waypointIndex;
+    private NavMeshAgent agent;
+    private int waypointIndex;
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
     {
-        if (_patrolPath == null || _patrolPath.WaypointCount == 0)
+        if (patrolPath == null || patrolPath.WaypointCount == 0)
         {
             Debug.LogError("No PatrolWaypointPath assigned to EnemyMovement script on " + gameObject.name);
             return;
         }
 
-        if (NavMesh.SamplePosition(transform.position, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(transform.position, out var hit, sampleMaxDistance, NavMesh.AllAreas))
         {
-            _agent.Warp(hit.position);
+            agent.Warp(hit.position);
         }
 
         else
@@ -40,35 +40,35 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_patrolPath == null || _patrolPath.WaypointCount == 0)
+        if (patrolPath == null || patrolPath.WaypointCount == 0)
             return;
 
-        var target = _patrolPath.GetWaypoint(_waypointIndex);
+        var target = patrolPath.GetWaypoint(waypointIndex);
         if (target == null)
             return;
 
         // Wait until Unity finishes computing the path; otherwise remainingDistance is unreliable.
-        if (_agent.pathPending)
+        if (agent.pathPending)
             return;
 
         if (HasReachedWaypoint(target))
             AdvanceWaypoint();
     }
 
-    public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
+    public void SetPatrolPath(PatrolWaypointPath path) => patrolPath = path;
 
     private bool HasReachedWaypoint(Transform target)
     {
         float dist = Vector3.Distance(transform.position, target.position);
 
-        if (dist > _arriveThreshold)
+        if (dist > arriveThreshold)
         {
             return false;
         }
 
-        if (_agent.isOnNavMesh && _agent.hasPath)
+        if (agent.isOnNavMesh && agent.hasPath)
         {
-            if (!float.IsInfinity(_agent.remainingDistance) && _agent.remainingDistance > _arriveThreshold * 1.5f)
+            if (!float.IsInfinity(agent.remainingDistance) && agent.remainingDistance > arriveThreshold * 1.5f)
                 return false;
         }
 
@@ -77,17 +77,17 @@ public class EnemyMovement : MonoBehaviour
 
     private void AdvanceWaypoint()
     {
-        _waypointIndex = _patrolPath.GetNextIndex(_waypointIndex);
+        waypointIndex = patrolPath.GetNextIndex(waypointIndex);
         GoToCurrentWaypoint();
     }
 
     private void GoToCurrentWaypoint()
     {
-        var t = _patrolPath.GetWaypoint(_waypointIndex);
+        var t = patrolPath.GetWaypoint(waypointIndex);
         if (t == null)
             return;
 
-        bool set = _agent.SetDestination(t.position);
+        bool set = agent.SetDestination(t.position);
         if (!set)
             Debug.LogWarning($"{name}: SetDestination failed. Is the enemy on the NavMesh?", this);
     }

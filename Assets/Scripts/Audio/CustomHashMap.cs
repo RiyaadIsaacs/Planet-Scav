@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Custom HashMap ADT (separate chaining). [Sealed so it cannot be inherited and it is exclusively used for the SFXManager]
+// Custom HashMap ADT. [Sealed so it cannot be inherited and it is exclusively used for the SFXManager]
 public sealed class CustomHashMap<TKey, TValue>
 {
     // A single node in a bucket's chain.

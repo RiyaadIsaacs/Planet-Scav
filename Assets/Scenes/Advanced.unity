@@ -3625,6 +3625,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5786535445635280425, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6235437969323840539, guid: 095ef153484481b4996e22d5879e3ce1, type: 3}
       propertyPath: m_Name
       value: GateParent
@@ -4747,6 +4751,132 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1267948138}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 269.999}
+--- !u!1 &1019654596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019654599}
+  - component: {fileID: 1019654598}
+  - component: {fileID: 1019654597}
+  m_Layer: 0
+  m_Name: PatrolManager (9)
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1019654597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019654596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be49bbf6b087eeb4a8b684a36d583678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  type: 1
+  spawnTransform: {fileID: 1019654599}
+  patrolPath: {fileID: 1019654598}
+--- !u!114 &1019654598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019654596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f2fda41ae16274c8eabc8b6f11c3bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PatrolWaypointPath
+  _waypointsInPatrolOrder: []
+  _useGraphPatrol: 0
+  _graphWaypoints: []
+--- !u!4 &1019654599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019654596}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.38268322, z: 0, w: 0.9238797}
+  m_LocalPosition: {x: -52.8, y: -168.5, z: 42.66}
+  m_LocalScale: {x: 3.98, y: 3.98, z: 3.98}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -46.006, z: 0}
+--- !u!1 &1021733133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021733136}
+  - component: {fileID: 1021733135}
+  - component: {fileID: 1021733134}
+  m_Layer: 0
+  m_Name: PatrolManager (7)
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1021733134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021733133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be49bbf6b087eeb4a8b684a36d583678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  type: 1
+  spawnTransform: {fileID: 1021733136}
+  patrolPath: {fileID: 1021733135}
+--- !u!114 &1021733135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021733133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f2fda41ae16274c8eabc8b6f11c3bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PatrolWaypointPath
+  _waypointsInPatrolOrder: []
+  _useGraphPatrol: 0
+  _graphWaypoints: []
+--- !u!4 &1021733136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021733133}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.38268316, z: 0, w: 0.92387974}
+  m_LocalPosition: {x: -31.95, y: -38.683784, z: 160.44}
+  m_LocalScale: {x: 3.98, y: 3.98, z: 3.98}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -46.006, z: 0}
 --- !u!1 &1022837586
 GameObject:
   m_ObjectHideFlags: 0
@@ -5302,6 +5432,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1267948138}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
+--- !u!1 &1189930268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1189930271}
+  - component: {fileID: 1189930270}
+  - component: {fileID: 1189930269}
+  m_Layer: 0
+  m_Name: PatrolManager (8)
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1189930269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189930268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be49bbf6b087eeb4a8b684a36d583678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  type: 1
+  spawnTransform: {fileID: 1189930271}
+  patrolPath: {fileID: 1189930270}
+--- !u!114 &1189930270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189930268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f2fda41ae16274c8eabc8b6f11c3bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PatrolWaypointPath
+  _waypointsInPatrolOrder: []
+  _useGraphPatrol: 0
+  _graphWaypoints: []
+--- !u!4 &1189930271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189930268}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.38268322, z: 0, w: 0.9238797}
+  m_LocalPosition: {x: 53.8, y: -168.5, z: 54.5}
+  m_LocalScale: {x: 3.98, y: 3.98, z: 3.98}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -46.006, z: 0}
 --- !u!1 &1192328184
 GameObject:
   m_ObjectHideFlags: 0
@@ -6692,7 +6885,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3756104424200626579, guid: dbcb963ca41101a43b6ec7cb21237f47, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.67341614
+      value: -2.49
       objectReference: {fileID: 0}
     - target: {fileID: 3756104424200626579, guid: dbcb963ca41101a43b6ec7cb21237f47, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6700,7 +6893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3756104424200626579, guid: dbcb963ca41101a43b6ec7cb21237f47, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 180.2
+      value: 192.78
       objectReference: {fileID: 0}
     - target: {fileID: 3756104424200626579, guid: dbcb963ca41101a43b6ec7cb21237f47, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8822,9 +9015,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1774073501}
-    - targetCorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1774073500}
     - targetCorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1774073499}
@@ -8874,11 +9064,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5580524419110048964, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
   m_PrefabInstance: {fileID: 1774073488}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1774073495 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6371811885416543229, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
-  m_PrefabInstance: {fileID: 1774073488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1774073496 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 825017456348221708, guid: a8f3c2e19b4d4a648e1f0c9d7b6a5e40, type: 3}
@@ -8917,19 +9102,6 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1774073494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIButtonClickSound
-  soundId: click
---- !u!114 &1774073500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774073495}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5ef9cb1deb41234ca90805abae5e090, type: 3}
@@ -10990,6 +11162,9 @@ SceneRoots:
   - {fileID: 139412666}
   - {fileID: 14680123}
   - {fileID: 453021521}
+  - {fileID: 1021733136}
+  - {fileID: 1189930271}
+  - {fileID: 1019654599}
   - {fileID: 659163550}
   - {fileID: 767752807}
   - {fileID: 1843850085}

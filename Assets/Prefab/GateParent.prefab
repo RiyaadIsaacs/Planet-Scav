@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExitChecker
   gateMove: {fileID: 3603141560849893728}
+  moveSpeed: 20
 --- !u!65 &4031537676263722929
 BoxCollider:
   m_ObjectHideFlags: 0
