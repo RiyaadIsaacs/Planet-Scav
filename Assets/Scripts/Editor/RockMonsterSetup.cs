@@ -302,7 +302,11 @@ public static class RockMonsterSetup
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
 
-            if (bossEnemy != null && agent != null)
+            if (bossMovement != null)
+            {
+                locomotion.ConfigureSpeeds(bossMovement.PatrolSpeed, bossMovement.RushSpeed);
+            }
+            else if (bossEnemy != null && agent != null)
             {
                 var patrolSpeed = bossEnemy.speed > 0f ? bossEnemy.speed : agent.speed;
                 var rushSpeed = patrolSpeed * 2.5f;

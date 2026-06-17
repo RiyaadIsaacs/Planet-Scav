@@ -29,16 +29,15 @@ public class BossEnemy : AIEnemy
         if (bossMovement == null)
             return;
 
-        var rushSpeed = speed * rushSpeedMultiplier;
-        bossMovement.ConfigureMovement(speed, rushSpeed);
-        locomotion?.ConfigureSpeeds(speed, rushSpeed);
+        // BossMovement patrol/rush speeds are the source of truth (Inspector values on that component).
+        speed = bossMovement.PatrolSpeed;
+        locomotion?.ConfigureSpeeds(bossMovement.PatrolSpeed, bossMovement.RushSpeed);
 
         if (agent != null)
         {
             agent.acceleration = 1000f;
             agent.autoBraking = false;
             agent.stoppingDistance = 0f;
-            agent.speed = speed;
         }
     }
 

@@ -63,6 +63,7 @@ public class BossMovement : MonoBehaviour
             Debug.LogWarning($"BossMovement could not sample NavMesh for {name}.", this);
 
         _currentNodeIndex = Mathf.Clamp(_startNodeIndex, 0, _patrolPath.WaypointCount - 1);
+        SyncLocomotion();
         ApplyCurrentSpeed();
         GoToGraphNode(_currentNodeIndex);
     }
@@ -90,8 +91,25 @@ public class BossMovement : MonoBehaviour
     {
         _patrolSpeed = patrolSpeed;
         _rushSpeed = rushSpeed;
-        locomotion?.ConfigureSpeeds(patrolSpeed, rushSpeed);
+        SyncLocomotion();
         ApplyCurrentSpeed();
+    }
+
+    public float PatrolSpeed => _patrolSpeed;
+    public float RushSpeed => _rushSpeed;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        _patrolSpeed = Mathf.Max(0.01f, _patrolSpeed);
+        _rushSpeed = Mathf.Max(_patrolSpeed, _rushSpeed);
+        SyncLocomotion();
+    }
+#endif
+
+    private void SyncLocomotion()
+    {
+        locomotion?.ConfigureSpeeds(_patrolSpeed, _rushSpeed);
     }
 
     private void ConfigureNavMeshForConstantSpeed()
