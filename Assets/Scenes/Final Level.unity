@@ -7230,7 +7230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce7b2bc7771afb46835c94fed0f355a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
-  cost: 50
+  cost: 250
   upgradeName: Boss Killer Shot
   upgradeType: 1
   revealOnPurchase: []
@@ -13418,7 +13418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5482505105298495403, guid: 807997fda830ac645a8a33f6584fc5ca, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7556169300408167457, guid: 807997fda830ac645a8a33f6584fc5ca, type: 3}
       propertyPath: m_LocalScale.x
@@ -13475,6 +13475,10 @@ PrefabInstance:
     - target: {fileID: 7889924548931838472, guid: 807997fda830ac645a8a33f6584fc5ca, type: 3}
       propertyPath: m_Name
       value: TriggerActivatedPlatform
+      objectReference: {fileID: 0}
+    - target: {fileID: 7889924548931838472, guid: 807997fda830ac645a8a33f6584fc5ca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8260463232894803610, guid: 807997fda830ac645a8a33f6584fc5ca, type: 3}
       propertyPath: endPoint
