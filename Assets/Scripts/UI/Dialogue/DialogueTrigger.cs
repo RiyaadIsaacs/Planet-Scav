@@ -18,6 +18,7 @@ public class DialogueTrigger : MonoBehaviour
         DialogueUIManager dm = GameObject.FindFirstObjectByType<DialogueUIManager>();
         if (dm != null)
         {
+            SFXManager.Play(SFXManager.NotificationSoundId);
             dm.StartNewDialogue(dialogueSequence, localizationFile);
             hasTriggered = true;
         }

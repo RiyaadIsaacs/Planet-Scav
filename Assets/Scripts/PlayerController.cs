@@ -389,6 +389,9 @@ public class PlayerController : MonoBehaviour
     private void SetJumping(bool value)
     {
         isJumping = value;
+        if (value)
+            SFXManager.Play(SFXManager.JumpSoundId);
+
         if (animator != null)
         {
             animator.SetBool(isJumpingHash, value);

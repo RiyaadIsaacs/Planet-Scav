@@ -46,6 +46,7 @@ public class DeathHandling : MonoBehaviour
         }
 
         player.health += -1;
+        SFXManager.Play(SFXManager.HurtSoundId);
         Debug.Log(player.health);
 
         if (player.health == 2)

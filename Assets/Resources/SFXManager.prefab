@@ -145,5 +145,15 @@ MonoBehaviour:
   sounds:
   - id: click
     clip: {fileID: 8300000, guid: 7073773344333834ab2e6d442957fe3f, type: 3}
+  - id: crash
+    clip: {fileID: 8300000, guid: 898a1f426f58e4e4480561ca9c9f163f, type: 3}
+  - id: hurt
+    clip: {fileID: 8300000, guid: c1fce2f2fdefd17488a5a46fc9dd3c6e, type: 3}
+  - id: jump
+    clip: {fileID: 8300000, guid: fb09b29357947214fb8900f85dd99f82, type: 3}
+  - id: notification
+    clip: {fileID: 8300000, guid: 93863f352b0f65841bce9abb80263bb7, type: 3}
+  - id: shoot
+    clip: {fileID: 8300000, guid: f7950b58f9a4ed945b24cedbf519b8a8, type: 3}
   volume: 1
   persistAcrossScenes: 1

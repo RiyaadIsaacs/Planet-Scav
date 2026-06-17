@@ -81,6 +81,7 @@ public class PlayerShooting : MonoBehaviour
             return false;
 
         PlayShootAnimation();
+        SFXManager.Play(SFXManager.ShootSoundId);
 
         var spawnPos = aimTransform.position + aimTransform.forward * 0.5f;
         var direction = aimTransform.forward;

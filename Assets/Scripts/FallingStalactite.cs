@@ -54,20 +54,27 @@ public class FallingStalactite : MonoBehaviour
 
         if (collision.collider.CompareTag("Player"))
         {
+            SFXManager.Play(SFXManager.CrashSoundId);
+
             var death = collision.collider.GetComponentInParent<PlayerController>()?.deathHandling
                         ?? FindFirstObjectByType<DeathHandling>();
             if (death != null)
                 death.KillPlayer();
+            Destroy(gameObject);
             return;
         }
 
         var enemy = collision.collider.GetComponentInParent<AIEnemy>();
         if (enemy != null && !enemy.isDead)
         {
+            SFXManager.Play(SFXManager.CrashSoundId);
+
             if (enemy is BossEnemy boss)
                 boss.TakeDamage(fallDamageToBoss);
             else
+            {
                 enemy.Die();
+            }
 
             Destroy(gameObject);
         }
