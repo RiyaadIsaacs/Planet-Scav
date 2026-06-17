@@ -27,6 +27,7 @@ public class UIButtons : MonoBehaviour
         deathCanvas.gameObject.SetActive(false); // Hide the death canvas
         Time.timeScale = 1f; // Resume the game
         AudioListener.pause = false;
+        SFXManager.ResumeMusic();
 
         // Reload the currently active scene to reset everything in that scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

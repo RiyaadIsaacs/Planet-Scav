@@ -61,6 +61,7 @@ public class DeathHandling : MonoBehaviour
             Debug.Log("Player has died.");
             if (deathCanvas != null) deathCanvas.gameObject.SetActive(true); // Show the death canvas
             Time.timeScale = 0f; // Pause the game
+            SFXManager.PauseMusic();
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

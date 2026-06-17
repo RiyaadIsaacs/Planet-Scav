@@ -41,6 +41,8 @@ public class UIManager : MonoBehaviour
         if (dialogueUI != null)
             dialogueUI.SetHudOverlayActive(true);
 
+        SFXManager.ResumeMusic();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -71,6 +73,11 @@ public class UIManager : MonoBehaviour
 
         Time.timeScale = isPaused ? 0f : 1f;
 
+        if (isPaused)
+            SFXManager.PauseMusic();
+        else
+            SFXManager.ResumeMusic();
+
         // Cursor control 
         Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isPaused;
@@ -89,6 +96,7 @@ public class UIManager : MonoBehaviour
             dialogueUI.SetHudOverlayActive(true);
 
         Time.timeScale = 1f;
+        SFXManager.ResumeMusic();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

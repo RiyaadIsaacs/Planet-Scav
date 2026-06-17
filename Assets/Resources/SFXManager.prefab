@@ -46,7 +46,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.67
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -155,5 +155,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 93863f352b0f65841bce9abb80263bb7, type: 3}
   - id: shoot
     clip: {fileID: 8300000, guid: f7950b58f9a4ed945b24cedbf519b8a8, type: 3}
+  - id: BGM
+    clip: {fileID: 8300000, guid: 93b0482576e7764418c83b43a312a470, type: 3}
   volume: 1
   persistAcrossScenes: 1
+  backgroundMusicId: BGM
+  musicVolume: 0.5
+  playMusicOnStart: 1
