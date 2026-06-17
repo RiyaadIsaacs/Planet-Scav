@@ -30,12 +30,33 @@ public class WallSpikeTrap : MonoBehaviour
             _spike = transform;
 
         if (_spikeCollider == null)
-            _spikeCollider = _spike.GetComponent<Collider>();
+            _spikeCollider = _spike.GetComponentInChildren<Collider>();
+
+        if (_spikeCollider == null)
+            _spikeCollider = GetComponentInChildren<Collider>();
 
         _retractedLocalPosition = _spike.localPosition;
         _extendedLocalPosition = _retractedLocalPosition + _extendedLocalOffset;
 
+        SetupHitbox();
         SetSpikeColliderActive(false);
+    }
+
+    private void SetupHitbox()
+    {
+        if (_spikeCollider == null)
+        {
+            Debug.LogWarning($"{nameof(WallSpikeTrap)} on '{name}' has no spike collider assigned.", this);
+            return;
+        }
+
+        _spikeCollider.isTrigger = true;
+
+        var hitbox = _spikeCollider.GetComponent<WallSpikeTrapHitbox>();
+        if (hitbox == null)
+            hitbox = _spikeCollider.gameObject.AddComponent<WallSpikeTrapHitbox>();
+
+        hitbox.Initialize(this);
     }
 
     private void OnEnable()
@@ -94,28 +115,79 @@ public class WallSpikeTrap : MonoBehaviour
 
     private void SetSpikeColliderActive(bool isActive)
     {
-        if (_spikeCollider != null)
-            _spikeCollider.enabled = isActive;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!_isExtended)
+        if (_spikeCollider == null)
             return;
 
-        if (_killPlayerOnHit && other.CompareTag("Player"))
-        {
-            var death = other.GetComponentInParent<PlayerController>()?.deathHandling
-                        ?? FindFirstObjectByType<DeathHandling>();
-            if (death != null)
-                death.KillPlayer();
+        _spikeCollider.isTrigger = true;
+        _spikeCollider.enabled = isActive;
 
+        if (isActive)
+            ProcessOverlappingTargets();
+    }
+
+    internal void HandleHit(Collider other)
+    {
+        if (!_isExtended || other == null)
+            return;
+
+        var player = other.GetComponentInParent<PlayerController>();
+        if (_killPlayerOnHit && (player != null || other.CompareTag("Player")))
+        {
+            TryKillPlayer(player);
             return;
         }
 
         var boss = other.GetComponentInParent<BossEnemy>();
         if (boss != null && _bossDamage > 0f)
             boss.TakeDamage(_bossDamage);
+    }
+
+    private void ProcessOverlappingTargets()
+    {
+        if (_spikeCollider == null)
+            return;
+
+        var trapBounds = _spikeCollider.bounds;
+
+        var player = FindFirstObjectByType<PlayerController>();
+        if (player != null && PlayerIntersectsBounds(player, trapBounds))
+            TryKillPlayer(player);
+
+        var overlaps = Physics.OverlapBox(
+            trapBounds.center,
+            trapBounds.extents,
+            _spikeCollider.transform.rotation,
+            ~0,
+            QueryTriggerInteraction.Collide);
+
+        foreach (var overlap in overlaps)
+        {
+            if (overlap == _spikeCollider)
+                continue;
+
+            HandleHit(overlap);
+        }
+    }
+
+    private void TryKillPlayer(PlayerController player)
+    {
+        var death = player?.deathHandling ?? FindFirstObjectByType<DeathHandling>();
+        if (death != null)
+            death.KillPlayer();
+    }
+
+    private static bool PlayerIntersectsBounds(PlayerController player, Bounds trapBounds)
+    {
+        if (player == null)
+            return false;
+
+        var controller = player.GetComponent<CharacterController>();
+        if (controller == null)
+            return trapBounds.Contains(player.transform.position);
+
+        var center = controller.transform.TransformPoint(controller.center);
+        var reach = Mathf.Max(controller.radius, controller.height * 0.5f);
+        return trapBounds.SqrDistance(center) <= reach * reach;
     }
 
 #if UNITY_EDITOR
@@ -133,4 +205,19 @@ public class WallSpikeTrap : MonoBehaviour
         Gizmos.DrawSphere(extendedWorld, 0.15f);
     }
 #endif
+}
+
+internal class WallSpikeTrapHitbox : MonoBehaviour
+{
+    private WallSpikeTrap _trap;
+
+    public void Initialize(WallSpikeTrap trap)
+    {
+        _trap = trap;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _trap?.HandleHit(other);
+    }
 }

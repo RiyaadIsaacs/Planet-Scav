@@ -9,41 +9,41 @@ public sealed class CustomLinkedList<T>
         public Node(T value) => Value = value;
     }
 
-    private Node _head;
-    private int _count;
-    public int Count => _count;
+    private Node head;
+    private int count;
+    public int Count => count;
 
     public void ClearList()
     {
-        _head = null;
-        _count = 0;
+        head = null;
+        count = 0;
     }
 
     public void AddLast(T item)
     {
         var newNode = new Node(item);
-        if (_head == null)
+        if (head == null)
         {
-            _head = newNode;
+            head = newNode;
         }
 
         else
         {
-            var current = _head;
+            var current = head;
             while (current.Next != null)
                 current = current.Next;
             current.Next = newNode;
         }
 
-        _count++;
+        count++;
     }
 
     public T GetAt(int index)
     {
-        if (index < 0 || index >= _count)
+        if (index < 0 || index >= count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var current = _head;
+        var current = head;
 
         for (var i = 0; i < index; i++)
             current = current.Next;

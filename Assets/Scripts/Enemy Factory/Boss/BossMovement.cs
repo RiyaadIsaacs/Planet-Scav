@@ -10,70 +10,70 @@ public class BossMovement : MonoBehaviour
         Stunned
     }
 
-    [SerializeField] private PatrolWaypointPath _patrolPath;
-    [SerializeField] private int _startNodeIndex;
+    [SerializeField] private PatrolWaypointPath patrolPath;
+    [SerializeField] private int startNodeIndex;
 
-    [SerializeField] private float _patrolSpeed = 4f;
-    [SerializeField] private float _rushSpeed = 10f;
-    [SerializeField] private int _waypointsBeforeRush = 3;
-    [SerializeField] private float _stunDuration = 7f;
-    [SerializeField] private float _arriveThreshold = 1.5f;
-    [SerializeField] private float _sampleMaxDistance = 40f;
-    [SerializeField] private float _agentAcceleration = 1000f;
+    [SerializeField] private float patrolSpeed = 4f;
+    [SerializeField] private float rushSpeed = 10f;
+    [SerializeField] private int waypointsBeforeRush = 3;
+    [SerializeField] private float stunDuration = 7f;
+    [SerializeField] private float arriveThreshold = 1.5f;
+    [SerializeField] private float sampleMaxDistance = 40f;
+    [SerializeField] private float agentAcceleration = 1000f;
     [SerializeField] private RockMonsterLocomotion locomotion;
 
-    private NavMeshAgent _agent;
-    private BossState _state = BossState.Patrol;
-    private int _currentNodeIndex;
-    private int _previousNodeIndex = -1;
-    private int _waypointsSinceRest;
-    private float _stunTimer;
-    private Vector3 _rushTargetPosition;
-    private bool _hasRushTarget;
-    private Vector3 _activeDestination;
-    private bool _hasActiveDestination;
+    private NavMeshAgent agent;
+    private BossState state = BossState.Patrol;
+    private int currentNodeIndex;
+    private int previousNodeIndex = -1;
+    private int waypointsSinceRest;
+    private float stunTimer;
+    private Vector3 rushTargetPosition;
+    private bool hasRushTarget;
+    private Vector3 activeDestination;
+    private bool hasActiveDestination;
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         if (locomotion == null)
             locomotion = GetComponent<RockMonsterLocomotion>();
-        ConfigureNavMeshForConstantSpeed();
+        ConfigureNavMesh();
     }
 
     private void Start()
     {
-        if (_patrolPath == null || !_patrolPath.UsesGraphPatrol)
+        if (patrolPath == null || !patrolPath.UsesGraphPatrol)
         {
             Debug.LogError($"BossMovement on {name} needs a PatrolWaypointPath with graph patrol enabled.", this);
             enabled = false;
             return;
         }
 
-        if (_patrolPath.WaypointCount == 0)
+        if (patrolPath.WaypointCount == 0)
         {
             Debug.LogError($"BossMovement on {name} has an empty patrol path.", this);
             enabled = false;
             return;
         }
 
-        if (NavMesh.SamplePosition(transform.position, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
-            _agent.Warp(hit.position);
+        if (NavMesh.SamplePosition(transform.position, out var hit, sampleMaxDistance, NavMesh.AllAreas))
+            agent.Warp(hit.position);
         else
             Debug.LogWarning($"BossMovement could not sample NavMesh for {name}.", this);
 
-        _currentNodeIndex = Mathf.Clamp(_startNodeIndex, 0, _patrolPath.WaypointCount - 1);
+        currentNodeIndex = Mathf.Clamp(startNodeIndex, 0, patrolPath.WaypointCount - 1);
         SyncLocomotion();
         ApplyCurrentSpeed();
-        GoToGraphNode(_currentNodeIndex);
+        GoToGraphNode(currentNodeIndex);
     }
 
     private void Update()
     {
-        if (_agent.pathPending)
+        if (agent.pathPending)
             return;
 
-        switch (_state)
+        switch (state)
         {
             case BossState.Patrol:
                 UpdatePatrol();
@@ -89,90 +89,90 @@ public class BossMovement : MonoBehaviour
 
     public void ConfigureMovement(float patrolSpeed, float rushSpeed)
     {
-        _patrolSpeed = patrolSpeed;
-        _rushSpeed = rushSpeed;
+        this.patrolSpeed = patrolSpeed;
+        this.rushSpeed = rushSpeed;
         SyncLocomotion();
         ApplyCurrentSpeed();
     }
 
-    public float PatrolSpeed => _patrolSpeed;
-    public float RushSpeed => _rushSpeed;
+    public float PatrolSpeed => patrolSpeed;
+    public float RushSpeed => rushSpeed;
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        _patrolSpeed = Mathf.Max(0.01f, _patrolSpeed);
-        _rushSpeed = Mathf.Max(_patrolSpeed, _rushSpeed);
+        patrolSpeed = Mathf.Max(0.01f, patrolSpeed);
+        rushSpeed = Mathf.Max(patrolSpeed, rushSpeed);
         SyncLocomotion();
     }
 #endif
 
     private void SyncLocomotion()
     {
-        locomotion?.ConfigureSpeeds(_patrolSpeed, _rushSpeed);
+        locomotion?.ConfigureSpeeds(patrolSpeed, rushSpeed);
     }
 
-    private void ConfigureNavMeshForConstantSpeed()
+    private void ConfigureNavMesh()
     {
-        if (_agent == null)
+        if (agent == null)
             return;
 
         // High acceleration + no auto-braking keeps movement at a steady speed
         // instead of easing in/out around each waypoint.
-        _agent.acceleration = _agentAcceleration;
-        _agent.autoBraking = false;
-        _agent.stoppingDistance = 0f;
+        agent.acceleration = agentAcceleration;
+        agent.autoBraking = false;
+        agent.stoppingDistance = 0f;
     }
 
     private void ApplyCurrentSpeed()
     {
-        if (_agent == null)
+        if (agent == null)
             return;
 
-        _agent.speed = _state == BossState.Rush ? _rushSpeed : _patrolSpeed;
+        agent.speed = state == BossState.Rush ? rushSpeed : patrolSpeed;
     }
 
-    public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
+    public void SetPatrolPath(PatrolWaypointPath path) => patrolPath = path;
 
     private void UpdatePatrol()
     {
-        if (!_hasActiveDestination)
+        if (!hasActiveDestination)
             return;
 
-        if (!HasReachedPosition(_activeDestination))
+        if (!HasReachedPosition(activeDestination))
             return;
 
-        _waypointsSinceRest++;
+        waypointsSinceRest++;
 
-        if (_waypointsSinceRest >= _waypointsBeforeRush)
+        if (waypointsSinceRest >= waypointsBeforeRush)
         {
             BeginRush();
             return;
         }
 
-        _previousNodeIndex = _currentNodeIndex;
-        var nextIndex = _patrolPath.GetRandomNeighbor(_currentNodeIndex, _previousNodeIndex);
-        if (nextIndex == _currentNodeIndex)
+        previousNodeIndex = currentNodeIndex;
+        var nextIndex = patrolPath.GetRandomNeighbor(currentNodeIndex, previousNodeIndex);
+        if (nextIndex == currentNodeIndex)
         {
             Debug.LogWarning(
-                $"{name}: No valid neighbour from graph node {_currentNodeIndex}. Check neighbour indices on { _patrolPath.name }.",
+                $"{name}: No valid neighbour from graph node {currentNodeIndex}. Check neighbour indices on { patrolPath.name }.",
                 this);
             return;
         }
 
-        _currentNodeIndex = nextIndex;
-        GoToGraphNode(_currentNodeIndex);
+        currentNodeIndex = nextIndex;
+        GoToGraphNode(currentNodeIndex);
     }
 
     private void UpdateRush()
     {
-        if (!_hasRushTarget)
+        if (!hasRushTarget)
         {
             ResumePatrol();
             return;
         }
 
-        if (!HasReachedPosition(_rushTargetPosition))
+        if (!HasReachedPosition(rushTargetPosition))
             return;
 
         BeginStun();
@@ -180,8 +180,8 @@ public class BossMovement : MonoBehaviour
 
     private void UpdateStunned()
     {
-        _stunTimer -= Time.deltaTime;
-        if (_stunTimer > 0f)
+        stunTimer -= Time.deltaTime;
+        if (stunTimer > 0f)
             return;
 
         ResumePatrol();
@@ -189,80 +189,80 @@ public class BossMovement : MonoBehaviour
 
     private void BeginRush()
     {
-        _state = BossState.Rush;
-        _agent.isStopped = false;
+        state = BossState.Rush;
+        agent.isStopped = false;
         ApplyCurrentSpeed();
 
-        _rushTargetPosition = GetCenterOfGraphPatrol();
-        _hasRushTarget = true;
-        _hasActiveDestination = true;
-        _activeDestination = _rushTargetPosition;
-        _agent.SetDestination(_rushTargetPosition);
+        rushTargetPosition = GetCenterOfGraphPatrol();
+        hasRushTarget = true;
+        hasActiveDestination = true;
+        activeDestination = rushTargetPosition;
+        agent.SetDestination(rushTargetPosition);
     }
 
     private void BeginStun()
     {
-        _hasRushTarget = false;
-        _hasActiveDestination = false;
+        hasRushTarget = false;
+        hasActiveDestination = false;
 
-        _state = BossState.Stunned;
-        _stunTimer = _stunDuration;
-        _agent.ResetPath();
-        _agent.isStopped = true;
+        state = BossState.Stunned;
+        stunTimer = stunDuration;
+        agent.ResetPath();
+        agent.isStopped = true;
         locomotion?.SetStunned(true);
     }
 
     private void ResumePatrol()
     {
-        _waypointsSinceRest = 0;
-        _state = BossState.Patrol;
-        _agent.isStopped = false;
+        waypointsSinceRest = 0;
+        state = BossState.Patrol;
+        agent.isStopped = false;
         locomotion?.SetStunned(false);
         ApplyCurrentSpeed();
 
-        _currentNodeIndex = _patrolPath.FindNearestNodeIndex(transform.position);
-        _previousNodeIndex = -1;
-        GoToGraphNode(_currentNodeIndex);
+        currentNodeIndex = patrolPath.FindNearestNodeIndex(transform.position);
+        previousNodeIndex = -1;
+        GoToGraphNode(currentNodeIndex);
     }
 
     private void GoToGraphNode(int nodeIndex)
     {
-        var waypoint = _patrolPath.GetWaypoint(nodeIndex);
+        var waypoint = patrolPath.GetWaypoint(nodeIndex);
         if (waypoint == null)
             return;
 
-        _agent.isStopped = false;
+        agent.isStopped = false;
         var destination = waypoint.position;
 
-        if (NavMesh.SamplePosition(destination, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(destination, out var hit, sampleMaxDistance, NavMesh.AllAreas))
             destination = hit.position;
 
-        _activeDestination = destination;
-        _hasActiveDestination = true;
+        activeDestination = destination;
+        hasActiveDestination = true;
 
-        if (!_agent.SetDestination(destination))
+        if (!agent.SetDestination(destination))
             Debug.LogWarning($"{name}: SetDestination failed for graph node {nodeIndex}.", this);
     }
 
     private bool HasReachedPosition(Vector3 targetPosition)
     {
-        if (!_agent.isOnNavMesh)
+        if (!agent.isOnNavMesh)
             return false;
 
-        if (_agent.pathPending)
+        if (agent.pathPending)
             return false;
 
-        if (_agent.hasPath && !float.IsInfinity(_agent.remainingDistance))
-            return _agent.remainingDistance <= _arriveThreshold;
+        if (agent.hasPath && !float.IsInfinity(agent.remainingDistance))
+            return agent.remainingDistance <= arriveThreshold;
 
-        return Vector3.Distance(transform.position, targetPosition) <= _arriveThreshold;
+        return Vector3.Distance(transform.position, targetPosition) <= arriveThreshold;
     }
 
     private Vector3 GetCenterOfGraphPatrol()
     {
         // "Center" = average of all graph waypoint positions.
         // This avoids requiring dedicated corner transforms.
-        var count = _patrolPath.WaypointCount;
+        var count = patrolPath.WaypointCount;
         if (count <= 0)
             return transform.position;
 
@@ -270,7 +270,7 @@ public class BossMovement : MonoBehaviour
         var valid = 0;
         for (var i = 0; i < count; i++)
         {
-            var wp = _patrolPath.GetWaypoint(i);
+            var wp = patrolPath.GetWaypoint(i);
             if (wp == null)
                 continue;
 
@@ -284,7 +284,7 @@ public class BossMovement : MonoBehaviour
         var center = sum / valid;
 
         // Ensure the computed center is reachable by NavMesh.
-        if (NavMesh.SamplePosition(center, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(center, out var hit, sampleMaxDistance, NavMesh.AllAreas))
             return hit.position;
 
         return center;

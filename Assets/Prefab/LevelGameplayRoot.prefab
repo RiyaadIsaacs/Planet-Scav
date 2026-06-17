@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
   dialogueSequence: {fileID: 0}
   localizationFile: Beginner
+  enablePlayerShooting: 0
 --- !u!1 &8100000000000000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,11 +246,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3288856049841381304, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 577
+      value: 476
       objectReference: {fileID: 0}
     - target: {fileID: 3288856049841381304, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -179
+      value: -307
       objectReference: {fileID: 0}
     - target: {fileID: 3594726449618804669, guid: e2eebf82c9956ab4f91a36b5a0cb1416, type: 3}
       propertyPath: m_IsActive

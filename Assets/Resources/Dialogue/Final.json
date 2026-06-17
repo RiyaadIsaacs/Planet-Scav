@@ -6,11 +6,11 @@
     },
     {
       "key": "Final_INTRO_002",
-      "value": "Navigate the area carefully, theres something big down there and its messing with our coms."
+      "value": "Navigate the area carefully, theres something big down there and its messing with our comms."
     },
     {
       "key": "Final_INTRO_003",
-      "value": "Do I get a bonus for all this money I was required to spend?"
+      "value": "This place is so cold. Better pay me well for this one."
     },
     {
       "key": "Final_INTRO_004",
@@ -18,15 +18,15 @@
     },
     {
       "key": "Final_MIDDLE_001",
-      "value": "Alright, 305. We have sent the vendor again this time. Meet up with him if you need any assistance and pick up any of the beacons that are still available."
+      "value": "Hello, 305. Do you hear me"
     },
     {
       "key": "Final_MIDDLE_002",
-      "value": "I better be getting compensated for all this stuff I've had to buy Captain."
+      "value": "Yeah I hear ya."
     },
     {
       "key": "Final_MIDDLE_003",
-      "value": "We'll sort that out with your bonus when you get back on board the ship. The Vendor should have access to a new area for 100 credits."
+      "value": "There's a vendor up ahead that can help you to find a lost vendor who can help you with the upcoming challenge, obviously you must pay him."
     },
     {
       "key": "Final_MIDDLE_004",
@@ -34,7 +34,7 @@
     },
     {
       "key": "Final_MIDDLE_005",
-      "value": "Ah what... it looks like you're cutting out again. Good luck out there 305."
+      "value": "Well you don't need to get it, it would just help you out."
     },
     {
       "key": "Final_VENDOR_001",
@@ -42,11 +42,11 @@
     },
     {
       "key": "Final_VENDOR_002",
-      "value": "You're going to need pay up yet again if you want what I got. Don't worry, this time its worth it. This part right here should obliterate the big guy down there."
+      "value": "Got a great item for you, causes a devastating blow! But it will cost ya."
     },
     {
       "key": "Final_VENDOR_003",
-      "value": "It's yours if you can part with, lets say, 500 credits. I sure do hope you've got enough. Otherwise, go down there and face him yourself."
+      "value": "Lets say 250, c'mon not that bad right?."
     },
     {
       "key": "Final_VENDOR_004",
@@ -54,7 +54,7 @@
     },
     {
       "key": "Final_VENDOR_005",
-      "value": "It's business!"
+      "value": "Hehe I know."
     }
   ]
 }
