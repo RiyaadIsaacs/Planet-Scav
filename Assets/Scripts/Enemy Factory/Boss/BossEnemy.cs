@@ -58,12 +58,13 @@ public class BossEnemy : AIEnemy
         Die();
     }
 
-    private void Die()
+    public override void Die()
     {
         if (isDead)
             return;
 
         isDead = true;
+        CancelInvoke();
 
         if (bossMovement != null)
             bossMovement.enabled = false;
