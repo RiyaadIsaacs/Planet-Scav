@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 public enum VendorUpgradeType
 {
     SpeedBooster,
-    BossKillerShot
+    BossKillerShot,
+    PlatformAccess
 }
 
 public class NPCInteractable : MonoBehaviour
@@ -13,6 +14,10 @@ public class NPCInteractable : MonoBehaviour
     public int cost = 80;
     public string upgradeName = "Speed Booster";
     public VendorUpgradeType upgradeType = VendorUpgradeType.SpeedBooster;
+
+    [Header("Platform Access")]
+    [SerializeField] private GameObject[] revealOnPurchase;
+    [SerializeField] private bool disableVendorAfterPurchase = true;
 
     private bool playerInRange = false;
     private DialogueUIManager uiManager;
@@ -37,6 +42,9 @@ public class NPCInteractable : MonoBehaviour
     {
         uiManager = FindFirstObjectByType<DialogueUIManager>();
         playerController = FindFirstObjectByType<PlayerController>();
+
+        if (upgradeType == VendorUpgradeType.PlatformAccess)
+            TryApplyPurchasedState();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -80,6 +88,9 @@ public class NPCInteractable : MonoBehaviour
         if (stats == null)
             return;
 
+        if (upgradeType == VendorUpgradeType.PlatformAccess && stats.platformAccessPurchased)
+            return;
+
         switch (upgradeType)
         {
             case VendorUpgradeType.SpeedBooster:
@@ -92,11 +103,55 @@ public class NPCInteractable : MonoBehaviour
                 else
                     Debug.LogWarning("NPCInteractable: BossKillerShot purchased but PlayerShooting is missing.");
                 break;
+            case VendorUpgradeType.PlatformAccess:
+                stats.platformAccessPurchased = true;
+                RevealObjects();
+                if (disableVendorAfterPurchase)
+                    DisableVendor();
+                break;
         }
 
         stats.CoinGainHandler(-cost);
 
         if (uiManager != null)
             uiManager.ShowInteractPrompt(false);
+    }
+
+    private void TryApplyPurchasedState()
+    {
+        var stats = playerController != null
+            ? playerController.GetComponent<PlayerStats>()
+            : FindFirstObjectByType<PlayerStats>();
+
+        if (stats == null || !stats.platformAccessPurchased)
+            return;
+
+        RevealObjects();
+        if (disableVendorAfterPurchase)
+            DisableVendor();
+    }
+
+    private void RevealObjects()
+    {
+        if (revealOnPurchase == null)
+            return;
+
+        foreach (var obj in revealOnPurchase)
+        {
+            if (obj != null)
+                obj.SetActive(true);
+        }
+    }
+
+    private void DisableVendor()
+    {
+        playerInRange = false;
+        if (uiManager != null)
+            uiManager.ShowInteractPrompt(false);
+
+        foreach (var col in GetComponents<Collider>())
+            col.enabled = false;
+
+        enabled = false;
     }
 }

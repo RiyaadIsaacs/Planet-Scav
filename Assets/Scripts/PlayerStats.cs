@@ -12,6 +12,9 @@ public class PlayerStats : MonoBehaviour
     [HideInInspector]
     public bool upgradeCheck = false;
 
+    [HideInInspector]
+    public bool platformAccessPurchased = false;
+
     public void CoinGainHandler(int coinGain)
     {
         coins += coinGain;
