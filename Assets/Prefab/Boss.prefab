@@ -679,6 +679,7 @@ GameObject:
   - component: {fileID: 18005148610493441}
   - component: {fileID: 3823818765718663991}
   - component: {fileID: 7346130508192339186}
+  - component: {fileID: 5918273640582937461}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -819,6 +820,27 @@ MonoBehaviour:
   walkAgentSpeed: 5
   runAgentSpeed: 12.5
   speedDampTime: 0.12
+--- !u!114 &5918273640582937461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293556897942819231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c8d9e0f1a2436586978a9b0c1d2e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossShooting
+  projectilePrefab: {fileID: 1688157287071401247, guid: 98be6a389ff7f7c4d8e081fd7925ae99, type: 3}
+  firePoint: {fileID: 0}
+  fireInterval: 5
+  projectileSpeed: 14
+  projectileLifetime: 8
+  fireHeightOffset: 8
+  aimHeightOffset: 1
+  requireCheckpoint: 1
+  requiredCheckpointName: Checkpoint (4)
 --- !u!1 &1293569743954194735
 GameObject:
   m_ObjectHideFlags: 0

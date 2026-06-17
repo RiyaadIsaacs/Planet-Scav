@@ -2,14 +2,18 @@
   "dialogues": [
     {
       "key": "Final_INTRO_001",
-      "value": "Great, you're still around 305. Thought we lost you with the communications. The new pulse bullet you bought should come in handy at shooting down those stalctites. Navigate the area carefully, theres something big down there and its messing with our coms."
+      "value": "Great, you're still around 305. Thought we lost you with the communications. The new pulse bullet you bought should come in handy at shooting down those stalctites."
     },
     {
       "key": "Final_INTRO_002",
-      "value": "Do I get a bonus for all this money I was required to spend?"
+      "value": "Navigate the area carefully, theres something big down there and its messing with our coms."
     },
     {
       "key": "Final_INTRO_003",
+      "value": "Do I get a bonus for all this money I was required to spend?"
+    },
+    {
+      "key": "Final_INTRO_004",
       "value": "What was that? You're cutting out again."
     },
     {
