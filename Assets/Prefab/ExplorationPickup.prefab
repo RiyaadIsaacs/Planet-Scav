@@ -125,4 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickUpHandler
   pickupMultiplier: 1.5
-  uses: 5
+  uses: 1
+  coins: 100
+  respawnDelaySeconds: 300

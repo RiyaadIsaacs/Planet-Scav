@@ -54,7 +54,6 @@ public class FallingStalactite : MonoBehaviour
 
         if (collision.collider.CompareTag("Player"))
         {
-            SFXManager.Play(SFXManager.CrashSoundId);
 
             var death = collision.collider.GetComponentInParent<PlayerController>()?.deathHandling
                         ?? FindFirstObjectByType<DeathHandling>();
@@ -67,7 +66,6 @@ public class FallingStalactite : MonoBehaviour
         var enemy = collision.collider.GetComponentInParent<AIEnemy>();
         if (enemy != null && !enemy.isDead)
         {
-            SFXManager.Play(SFXManager.CrashSoundId);
 
             if (enemy is BossEnemy boss)
                 boss.TakeDamage(fallDamageToBoss);
@@ -76,8 +74,11 @@ public class FallingStalactite : MonoBehaviour
                 enemy.Die();
             }
 
-            Destroy(gameObject);
         }
+
+        SFXManager.Play(SFXManager.CrashSoundId);
+        Destroy(gameObject);
+
     }
 
     private void SetHanging()
