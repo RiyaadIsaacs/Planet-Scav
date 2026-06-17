@@ -5,6 +5,8 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void LoadBeginnerLevel() => LoadGameplayScene("Beginner");
 
+    public void LoadTutorialLevel() => LoadGameplayScene("Tutorial");
+
     public void LoadAdvancedLevel() => LoadGameplayScene("Advanced");
 
     public void LoadFinalLevel() => LoadGameplayScene("Final Level");

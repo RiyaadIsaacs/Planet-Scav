@@ -1,0 +1,8 @@
+{
+  "dialogues": [
+    {
+      "key": "TUTORIAL_PLACEHOLDER",
+      "value": "Tutorial level uses dedicated tutorial canvases instead of dialogue sequences."
+    }
+  ]
+}

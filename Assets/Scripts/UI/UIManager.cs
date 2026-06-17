@@ -24,6 +24,25 @@ public class UIManager : MonoBehaviour
             optionsMenu = options;
         if (dialogue != null)
             dialogueUI = dialogue;
+
+        ResetPauseState();
+    }
+
+    private void ResetPauseState()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+        if (optionsMenu != null)
+            optionsMenu.SetActive(false);
+
+        if (dialogueUI != null)
+            dialogueUI.SetHudOverlayActive(true);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void OnEnable()
