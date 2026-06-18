@@ -17,7 +17,7 @@ public class EnemyFactory : BaseEnemyFactory
         this.stationaryProjectilePrefab = stationaryProjectilePrefab;
     }
 
-    public override AIEnemy CreateEnemy(EEnemyType.EnemyType type, Vector3 position, Quaternion rotation)
+    public override AIEnemy CreateEnemy(EEnemyType.EnemyType type, Transform position)
     {
         GameObject enemyPrefab = null; 
         switch (type)
@@ -40,7 +40,7 @@ public class EnemyFactory : BaseEnemyFactory
             Debug.LogError($"Enemy prefab is null for type {type}.");
             return null;
         }
-        GameObject enemyInstance = Object.Instantiate(enemyPrefab, position, rotation);
+        GameObject enemyInstance = Object.Instantiate(enemyPrefab, position, Quaternion.identity);
         AIEnemy aiComponent = enemyInstance.GetComponent<AIEnemy>();
         if (aiComponent == null)
         {

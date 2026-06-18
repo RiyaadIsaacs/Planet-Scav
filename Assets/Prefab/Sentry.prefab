@@ -928,8 +928,11 @@ MonoBehaviour:
   fireRate: 3
   firePoint: {fileID: 8864251241662465080}
   projectileSpeed: 12
-  projectileLifetime: 3
+  projectileLifetime: 6
+<<<<<<< Updated upstream
+=======
   projectileScale: 1
+>>>>>>> Stashed changes
 --- !u!114 &1917382874769129653
 MonoBehaviour:
   m_ObjectHideFlags: 0

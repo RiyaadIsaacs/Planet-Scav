@@ -54,15 +54,6 @@ public class PlayerProjectile : MonoBehaviour
             return;
         }
 
-        if (other.CompareTag("Stalactite") &&
-            other.TryGetComponent<FallingStalactite>(out stalactite))
-        {
-            hasHit = true;
-            stalactite.TriggerFall(this);
-            Destroy(gameObject);
-            return;
-        }
-
         var boss = other.GetComponentInParent<BossEnemy>();
         if (boss != null)
         {

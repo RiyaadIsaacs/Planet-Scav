@@ -17,7 +17,17 @@ public class WinHandling : MonoBehaviour
     public void ShowWinScreen()
     {
         if (winCanvas == null)
+        {
+            var found = GameObject.Find("WinCanvas");
+            if (found != null)
+                winCanvas = found.GetComponent<Canvas>();
+        }
+
+        if (winCanvas == null)
+        {
+            Debug.LogError("WinHandling: WinCanvas reference is missing.");
             return;
+        }
 
         winCanvas.gameObject.SetActive(true);
         Time.timeScale = 0f;

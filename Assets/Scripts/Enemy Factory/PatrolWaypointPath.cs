@@ -11,24 +11,24 @@ public class GraphWaypoint
 public class PatrolWaypointPath : MonoBehaviour
 {
     [Header("Linear Patrol (normal enemies)")]
-    [SerializeField] private Transform[] waypointsInPatrolOrder;
+    [SerializeField] private Transform[] _waypointsInPatrolOrder;
 
     [Header("Graph Patrol (boss)")]
-    [SerializeField] private bool useGraphPatrol;
-    [SerializeField] private GraphWaypoint[] graphWaypoints;
+    [SerializeField] private bool _useGraphPatrol;
+    [SerializeField] private GraphWaypoint[] _graphWaypoints;
 
     private CustomLinkedList<Transform> path;
     private CustomGraph<Transform> graph;
     private int[] neighborBuffer = new int[8];
 
-    public bool UsesGraphPatrol => useGraphPatrol;
-    public int WaypointCount => useGraphPatrol
+    public bool UsesGraphPatrol => _useGraphPatrol;
+    public int WaypointCount => _useGraphPatrol
         ? (graph != null ? graph.NodeCount : 0)
         : (path != null ? path.Count : 0);
 
     private void Awake()
     {
-        if (useGraphPatrol)
+        if (_useGraphPatrol)
             BuildGraphFromInspector();
         else
             BuildPathFromInspector();
@@ -38,10 +38,10 @@ public class PatrolWaypointPath : MonoBehaviour
     {
         path = new CustomLinkedList<Transform>();
 
-        if (waypointsInPatrolOrder == null)
+        if (_waypointsInPatrolOrder == null)
             return;
 
-        foreach (var wp in waypointsInPatrolOrder)
+        foreach (var wp in _waypointsInPatrolOrder)
         {
             if (wp != null)
                 path.AddLast(wp);
@@ -52,15 +52,15 @@ public class PatrolWaypointPath : MonoBehaviour
     {
         graph = new CustomGraph<Transform>();
 
-        if (graphWaypoints == null || graphWaypoints.Length == 0)
+        if (_graphWaypoints == null || _graphWaypoints.Length == 0)
         {
             Debug.LogError($"PatrolWaypointPath on {name} has graph patrol enabled but no graph waypoints.", this);
             return;
         }
 
-        for (var i = 0; i < graphWaypoints.Length; i++)
+        for (var i = 0; i < _graphWaypoints.Length; i++)
         {
-            var waypoint = graphWaypoints[i].waypoint;
+            var waypoint = _graphWaypoints[i].waypoint;
             if (waypoint == null)
             {
                 Debug.LogError($"PatrolWaypointPath on {name} has a null graph waypoint at index {i}.", this);
@@ -70,9 +70,9 @@ public class PatrolWaypointPath : MonoBehaviour
             graph.AddNode(waypoint);
         }
 
-        for (var i = 0; i < graphWaypoints.Length; i++)
+        for (var i = 0; i < _graphWaypoints.Length; i++)
         {
-            var neighbors = graphWaypoints[i].neighborIndices;
+            var neighbors = _graphWaypoints[i].neighborIndices;
             if (neighbors == null || neighbors.Length == 0)
             {
                 Debug.LogWarning($"PatrolWaypointPath on {name}: graph node {i} has no neighbour indices.", this);
@@ -83,7 +83,7 @@ public class PatrolWaypointPath : MonoBehaviour
 
             foreach (var neighborIndex in neighbors)
             {
-                if (neighborIndex < 0 || neighborIndex >= graphWaypoints.Length)
+                if (neighborIndex < 0 || neighborIndex >= _graphWaypoints.Length)
                 {
                     Debug.LogError(
                         $"PatrolWaypointPath on {name}: waypoint {i} references invalid neighbor index {neighborIndex}.",
@@ -98,7 +98,7 @@ public class PatrolWaypointPath : MonoBehaviour
 
     public Transform GetWaypoint(int index)
     {
-        if (useGraphPatrol)
+        if (_useGraphPatrol)
         {
             if (graph == null || graph.NodeCount == 0)
                 return null;
@@ -129,7 +129,7 @@ public class PatrolWaypointPath : MonoBehaviour
 
     public int GetNextIndex(int currentIndex)
     {
-        if (useGraphPatrol)
+        if (_useGraphPatrol)
         {
             Debug.LogWarning($"GetNextIndex called on graph patrol path {name}. Use GetRandomNeighbor instead.", this);
             return currentIndex;
@@ -143,7 +143,7 @@ public class PatrolWaypointPath : MonoBehaviour
 
     public int GetRandomNeighbor(int currentIndex, int excludeIndex = -1)
     {
-        if (!useGraphPatrol || graph == null || graph.NodeCount == 0)
+        if (!_useGraphPatrol || graph == null || graph.NodeCount == 0)
             return GetNextIndex(currentIndex);
 
         var neighborCount = graph.GetNeighborCount(currentIndex);
@@ -173,7 +173,7 @@ public class PatrolWaypointPath : MonoBehaviour
 
     public int FindNearestNodeIndex(Vector3 worldPosition)
     {
-        if (!useGraphPatrol || graph == null || graph.NodeCount == 0)
+        if (!_useGraphPatrol || graph == null || graph.NodeCount == 0)
             return 0;
 
         var nearestIndex = 0;
@@ -199,7 +199,7 @@ public class PatrolWaypointPath : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        if (useGraphPatrol)
+        if (_useGraphPatrol)
             DrawGraphGizmos();
         else
             DrawLinearGizmos();
@@ -207,13 +207,13 @@ public class PatrolWaypointPath : MonoBehaviour
 
     private void DrawLinearGizmos()
     {
-        if (waypointsInPatrolOrder == null)
+        if (_waypointsInPatrolOrder == null)
             return;
 
         Gizmos.color = Color.cyan;
         Transform previous = null;
 
-        foreach (var wp in waypointsInPatrolOrder)
+        foreach (var wp in _waypointsInPatrolOrder)
         {
             if (wp == null)
                 continue;
@@ -224,9 +224,9 @@ public class PatrolWaypointPath : MonoBehaviour
             previous = wp;
         }
 
-        if (previous != null && waypointsInPatrolOrder.Length > 1)
+        if (previous != null && _waypointsInPatrolOrder.Length > 1)
         {
-            var first = waypointsInPatrolOrder[0];
+            var first = _waypointsInPatrolOrder[0];
             if (first != null)
                 Gizmos.DrawLine(previous.position, first.position);
         }
@@ -234,32 +234,32 @@ public class PatrolWaypointPath : MonoBehaviour
 
     private void DrawGraphGizmos()
     {
-        if (graphWaypoints == null)
+        if (_graphWaypoints == null)
             return;
 
-        for (var i = 0; i < graphWaypoints.Length; i++)
+        for (var i = 0; i < _graphWaypoints.Length; i++)
         {
-            var waypoint = graphWaypoints[i].waypoint;
+            var waypoint = _graphWaypoints[i].waypoint;
             if (waypoint == null)
                 continue;
 
-            var neighborCount = graphWaypoints[i].neighborIndices != null
-                ? graphWaypoints[i].neighborIndices.Length
+            var neighborCount = _graphWaypoints[i].neighborIndices != null
+                ? _graphWaypoints[i].neighborIndices.Length
                 : 0;
 
             Gizmos.color = neighborCount >= 3 ? Color.yellow : Color.cyan;
             Gizmos.DrawSphere(waypoint.position, 0.35f);
 
-            var neighbors = graphWaypoints[i].neighborIndices;
+            var neighbors = _graphWaypoints[i].neighborIndices;
             if (neighbors == null)
                 continue;
 
             foreach (var neighborIndex in neighbors)
             {
-                if (neighborIndex < 0 || neighborIndex >= graphWaypoints.Length)
+                if (neighborIndex < 0 || neighborIndex >= _graphWaypoints.Length)
                     continue;
 
-                var neighbor = graphWaypoints[neighborIndex].waypoint;
+                var neighbor = _graphWaypoints[neighborIndex].waypoint;
                 if (neighbor == null)
                     continue;
 

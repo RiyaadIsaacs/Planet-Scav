@@ -10,16 +10,16 @@ public class BossMovement : MonoBehaviour
         Stunned
     }
 
-    [SerializeField] private PatrolWaypointPath patrolPath;
-    [SerializeField] private int startNodeIndex;
+    [SerializeField] private PatrolWaypointPath _patrolPath;
+    [SerializeField] private int _startNodeIndex;
 
-    [SerializeField] private float patrolSpeed = 4f;
-    [SerializeField] private float rushSpeed = 10f;
-    [SerializeField] private int waypointsBeforeRush = 3;
-    [SerializeField] private float stunDuration = 7f;
-    [SerializeField] private float arriveThreshold = 1.5f;
-    [SerializeField] private float sampleMaxDistance = 40f;
-    [SerializeField] private float agentAcceleration = 1000f;
+    [SerializeField] private float _patrolSpeed = 4f;
+    [SerializeField] private float _rushSpeed = 10f;
+    [SerializeField] private int _waypointsBeforeRush = 3;
+    [SerializeField] private float _stunDuration = 7f;
+    [SerializeField] private float _arriveThreshold = 1.5f;
+    [SerializeField] private float _sampleMaxDistance = 40f;
+    [SerializeField] private float _agentAcceleration = 1000f;
     [SerializeField] private RockMonsterLocomotion locomotion;
 
     private NavMeshAgent agent;
@@ -43,26 +43,26 @@ public class BossMovement : MonoBehaviour
 
     private void Start()
     {
-        if (patrolPath == null || !patrolPath.UsesGraphPatrol)
+        if (_patrolPath == null || !_patrolPath.UsesGraphPatrol)
         {
             Debug.LogError($"BossMovement on {name} needs a PatrolWaypointPath with graph patrol enabled.", this);
             enabled = false;
             return;
         }
 
-        if (patrolPath.WaypointCount == 0)
+        if (_patrolPath.WaypointCount == 0)
         {
             Debug.LogError($"BossMovement on {name} has an empty patrol path.", this);
             enabled = false;
             return;
         }
 
-        if (NavMesh.SamplePosition(transform.position, out var hit, sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(transform.position, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
             agent.Warp(hit.position);
         else
             Debug.LogWarning($"BossMovement could not sample NavMesh for {name}.", this);
 
-        currentNodeIndex = Mathf.Clamp(startNodeIndex, 0, patrolPath.WaypointCount - 1);
+        currentNodeIndex = Mathf.Clamp(_startNodeIndex, 0, _patrolPath.WaypointCount - 1);
         SyncLocomotion();
         ApplyCurrentSpeed();
         GoToGraphNode(currentNodeIndex);
@@ -89,27 +89,27 @@ public class BossMovement : MonoBehaviour
 
     public void ConfigureMovement(float patrolSpeed, float rushSpeed)
     {
-        this.patrolSpeed = patrolSpeed;
-        this.rushSpeed = rushSpeed;
+        _patrolSpeed = patrolSpeed;
+        _rushSpeed = rushSpeed;
         SyncLocomotion();
         ApplyCurrentSpeed();
     }
 
-    public float PatrolSpeed => patrolSpeed;
-    public float RushSpeed => rushSpeed;
+    public float PatrolSpeed => _patrolSpeed;
+    public float RushSpeed => _rushSpeed;
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        patrolSpeed = Mathf.Max(0.01f, patrolSpeed);
-        rushSpeed = Mathf.Max(patrolSpeed, rushSpeed);
+        _patrolSpeed = Mathf.Max(0.01f, _patrolSpeed);
+        _rushSpeed = Mathf.Max(_patrolSpeed, _rushSpeed);
         SyncLocomotion();
     }
 #endif
 
     private void SyncLocomotion()
     {
-        locomotion?.ConfigureSpeeds(patrolSpeed, rushSpeed);
+        locomotion?.ConfigureSpeeds(_patrolSpeed, _rushSpeed);
     }
 
     private void ConfigureNavMeshForConstantSpeed()
@@ -119,7 +119,7 @@ public class BossMovement : MonoBehaviour
 
         // High acceleration + no auto-braking keeps movement at a steady speed
         // instead of easing in/out around each waypoint.
-        agent.acceleration = agentAcceleration;
+        agent.acceleration = _agentAcceleration;
         agent.autoBraking = false;
         agent.stoppingDistance = 0f;
     }
@@ -129,10 +129,10 @@ public class BossMovement : MonoBehaviour
         if (agent == null)
             return;
 
-        agent.speed = state == BossState.Rush ? rushSpeed : patrolSpeed;
+        agent.speed = state == BossState.Rush ? _rushSpeed : _patrolSpeed;
     }
 
-    public void SetPatrolPath(PatrolWaypointPath path) => patrolPath = path;
+    public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
 
     private void UpdatePatrol()
     {
@@ -144,18 +144,18 @@ public class BossMovement : MonoBehaviour
 
         waypointsSinceRest++;
 
-        if (waypointsSinceRest >= waypointsBeforeRush)
+        if (waypointsSinceRest >= _waypointsBeforeRush)
         {
             BeginRush();
             return;
         }
 
         previousNodeIndex = currentNodeIndex;
-        var nextIndex = patrolPath.GetRandomNeighbor(currentNodeIndex, previousNodeIndex);
+        var nextIndex = _patrolPath.GetRandomNeighbor(currentNodeIndex, previousNodeIndex);
         if (nextIndex == currentNodeIndex)
         {
             Debug.LogWarning(
-                $"{name}: No valid neighbour from graph node {currentNodeIndex}. Check neighbour indices on { patrolPath.name }.",
+                $"{name}: No valid neighbour from graph node {currentNodeIndex}. Check neighbour indices on {_patrolPath.name}.",
                 this);
             return;
         }
@@ -206,7 +206,7 @@ public class BossMovement : MonoBehaviour
         hasActiveDestination = false;
 
         state = BossState.Stunned;
-        stunTimer = stunDuration;
+        stunTimer = _stunDuration;
         agent.ResetPath();
         agent.isStopped = true;
         locomotion?.SetStunned(true);
@@ -220,21 +220,21 @@ public class BossMovement : MonoBehaviour
         locomotion?.SetStunned(false);
         ApplyCurrentSpeed();
 
-        currentNodeIndex = patrolPath.FindNearestNodeIndex(transform.position);
+        currentNodeIndex = _patrolPath.FindNearestNodeIndex(transform.position);
         previousNodeIndex = -1;
         GoToGraphNode(currentNodeIndex);
     }
 
     private void GoToGraphNode(int nodeIndex)
     {
-        var waypoint = patrolPath.GetWaypoint(nodeIndex);
+        var waypoint = _patrolPath.GetWaypoint(nodeIndex);
         if (waypoint == null)
             return;
 
         agent.isStopped = false;
         var destination = waypoint.position;
 
-        if (NavMesh.SamplePosition(destination, out var hit, sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(destination, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
             destination = hit.position;
 
         activeDestination = destination;
@@ -253,16 +253,16 @@ public class BossMovement : MonoBehaviour
             return false;
 
         if (agent.hasPath && !float.IsInfinity(agent.remainingDistance))
-            return agent.remainingDistance <= arriveThreshold;
+            return agent.remainingDistance <= _arriveThreshold;
 
-        return Vector3.Distance(transform.position, targetPosition) <= arriveThreshold;
+        return Vector3.Distance(transform.position, targetPosition) <= _arriveThreshold;
     }
 
     private Vector3 GetCenterOfGraphPatrol()
     {
         // "Center" = average of all graph waypoint positions.
         // This avoids requiring dedicated corner transforms.
-        var count = patrolPath.WaypointCount;
+        var count = _patrolPath.WaypointCount;
         if (count <= 0)
             return transform.position;
 
@@ -270,7 +270,7 @@ public class BossMovement : MonoBehaviour
         var valid = 0;
         for (var i = 0; i < count; i++)
         {
-            var wp = patrolPath.GetWaypoint(i);
+            var wp = _patrolPath.GetWaypoint(i);
             if (wp == null)
                 continue;
 
@@ -284,7 +284,7 @@ public class BossMovement : MonoBehaviour
         var center = sum / valid;
 
         // Ensure the computed center is reachable by NavMesh.
-        if (NavMesh.SamplePosition(center, out var hit, sampleMaxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(center, out var hit, _sampleMaxDistance, NavMesh.AllAreas))
             return hit.position;
 
         return center;

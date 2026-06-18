@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     //To identify which WaypointPath to use.
-    [SerializeField] private PatrolWaypointPath patrolPath;
+    [SerializeField] private PatrolWaypointPath _patrolPath;
 
     //Provides a distance that lets the enemy move to the point incase they are far.
     [SerializeField] private float sampleMaxDistance = 2f;
@@ -21,7 +21,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        if (patrolPath == null || patrolPath.WaypointCount == 0)
+        if (_patrolPath == null || _patrolPath.WaypointCount == 0)
         {
             Debug.LogError("No PatrolWaypointPath assigned to EnemyMovement script on " + gameObject.name);
             return;
@@ -40,10 +40,10 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        if (patrolPath == null || patrolPath.WaypointCount == 0)
+        if (_patrolPath == null || _patrolPath.WaypointCount == 0)
             return;
 
-        var target = patrolPath.GetWaypoint(waypointIndex);
+        var target = _patrolPath.GetWaypoint(waypointIndex);
         if (target == null)
             return;
 
@@ -55,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
             AdvanceWaypoint();
     }
 
-    public void SetPatrolPath(PatrolWaypointPath path) => patrolPath = path;
+    public void SetPatrolPath(PatrolWaypointPath path) => _patrolPath = path;
 
     private bool HasReachedWaypoint(Transform target)
     {
@@ -77,13 +77,13 @@ public class EnemyMovement : MonoBehaviour
 
     private void AdvanceWaypoint()
     {
-        waypointIndex = patrolPath.GetNextIndex(waypointIndex);
+        waypointIndex = _patrolPath.GetNextIndex(waypointIndex);
         GoToCurrentWaypoint();
     }
 
     private void GoToCurrentWaypoint()
     {
-        var t = patrolPath.GetWaypoint(waypointIndex);
+        var t = _patrolPath.GetWaypoint(waypointIndex);
         if (t == null)
             return;
 

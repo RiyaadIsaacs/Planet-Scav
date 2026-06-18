@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public static class WinMenuArtSetup
 {
-    private const string CoverPath = "Assets/UI/WinMenu/planet-scav-win-menu-cover.png";
-    private const string ButtonPath = "Assets/UI/WinMenu/planet-scav-win-button-main-menu.png";
+    private const string CoverPath = "Assets/UI/WinScreen/planet-scav-win-screen-cover.png";
+    private const string ButtonPath = "Assets/UI/WinScreen/planet-scav-win-button-main-menu.png";
     private const string PrefabPath = "Assets/Prefab/UI Canvas/WinCanvas.prefab";
 
     [MenuItem("Planet Scav/Wire Win Menu Art")]

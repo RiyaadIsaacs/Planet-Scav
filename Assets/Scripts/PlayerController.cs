@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravity = -18f;
     [SerializeField] private float groundCheckDistance = 1.1f; // Allowable distance from ground to player
     [SerializeField] private LayerMask groundLayer = -1;
+    [SerializeField] private float collisionSkinWidth = 0.05f;
+    [SerializeField] private float wallBlockMinNormalY = 0.55f;
+    [SerializeField] private float groundStickDistance = 0.55f;
 
     // Player camera control with mouse
     [Header("Camera")]
@@ -76,6 +79,9 @@ public class PlayerController : MonoBehaviour
 
     private bool isJumping;
 
+    private CapsuleCollider bodyCollider;
+    private Rigidbody bodyRigidbody;
+
     [Header("Fall Death")]
     [SerializeField] private bool killAfterLongFall = true;
     [SerializeField] private float secondsFallingToDie = 6f;
@@ -100,6 +106,14 @@ public class PlayerController : MonoBehaviour
 
         if (deathHandling == null)
             deathHandling = FindFirstObjectByType<DeathHandling>();
+
+        bodyCollider = GetComponent<CapsuleCollider>();
+        bodyRigidbody = GetComponent<Rigidbody>();
+        if (bodyRigidbody != null)
+        {
+            bodyRigidbody.isKinematic = true;
+            bodyRigidbody.useGravity = false;
+        }
 
         speedHash = Animator.StringToHash(speedParam);
         isRunningHash = Animator.StringToHash(isRunningParam);
@@ -253,9 +267,181 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private Vector3 WorldPosition => bodyRigidbody != null ? bodyRigidbody.position : transform.position;
+
+    private void SetWorldPosition(Vector3 position)
+    {
+        transform.position = position;
+        if (bodyRigidbody != null)
+            bodyRigidbody.position = position;
+    }
+
+    private float GetFeetWorldY(Vector3 worldPosition)
+    {
+        if (bodyCollider == null)
+            return worldPosition.y;
+
+        GetCapsuleWorldPointsAt(worldPosition, out _, out Vector3 bottom, out _);
+        return bottom.y;
+    }
+
+    private bool TryGroundCheck(out RaycastHit hit)
+    {
+        Vector3 pos = WorldPosition;
+        float castDistance = groundCheckDistance + 0.1f;
+
+        // Primary check from the player root (this worked before the collision refactor).
+        if (Physics.Raycast(pos + Vector3.up * 0.1f, Vector3.down, out hit, castDistance, groundLayer, QueryTriggerInteraction.Ignore))
+            return true;
+
+        if (bodyCollider == null)
+        {
+            hit = default;
+            return false;
+        }
+
+        // Secondary check from the capsule bottom for when the root sits above the surface.
+        GetCapsuleWorldPointsAt(pos, out _, out Vector3 bottom, out float radius);
+        Vector3 feetOrigin = bottom + Vector3.up * 0.1f;
+        return Physics.Raycast(feetOrigin, Vector3.down, out hit, radius + 0.2f, groundLayer, QueryTriggerInteraction.Ignore);
+    }
+
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        if (verticalVelocity > 0.05f)
+            return false;
+
+        if (!TryGroundCheck(out RaycastHit hit))
+            return false;
+
+        float gap = GetFeetWorldY(WorldPosition) - hit.point.y;
+        return gap >= -0.05f && gap <= groundStickDistance;
+    }
+
+    private Vector3 ClampVerticalMovement(Vector3 movement, Vector3 worldPosition)
+    {
+        if (movement.sqrMagnitude < 0.000001f || bodyCollider == null)
+            return movement;
+
+        GetCapsuleWorldPointsAt(worldPosition, out Vector3 point1, out Vector3 point2, out float radius);
+        float distance = movement.magnitude;
+        Vector3 direction = movement / distance;
+
+        if (Physics.CapsuleCast(
+                point1,
+                point2,
+                radius,
+                direction,
+                out RaycastHit hit,
+                distance + collisionSkinWidth,
+                groundLayer,
+                QueryTriggerInteraction.Ignore))
+        {
+            float allowedDistance = Mathf.Max(hit.distance - collisionSkinWidth, 0f);
+            return direction * allowedDistance;
+        }
+
+        return movement;
+    }
+
+    private void StickToGround()
+    {
+        if (verticalVelocity > 0.05f)
+            return;
+
+        if (!TryGroundCheck(out RaycastHit hit))
+            return;
+
+        float gap = GetFeetWorldY(WorldPosition) - hit.point.y;
+        if (gap < -0.05f || gap > groundStickDistance)
+            return;
+
+        if (Mathf.Abs(gap) > 0.001f)
+            SetWorldPosition(WorldPosition + Vector3.down * gap);
+
+        verticalVelocity = 0f;
+    }
+
+    private Vector3 ClampSprintWalls(Vector3 movement, Vector3 worldPosition)
+    {
+        if (movement.sqrMagnitude < 0.000001f || bodyCollider == null)
+            return movement;
+
+        GetCapsuleWorldPointsAt(worldPosition, out Vector3 point1, out Vector3 point2, out float radius);
+
+        // Cast with the upper portion of the capsule so floor/ramp geometry does not kill speed.
+        float bodyHeight = point1.y - point2.y;
+        Vector3 castBottom = point2 + Vector3.up * Mathf.Min(radius + 0.15f, bodyHeight * 0.45f);
+        Vector3 castTop = point1;
+        float castRadius = radius * 0.9f;
+
+        float distance = movement.magnitude;
+        Vector3 direction = movement / distance;
+
+        if (Physics.CapsuleCast(
+                castTop,
+                castBottom,
+                castRadius,
+                direction,
+                out RaycastHit hit,
+                distance + collisionSkinWidth,
+                groundLayer,
+                QueryTriggerInteraction.Ignore)
+            && hit.normal.y < wallBlockMinNormalY)
+        {
+            float allowedDistance = Mathf.Max(hit.distance - collisionSkinWidth, 0f);
+            return direction * allowedDistance;
+        }
+
+        return movement;
+    }
+
+    private void GetCapsuleWorldPointsAt(Vector3 worldPosition, out Vector3 point1, out Vector3 point2, out float radius)
+    {
+        Vector3 scale = transform.lossyScale;
+        radius = bodyCollider.radius * Mathf.Max(scale.x, scale.z);
+        float height = bodyCollider.height * scale.y;
+        float halfHeight = Mathf.Max(height * 0.5f - radius, 0.01f);
+        Vector3 center = (worldPosition - transform.position) + transform.TransformPoint(bodyCollider.center);
+        point1 = center + Vector3.up * halfHeight;
+        point2 = center - Vector3.up * halfHeight;
+    }
+
+    private void ApplyMovement(Vector3 horizontalMove, bool sprinting, bool grounded)
+    {
+        Vector3 position = WorldPosition;
+
+        if (sprinting && horizontalMove.sqrMagnitude > 0.000001f)
+            horizontalMove = ClampSprintWalls(horizontalMove, position);
+
+        position += horizontalMove;
+
+        if (verticalVelocity > 0f)
+        {
+            Vector3 upMove = Vector3.up * (verticalVelocity * Time.deltaTime);
+            position += ClampVerticalMovement(upMove, position);
+        }
+        else if (!grounded)
+        {
+            Vector3 downMove = Vector3.up * (verticalVelocity * Time.deltaTime);
+            position += ClampVerticalMovement(downMove, position);
+        }
+
+        SetWorldPosition(position);
+        StickToGround();
+    }
+
+    private static Transform FindPlatformRoot(Transform hitTransform)
+    {
+        var current = hitTransform;
+        while (current != null)
+        {
+            if (current.CompareTag("Platform"))
+                return current;
+            current = current.parent;
+        }
+
+        return null;
     }
 
     private void Update()
@@ -288,14 +474,12 @@ public class PlayerController : MonoBehaviour
         }
         // else: airborne with airControl 0 — keep launch momentum, ignore WASD
 
-        verticalVelocity += gravity * Time.deltaTime;
-        if (grounded && verticalVelocity < 0f)
-            verticalVelocity = -0.5f;
+        if (!grounded)
+            verticalVelocity += gravity * Time.deltaTime;
 
-        Vector3 move = horizontalVelocity * Time.deltaTime;
-        move.y = verticalVelocity * Time.deltaTime;
+        Vector3 horizontalMove = horizontalVelocity * Time.deltaTime;
 
-        transform.Translate(move, Space.World);
+        ApplyMovement(horizontalMove, sprintHeld, grounded);
 
         // Charge cannot be built up mid air
         if (!grounded)
@@ -389,9 +573,6 @@ public class PlayerController : MonoBehaviour
     private void SetJumping(bool value)
     {
         isJumping = value;
-        if (value)
-            SFXManager.Play(SFXManager.JumpSoundId);
-
         if (animator != null)
         {
             animator.SetBool(isJumpingHash, value);
@@ -420,36 +601,40 @@ public class PlayerController : MonoBehaviour
             cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         }
 
-        if (currentPlatform != null)
-        {
-            // Calculate how much the platform moved since last frame
-            Vector3 platformDelta = currentPlatform.position - lastPlatformPosition;
-
-            transform.position += platformDelta;
-
-            // Update last position for next frame
-            lastPlatformPosition = currentPlatform.position;
-        }
-
+        UpdatePlatformCarry();
     }
 
-    void OnCollisionEnter(Collision collision)
+    private Transform GetPlatformUnderFeet()
     {
-        if (collision.gameObject.CompareTag("Platform"))
-        {
-            currentPlatform = collision.transform;
-            lastPlatformPosition = currentPlatform.position;
-        }
+        if (!TryGroundCheck(out RaycastHit hit))
+            return null;
+
+        return FindPlatformRoot(hit.collider.transform);
     }
 
-    void OnCollisionExit(Collision collision)
+    private void UpdatePlatformCarry()
     {
-        if (collision.gameObject.CompareTag("Platform"))
+        var platformUnderFeet = GetPlatformUnderFeet();
+        if (platformUnderFeet == null)
         {
             currentPlatform = null;
+            return;
         }
-    }
 
+        if (currentPlatform != platformUnderFeet)
+        {
+            currentPlatform = platformUnderFeet;
+            lastPlatformPosition = currentPlatform.position;
+            return;
+        }
+
+        var platformDelta = currentPlatform.position - lastPlatformPosition;
+        if (platformDelta.sqrMagnitude > 0f)
+            SetWorldPosition(WorldPosition + platformDelta);
+
+        lastPlatformPosition = currentPlatform.position;
+        StickToGround();
+    }
 
     public bool CanSpendMoney(int amount)
     {
